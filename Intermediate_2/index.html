@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Intermediate DSA · Introduction to Arrays &amp; Basics of AI</title>
+<style>
+:root,:root[data-theme=dark]{--bg:#0a0e1a;--cd:#151b2e;--bd:#2a3350;--tx:#e8ecf8;--mu:#8b95b5;--ac:#8b9cf8;--ye:#f5c84c;--gr:#5ed49a;--rd:#f07878;--cc:#0d1222;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f6fc;--cd:#fff;--bd:#d5dbee;--tx:#171c30;--mu:#5b6586;--ac:#4a5ce0;--ye:#a67600;--gr:#17874f;--rd:#c23b3b;--cc:#eef1fa}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+body::before{content:"arr[i] = *(arr + i)";position:fixed;right:-2%;bottom:2%;font:800 clamp(40px,9vw,120px) ui-monospace,Menlo,monospace;color:var(--tx);opacity:.035;white-space:nowrap;pointer-events:none}
+header{max-width:1180px;margin:auto;padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header small{color:var(--mu);font:12px ui-monospace,Menlo,monospace}header h1{font-size:22px;margin:2px 0}
+.tg{background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:20px;padding:7px 14px;cursor:pointer;font:inherit}
+#tabs{max-width:1180px;margin:10px auto 0;padding:0 20px;display:flex;overflow-x:auto;border-bottom:1px solid var(--bd)}
+#tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:12px 14px;font:600 15px inherit;cursor:pointer;white-space:nowrap}
+#tabs button.on{color:var(--tx);border-color:var(--ac)}#tabs i{font:normal 12px ui-monospace,Menlo,monospace;opacity:.7;margin-right:4px}
+.wrap{max-width:1180px;margin:22px auto;padding:0 20px;display:grid;grid-template-columns:260px 1fr;gap:28px}
+#side h3{margin:0 0 12px;color:var(--mu)}#side button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:1px solid transparent;color:var(--mu);border-radius:10px;padding:9px;font:inherit;cursor:pointer}
+#side button.on{background:var(--cd);border-color:var(--bd);color:var(--tx);font-weight:600}
+#side span{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--ac);display:grid;place-items:center;font-size:12px}
+#side .on span{background:var(--ac);color:#0a0e1a}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:26px 28px;min-width:0}
+.k{color:var(--ac);font:12px ui-monospace,Menlo,monospace;letter-spacing:.06em}
+h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spacing:-.02em}
+.think,.card2{border:2px solid var(--ac);border-radius:16px;padding:18px 20px;background:var(--cc);margin-bottom:14px}.card2{border:1px solid var(--bd)}
+.tag{background:var(--ye);color:#1a1400;border-radius:6px;padding:2px 10px;font:700 12px ui-monospace,Menlo,monospace}
+.think h3,.card2 h3{font-size:22px;margin:12px 0}
+.btn{background:var(--ac);color:#0a0e1a;border:0;border-radius:10px;padding:10px 18px;font:700 15px inherit;cursor:pointer}.btn:disabled{opacity:.35;cursor:default}
+.ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}.ghost:disabled{opacity:.35}
+.ans{border-top:1px dashed var(--bd);padding-top:12px;margin:6px 0 14px}.ans small{color:var(--gr);font:700 12px ui-monospace,monospace}
+.ins{border-top:1px dashed var(--bd);margin-top:18px;padding-top:12px;color:var(--mu)}.ins small{color:var(--ye);font:700 12px ui-monospace,monospace}.ins p{margin:4px 0 0}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--bd);margin-top:20px;padding-top:16px;color:var(--mu);font:13px ui-monospace,monospace}
+.cells{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 26px}
+.cell{position:relative;min-width:56px;padding:12px 8px 22px;text-align:center;border:2px solid var(--bd);border-radius:10px;background:var(--cc);cursor:default}
+.cell b{font-size:20px}.cell small{position:absolute;bottom:3px;left:0;right:0;color:var(--mu);font-size:11px}
+.cell u{position:absolute;top:-24px;left:0;right:0;text-decoration:none;color:var(--ye);font:700 13px ui-monospace,monospace}
+.cell em{display:block;font:11px ui-monospace,monospace;color:var(--mu);margin-bottom:6px}
+.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 20%,var(--cc))}.sw{border-color:var(--gr)}.rg{border-color:var(--ye)}.emp{border-style:dashed;opacity:.5}
+.code{background:var(--cc);border-radius:12px;padding:12px 0;margin:10px 0;font:14px/1.7 ui-monospace,Menlo,monospace;overflow-x:auto}
+.code span{display:block;padding:0 16px;white-space:pre}.code i{color:var(--mu);margin-right:14px;font-style:normal}.code .hl{background:color-mix(in srgb,var(--ac) 22%,transparent)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font:600 15px inherit;cursor:pointer;text-align:left}
+.opt b{background:var(--bd);border-radius:6px;padding:1px 8px;font-size:12px}.opt.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 18%,var(--cd))}.opt.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 18%,var(--cd))}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--bd)}.row span{flex:1 1 260px}.opt.sm{padding:6px 12px}
+.ex{color:var(--mu);margin:10px 0}.ex b{color:var(--tx)}mark{background:var(--ye);color:#1a1400;padding:0 4px;border-radius:3px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}.cd{border:1px solid var(--bd);border-radius:14px;padding:14px;background:var(--cc)}
+.cd small{color:var(--ac);font:12px ui-monospace,monospace}.cd h4{margin:4px 0;font-size:18px}.cd p{margin:0;color:var(--mu);font-size:14px}
+.bt{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}.bt label{color:var(--mu);font-size:14px}input[type=range]{accent-color:var(--ac)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:110px;margin:10px 0}.bars i{flex:1;background:var(--ac);border-radius:3px 3px 0 0;min-width:4px}.bars i.big{background:var(--rd)}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}#side{display:flex;gap:6px;overflow-x:auto}#side h3{display:none}#side button{white-space:nowrap;width:auto}.card{padding:18px}}
+:focus-visible{outline:2px solid var(--ye);outline-offset:2px}
+</style></head><body>
+<header><div><small>INTERMEDIATE DSA · CLASS 3</small><h1>Introduction to Arrays &amp; Basics of AI</h1></div>
+<button class="tg" id="tn" onclick="notes=!notes;go()"></button></header>
+<nav id="tabs"></nav>
+<div class="wrap"><aside id="side"></aside>
+<section class="card"><div id="main"></div>
+<div class="nav"><button class="ghost" id="bk" onclick="bk()">‹ Back</button><span>← → keys work too</span><button class="btn" id="nx" onclick="nx()">Next ›</button></div></section></div>
+<script>
+const $=s=>document.querySelector(s);let T=0,S=0,notes=true,rev={},st={};
+const code=(l,h)=>'<pre class="code" style="margin:10px 0">'+l.map((x,i)=>`<span class="${i==h?'hl':''}"><i>${i+1}</i>${x}</span>`).join('')+'</pre>';
+const cells=(a,m={},c={})=>`<div class="cells">${a.map((v,j)=>`<div class="cell ${c[j]||''}">${m[j]?`<u>${m[j]}</u>`:''}<b>${v}</b><small>[${j}]</small></div>`).join('')}</div>`;
+const cards=a=>`<div class="g">${a.map(x=>`<div class="cd"><small>${x[0]}</small><h4>${x[1]}</h4><p>${x[2]}</p></div>`).join('')}</div>`;
+const W=(h,n,r)=>({h,n,r}),info=(h,b,n)=>W(h,n,()=>b);
+const think=(h,q,a,n)=>({h,n,th:1,r:k=>`<div class="think"><span class="tag">THINK FIRST</span><h3>${q}</h3><button class="btn" onclick="rev['${k}']=!rev['${k}'];go()">${rev[k]?'Hide':'Reveal'} the answer</button></div>`+(rev[k]?`<div class="ans"><small>ANSWER</small><p>${a}</p></div>`:'')});
+const quiz=(h,q,c,o,ok,ex,n)=>W(h,n,k=>`<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3>${c?code(c):''}<div class="opts">${o.map((t,i)=>`<button class="opt ${st[k]!=null?(i==ok?'good':i==st[k]?'bad':''):''}" onclick="st['${k}']=${i};go()"><b>${'ABCD'[i]}</b>${t}</button>`).join('')}</div>${st[k]!=null?`<p class="ex">${ex}</p>`:''}</div>`);
+const sorter=(h,items,L,tail,n)=>W(h,n,k=>`<div class="card2">${items.map((t,i)=>{const v=st[k+i];return `<div class="row"><span>${t[0]}</span>${L.map((l,x)=>`<button class="opt sm ${v!=null&&x==t[1]?'good':v==x?'bad':''}" onclick="st['${k}${i}']=${x};go()">${l}</button>`).join('')}</div>`}).join('')}${items.every((_,i)=>st[k+i]!=null)?`<p class="ex"><b>${tail}</b></p>`:''}</div>`);
+const set=(f,v)=>`${f};go()`;
+/* reverse */
+const rvI=n=>st.rv={n,a:Array.from({length:n},(_,x)=>x+1),i:0,j:n-1,sw:null,stop:0};
+function rvS(){const r=st.rv;if(r.i<r.j){[r.a[r.i],r.a[r.j]]=[r.a[r.j],r.a[r.i]];r.sw=[r.i,r.j];r.i++;r.j--}else r.stop=1;go()}
+/* brute rotate */
+const brI=(n,k)=>st.br={n,k,a:Array.from({length:n},(_,x)=>x+1),r:0};
+function brS(){const b=st.br;if(b.r<b.k){b.a.unshift(b.a.pop());b.r++}go()}
+/* three reverse */
+const tr=()=>st.tr??(st.tr={n:7,k:3,s:0});
+function trA(){const {n,k,s}=tr(),e=k%n;let a=Array.from({length:n},(_,i)=>i+1);if(s>0)a.reverse();if(s>1)a=[...a.slice(0,e).reverse(),...a.slice(e)];if(s>2)a=[...a.slice(0,e),...a.slice(e).reverse()];return a}
+/* dynamic */
+const dy=()=>st.dy??(st.dy={cap:1,len:0,c:[],t:0});
+function dyAdd(){const d=dy();if(d.len>=32)return;let c=1;if(d.len==d.cap){c=d.len+1;d.cap*=2}d.len++;d.c.push(c);d.t+=c;go()}
+const TABS=[
+{t:'Why it matters',s:[
+think('The 1,000,000th element','Which is faster: reading the 1st element of an array or the 1,000,000th?','<b>Same speed.</b> One jump, wherever the element sits. That single property is why arrays sit under almost every data structure you will meet.','Take two guesses before revealing.'),
+info('Today’s plan','<p>Every array problem today ends with the same two questions: <mark>what is the time complexity?</mark> and <mark>how much extra space?</mark></p>'+cards([['Part 1','Arrays','Indexing and O(1) access'],['Part 2','Reverse array','Two pointers and the stopping rule'],['Part 3','Rotate array','Brute force, then three reverses'],['Part 4','Dynamic arrays','Resizing and amortised O(1)'],['Part 5','AI awareness','What AI does well, and what stays yours']]),'Frame: fundamentals first, so the AI talk lands on something solid.')]},
+{t:'Arrays',s:[
+think('What is an array?','What is an array? Give an example, don’t define it.','A collection of items of the <b>same type</b>, stored one after another: <code>int arr[n]</code> holds arr[0] … arr[n-1].','Take two examples before revealing.'),
+W('Index to address','Click a cell. Show that arr[i] is just base + i × size.',k=>{const a=[5,-4,8,9,10],i=st.i??0;return `<div class="cells">${a.map((v,j)=>`<div class="cell ${j==i?'sel':''}" style="cursor:pointer" onclick="${set('st.i='+j)}"><em>${1000+4*j}</em><b>${v}</b><small>[${j}]</small></div>`).join('')}</div><p class="ex">arr[${i}] = *(arr + ${i}) → address 1000 + ${i} × 4 = <b>${1000+4*i}</b>. One multiply, one add, one read: <b>O(1)</b> for any N. Index 0 means “zero steps from the start”.</p>`}),
+quiz('First and last index','What are the first and last indices of an array of size N?',0,['1, N','0, N-1','1, N-1','0, N'],1,'Indexing starts at 0, so N elements end at N-1.','Ask why before showing.'),
+W('Print every element','Traverse with one index, touching each element once.',k=>{const a=[5,-4,8,9,10],i=st.pa??0;return cells(a,{[i]:'i'},{[i]:'sel'})+code(['for (i → 0 to n-1) {','    print(arr[i])','}'],1)+`<p class="ex">Output so far: <b>${a.slice(0,i+1).join('  ')}</b> · ${i+1} of ${a.length} steps → O(N)</p><div class="bt"><button class="btn" onclick="${set('st.pa=Math.min(4,(st.pa??0)+1)')}">Next element</button><button class="ghost" onclick="${set('st.pa=0')}">Reset</button></div>`}),
+quiz('Cost of access','Time complexity of accessing the element at index i in an array of size N?',0,['O(N)','O(1)','O(N·N)','O(log N)'],1,'The address is computed directly, so cost does not depend on N.'),
+quiz('Sum of 1st and 5th','int arr[5] = {5,-4,8,9,10}. Which prints the sum of the 1st and 5th elements?',0,['arr[0] + arr[5]','arr[0] + arr[4]','arr[1] + arr[5]','arr[1] + arr[4]'],1,'1st is index 0, 5th is index 4. Index 5 would be out of bounds.')]},
+{t:'Reverse array',s:[
+info('The problem','<p>Reverse the array in place.</p><div class="g"><div class="cd"><small>INPUT</small><h4>N = 5, {1,2,3,4,5}</h4></div><div class="cd"><small>OUTPUT</small><h4>{5,4,3,2,1}</h4></div></div><p class="ex">Idea: put one pointer at each end and swap while they move toward each other.</p>','Ask for the idea before showing the pointers.'),
+think('Where should the loop stop?','N = 6 swaps (0,5), (1,4), (2,3). N = 5 swaps (0,4), (1,3). When do we stop?','As soon as <b>i ≥ j</b>. For even N the pointers cross; for odd N they meet on the middle element, which stays put.','Run the N = 5 and N = 6 tables on the board.'),
+W('Two-pointer reverse','Switch N between 5 and 6 and compare how it stops.',k=>{if(!st.rv)rvI(6);const r=st.rv,m={},c={};if(!r.stop){m[r.i]='i';m[r.j]=r.i==r.j?'i,j':'j'}else{m[r.i]='i';m[r.j]=r.i==r.j?'i,j':'j'}if(r.sw)r.sw.forEach(x=>c[x]='sw');return cells(r.a,m,c)+code(['i = 0, j = N-1','while (i &lt; j) {','    swap(arr[i], arr[j])','    i++, j--','}'],r.stop?1:r.sw?2:1)+`<p class="ex">${r.stop?'i ≥ j → <b>STOP</b>.':`Next: swap A[${r.i}] and A[${r.j}] (i=${r.i}, j=${r.j}).`} Time <b>O(N)</b>, space <b>O(1)</b>.</p><div class="bt"><button class="btn" ${r.stop?'disabled':''} onclick="rvS()">Step</button><button class="ghost" onclick="${set('rvI(6)')}">N = 6</button><button class="ghost" onclick="${set('rvI(5)')}">N = 5</button></div>`},)]},
+{t:'Rotate array',s:[
+think('Rotate by 2','Rotate {1,2,3,4,5} right by K = 2. What is the result?','<b>{4,5,1,2,3}</b>. Each rotation moves the last element to the front: {5,1,2,3,4} first, then {4,5,1,2,3}.','Do one rotation by hand first.'),
+W('Brute force: one rotation at a time','Each rotation shifts about N elements. Watch the work add up.',k=>{if(!st.br)brI(5,3);const b=st.br,ops=b.r*b.n,big=(1e5*1e5)/1e8;return cells(b.a,{},{})+code(['for (r → 1 to K) {','    temp = arr[N-1]','    shift everything right by 1','    arr[0] = temp','}'],b.r?2:0)+`<div class="bt"><label>N <input type="range" min="4" max="8" value="${b.n}" oninput="brI(+this.value,st.br.k);go()"> ${b.n}</label><label>K <input type="range" min="1" max="8" value="${b.k}" oninput="brI(st.br.n,+this.value);go()"> ${b.k}</label></div><p class="ex">Rotations: <b>${b.r}/${b.k}</b> · element moves so far: <b>${ops}</b> · total <b>N×K = ${b.n*b.k}</b> → O(N·K). At N = K = 10⁵ that is 10¹⁰ moves, about <b>${big} s</b> at 10⁸ ops/s.</p><div class="bt"><button class="btn" ${b.r>=b.k?'disabled':''} onclick="brS()">Rotate once</button><button class="ghost" onclick="${set('brI(st.br.n,st.br.k)')}">Reset</button></div>`}),
+think('What do you notice?','Take {1..7} with K = 3. After 3 rotations we get {5,6,7,1,2,3,4}. What pattern do you see?','The <b>last K elements move to the front</b>, the rest follow in order. Three reverses produce exactly that.','Let them spot it from the three rows.'),
+W('Three reverses','Move through the stages. Push K past N to see K % N at work.',k=>{const t=tr(),e=t.k%t.n,L=['Given array','Reverse the entire array','Reverse the first K elements','Reverse the remaining N−K elements'],c={};const a=trA();a.forEach((_,i)=>{if(t.s==1||(t.s==2&&i<e)||(t.s==3&&i>=e))c[i]='rg'});return `<p class="ex"><b>${L[t.s]}</b></p>`+cells(a,{},c)+code(['K = K % N','reverse(arr, 0, N-1)','reverse(arr, 0, K-1)','reverse(arr, K, N-1)'],[0,0,2,3][t.s]==0&&t.s==0?-1:t.s)+`<div class="bt"><label>N <input type="range" min="4" max="9" value="${t.n}" oninput="st.tr={n:+this.value,k:st.tr.k,s:0};go()"> ${t.n}</label><label>K <input type="range" min="1" max="20" value="${t.k}" oninput="st.tr={n:st.tr.n,k:+this.value,s:0};go()"> ${t.k}</label></div><p class="ex">K % N = ${t.k} % ${t.n} = <b>${e}</b>${e==0?' → array comes back unchanged, no work needed.':''} Time <b>O(N)</b>, space <b>O(1)</b>.</p><div class="bt"><button class="btn" ${t.s>=3?'disabled':''} onclick="${set('st.tr.s++')}">Next stage</button><button class="ghost" onclick="${set('st.tr.s=0')}">Reset</button></div>`}),
+quiz('The edge case','N = 5 and K = 12. How many rotations are actually needed?',0,['12','2','7','0'],1,'After N rotations the array is back where it started, so K rotations equal K % N = 12 % 5 = 2.')]},
+{t:'Dynamic arrays',s:[
+think('Drawback of normal arrays','What is the drawback of a normal array?','The <b>size must be declared beforehand</b>. A dynamic array resizes itself as you add elements.','One-line answer is enough.'),
+W('Append and resize','Keep appending. Capacity doubles when the array is full, and that append costs O(N).',k=>{const d=dy();return `<div class="cells" style="gap:4px">${Array.from({length:d.cap},(_,i)=>`<div class="cell ${i<d.len?'sel':'emp'}" style="min-width:30px;padding:8px 0"><b style="font-size:13px">${i<d.len?i+1:''}</b></div>`).join('')}</div><div class="bars">${d.c.map(c=>`<i class="${c>2?'big':''}" style="height:${Math.max(5,c*3)}px" title="cost ${c}"></i>`).join('')}</div><p class="ex">Length <b>${d.len}</b>, capacity <b>${d.cap}</b>. Last append cost <b>${d.c.at(-1)??'–'}</b>. Average cost per append: <b>${d.len?(d.t/d.len).toFixed(2):'–'}</b> → <b>O(1) amortised</b>. Red bars are the resize appends.</p><div class="bt"><button class="btn" ${d.len>=32?'disabled':''} onclick="dyAdd()">Append</button><button class="ghost" onclick="${set('st.dy=null')}">Reset</button></div>`}),
+info('In your language','<div class="g"><div class="cd"><small>Java</small><h4>ArrayList</h4><p>add(x) · get(i) · size() · clear()</p></div><div class="cd"><small>C++</small><h4>vector</h4><p>push_back(x) · a[i] · size() · clear()</p></div><div class="cd"><small>Python</small><h4>list</h4><p>append(x) · a[i] · len(a) · clear()</p></div></div><p class="ex">Lookups stay O(1). Appends are O(1) amortised, and O(N) only on the rare resize.</p>','Overview only. Full analysis comes in a later class.')]},
+{t:'AI awareness',s:[
+think('The elephant in the room','“AI writes all the code now. Why should I learn?” What is the honest answer?','Every powerful tool (calculator, Excel, Google) raised the floor and made skilled people more valuable. <b>AI doesn’t replace developers. It replaces developers who refuse to learn it.</b>','Ask for a show of hands in chat first.'),
+sorter('Whose territory?',[['Writing a working first draft fast',0],['Explaining why this line gave an error',0],['Deciding what is actually worth building',1],['Spotting a bug that passes every test',1],['Owning the 2 AM production failure',1],['Translating Python into Java',0]],['AI is strong','Your job'],'Developer + AI > AI alone > Developer alone.','Let them argue each row before they tap.'),
+think('Why fundamentals matter more','AI solves a problem in seconds. How do you know its answer is right?','You check: <b>is it correct, is it optimal, does it survive edge cases, does it scale to millions of users, why this approach over another?</b> Without DSA you can only trust it blindly.','This is the most important step of the section.'),
+sorter('Healthy or not?',[['“Explain why this line gave me an error.”',0],['“Solve this assignment for me.”',1],['“I tried for 30 minutes. Give me a hint.”',0],['“Generate the answer without me thinking.”',1]],['Healthy use','Not healthy'],'Struggle first, then peers, then AI hints, and only then the full answer.','Land the rule at the end.')]},
+{t:'Wrap-up',s:[
+info('The takeaway','<p style="font-size:24px;font-weight:700;line-height:1.3">Arrays give O(1) access. Two pointers and the three-reverse trick solve in place. AI helps most when you can judge its answer.</p>'+cards([['Arrays','Index → address','arr[i] is O(1); indexing starts at 0'],['Reverse','Stop at i ≥ j','O(N) time, O(1) space'],['Rotate','K % N, three reverses','O(N·K) becomes O(N)'],['Dynamic','Resize on full','Appends are O(1) amortised']]),'Summarise quickly from this page.'),
+info('Assignment','<p>Unlock the assignment, then ask everyone to submit <mark>Array Rotation</mark>.</p><div class="card2"><b>Live solution session</b><p class="ex">1. Ask for a volunteer to solve it live.<br>2. Give them screen-share permission: Settings › Admin › Unmuted Audience Can Share › Audio, Video and Screen.<br>3. Guide them through it and keep the class involved.</p></div>','Unlock via the question-mark button on the top bar.')]}
+];
+function go(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;
+$('#tn').textContent='Instructor notes: '+(notes?'on':'off');
+$('#tabs').innerHTML=TABS.map((x,i)=>`<button class="${i==T?'on':''}" onclick="T=${i};S=0;go()"><i>0${i}</i>${x.t}</button>`).join('');
+$('#side').innerHTML=`<h3>${tb.t}</h3>`+tb.s.map((x,i)=>`<button class="${i==S?'on':''}" onclick="S=${i};go()"><span>${i+1}</span>${x.h}</button>`).join('');
+$('#main').innerHTML=`<small class="k">${tb.t.toUpperCase()} · STEP ${S+1} OF ${tb.s.length}</small><h2>${s.h}</h2>${s.r(k)}${notes&&s.n?`<div class="ins"><small>INSTRUCTOR</small><p>${s.n}</p></div>`:''}`;
+const last=S==tb.s.length-1,nt=TABS[T+1];
+$('#nx').textContent=s.th&&!rev[k]?'Reveal the answer ›':last?(nt?'Next: '+nt.t+' ›':'Done'):'Next ›';
+$('#nx').disabled=last&&!nt&&!(s.th&&!rev[k]);$('#bk').disabled=!T&&!S}
+function nx(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;if(s.th&&!rev[k])rev[k]=1;else if(S<tb.s.length-1)S++;else if(T<TABS.length-1){T++;S=0}go()}
+function bk(){if(S)S--;else if(T){T--;S=TABS[T].s.length-1}go()}
+addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;if(e.key=='ArrowRight')nx();if(e.key=='ArrowLeft')bk()});
+go();
+</script></body></html>
