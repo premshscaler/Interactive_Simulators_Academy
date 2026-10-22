@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Intermediate DSA · Subarray Sums, Contribution &amp; Sliding Window</title>
+<style>
+:root,:root[data-theme=dark]{--bg:#0a0e1a;--cd:#151b2e;--bd:#2a3350;--tx:#e8ecf8;--mu:#8b95b5;--ac:#8b9cf8;--ye:#f5c84c;--gr:#5ed49a;--rd:#f07878;--cc:#0d1222;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f6fc;--cd:#fff;--bd:#d5dbee;--tx:#171c30;--mu:#5b6586;--ac:#4a5ce0;--ye:#a67600;--gr:#17874f;--rd:#c23b3b;--cc:#eef1fa}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+body::before{content:"sum + A[j] − A[i−1]";position:fixed;right:-2%;bottom:2%;font:800 clamp(40px,9vw,120px) ui-monospace,Menlo,monospace;color:var(--tx);opacity:.035;white-space:nowrap;pointer-events:none}
+header{max-width:1180px;margin:auto;padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header small{color:var(--mu);font:12px ui-monospace,Menlo,monospace}header h1{font-size:22px;margin:2px 0}
+.tg{background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:20px;padding:7px 14px;cursor:pointer;font:inherit}
+#tabs{max-width:1180px;margin:10px auto 0;padding:0 20px;display:flex;overflow-x:auto;border-bottom:1px solid var(--bd)}
+#tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:12px 14px;font:600 15px inherit;cursor:pointer;white-space:nowrap}
+#tabs button.on{color:var(--tx);border-color:var(--ac)}#tabs i{font:normal 12px ui-monospace,Menlo,monospace;opacity:.7;margin-right:4px}
+.wrap{max-width:1180px;margin:22px auto;padding:0 20px;display:grid;grid-template-columns:260px 1fr;gap:28px}
+#side h3{margin:0 0 12px;color:var(--mu)}#side button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:1px solid transparent;color:var(--mu);border-radius:10px;padding:9px;font:inherit;cursor:pointer}
+#side button.on{background:var(--cd);border-color:var(--bd);color:var(--tx);font-weight:600}
+#side span{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--ac);display:grid;place-items:center;font-size:12px}
+#side .on span{background:var(--ac);color:#0a0e1a}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:26px 28px;min-width:0}
+.k{color:var(--ac);font:12px ui-monospace,Menlo,monospace;letter-spacing:.06em}
+h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spacing:-.02em}
+.think,.card2{border:2px solid var(--ac);border-radius:16px;padding:18px 20px;background:var(--cc);margin-bottom:14px}.card2{border:1px solid var(--bd)}
+.tag{background:var(--ye);color:#1a1400;border-radius:6px;padding:2px 10px;font:700 12px ui-monospace,Menlo,monospace}
+.think h3,.card2 h3{font-size:22px;margin:12px 0}
+.btn{background:var(--ac);color:#0a0e1a;border:0;border-radius:10px;padding:10px 18px;font:700 15px inherit;cursor:pointer}.btn:disabled{opacity:.35;cursor:default}
+.ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}.ghost:disabled{opacity:.35}
+.ans{border-top:1px dashed var(--bd);padding-top:12px;margin:6px 0 14px}.ans small{color:var(--gr);font:700 12px ui-monospace,monospace}
+.ins{border-top:1px dashed var(--bd);margin-top:18px;padding-top:12px;color:var(--mu)}.ins small{color:var(--ye);font:700 12px ui-monospace,monospace}.ins p{margin:4px 0 0}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--bd);margin-top:20px;padding-top:16px;color:var(--mu);font:13px ui-monospace,monospace}
+.cells{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 26px}
+.cell{position:relative;min-width:56px;padding:12px 8px 22px;text-align:center;border:2px solid var(--bd);border-radius:10px;background:var(--cc);cursor:default}
+.cell b{font-size:20px}.cell small{position:absolute;bottom:3px;left:0;right:0;color:var(--mu);font-size:11px}
+.cell u{position:absolute;top:-24px;left:0;right:0;text-decoration:none;color:var(--ye);font:700 13px ui-monospace,monospace}
+.cell em{display:block;font:11px ui-monospace,monospace;color:var(--mu);margin-bottom:6px}
+.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 20%,var(--cc))}.sw{border-color:var(--gr)}.rg{border-color:var(--ye)}.emp{border-style:dashed;opacity:.5}
+.code{background:var(--cc);border-radius:12px;padding:12px 0;margin:10px 0;font:14px/1.7 ui-monospace,Menlo,monospace;overflow-x:auto}
+.code span{display:block;padding:0 16px;white-space:pre}.code i{color:var(--mu);margin-right:14px;font-style:normal}.code .hl{background:color-mix(in srgb,var(--ac) 22%,transparent)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font:600 15px inherit;cursor:pointer;text-align:left}
+.opt b{background:var(--bd);border-radius:6px;padding:1px 8px;font-size:12px}.opt.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 18%,var(--cd))}.opt.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 18%,var(--cd))}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--bd)}.row span{flex:1 1 260px}.opt.sm{padding:6px 12px}
+.ex{color:var(--mu);margin:10px 0}.ex b{color:var(--tx)}mark{background:var(--ye);color:#1a1400;padding:0 4px;border-radius:3px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}.cd{border:1px solid var(--bd);border-radius:14px;padding:14px;background:var(--cc)}
+.cd small{color:var(--ac);font:12px ui-monospace,monospace}.cd h4{margin:4px 0;font-size:18px}.cd p{margin:0;color:var(--mu);font-size:14px}
+.bt{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}.bt label{color:var(--mu);font-size:14px}input[type=range]{accent-color:var(--ac)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:110px;margin:10px 0}.bars i{flex:1;background:var(--ac);border-radius:3px 3px 0 0;min-width:4px}.bars i.big{background:var(--rd)}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}#side{display:flex;gap:6px;overflow-x:auto}#side h3{display:none}#side button{white-space:nowrap;width:auto}.card{padding:18px}}
+.stg{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0;font:700 11px ui-monospace,Menlo,monospace;color:var(--mu);align-items:center}.stg span{padding:3px 9px;border-radius:12px;border:1px solid var(--bd)}.stg .on{background:var(--ye);color:#1a1400;border-color:var(--ye)}
+.pgw{overflow-x:auto}.pg{display:grid;grid-template-columns:82px repeat(10,minmax(36px,1fr));gap:5px;align-items:center;margin:12px 0;min-width:480px}.pg .l{color:var(--mu);font:12px ui-monospace,Menlo,monospace}.pg .c{text-align:center;padding:7px 0;border:2px solid var(--bd);border-radius:8px;background:var(--cc);font:600 14px ui-monospace,Menlo,monospace}.pg .bn{display:block;height:18px;border-radius:5px;border:1px dashed var(--bd)}
+ .rd2{border-color:var(--rd)}.gone b{text-decoration:line-through;opacity:.5}
+:focus-visible{outline:2px solid var(--ye);outline-offset:2px}
+</style></head><body>
+<header><div><small>INTERMEDIATE DSA · SUBARRAYS II</small><h1>Subarray Sums, Contribution &amp; Sliding Window</h1></div>
+<button class="tg" id="tn" onclick="notes=!notes;go()"></button></header>
+<nav id="tabs"></nav>
+<div class="wrap"><aside id="side"></aside>
+<section class="card"><div id="main"></div>
+<div class="nav"><button class="ghost" id="bk" onclick="bk()">‹ Back</button><span>← → keys work too</span><button class="btn" id="nx" onclick="nx()">Next ›</button></div></section></div>
+<script>
+const $=s=>document.querySelector(s);let T=0,S=0,notes=true,rev={},st={};
+const code=(l,h)=>'<pre class="code" style="margin:10px 0">'+l.map((x,i)=>`<span class="${i==h?'hl':''}"><i>${i+1}</i>${x}</span>`).join('')+'</pre>';
+const cells=(a,m={},c={})=>`<div class="cells">${a.map((v,j)=>`<div class="cell ${c[j]||''}">${m[j]?`<u>${m[j]}</u>`:''}<b>${v}</b><small>[${j}]</small></div>`).join('')}</div>`;
+const cards=a=>`<div class="g">${a.map(x=>`<div class="cd"><small>${x[0]}</small><h4>${x[1]}</h4><p>${x[2]}</p></div>`).join('')}</div>`;
+const W=(h,n,r)=>({h,n,r}),info=(h,b,n)=>W(h,n,()=>b);
+const think=(h,q,a,n)=>({h,n,th:1,r:k=>`<div class="think"><span class="tag">THINK FIRST</span><h3>${q}</h3><button class="btn" onclick="rev['${k}']=!rev['${k}'];go()">${rev[k]?'Hide':'Reveal'} the answer</button></div>`+(rev[k]?`<div class="ans"><small>ANSWER</small><p>${a}</p></div>`:'')});
+const quiz=(h,q,c,o,ok,ex,n)=>W(h,n,k=>`<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3>${c?code(c):''}<div class="opts">${o.map((t,i)=>`<button class="opt ${st[k]!=null?(i==ok?'good':i==st[k]?'bad':''):''}" onclick="st['${k}']=${i};go()"><b>${'ABCD'[i]}</b>${t}</button>`).join('')}</div>${st[k]!=null?`<p class="ex">${ex}</p>`:''}</div>`);
+const sorter=(h,items,L,tail,n)=>W(h,n,k=>`<div class="card2">${items.map((t,i)=>{const v=st[k+i];return `<div class="row"><span>${t[0]}</span>${L.map((l,x)=>`<button class="opt sm ${v!=null&&x==t[1]?'good':v==x?'bad':''}" onclick="st['${k}${i}']=${x};go()">${l}</button>`).join('')}</div>`}).join('')}${items.every((_,i)=>st[k+i]!=null)?`<p class="ex"><b>${tail}</b></p>`:''}</div>`);
+const set=(f,v)=>`${f};go()`;
+const X=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').split('\n');
+const ST=(t,s)=>(s.st=t,s);
+const walk=(h,q,c,S_,ans)=>W(h,0,k=>{const v=st[k]??0;return `<div class="card2"><small class="k">WORK IT OUT</small><h3>${q}</h3>${c?code(X(c)):''}${S_.slice(0,v).map((s,i)=>`<div class="row"><span style="flex:0 0 26px"><b>${i+1}</b></span><span><b>${s[0]}</b><br>${s[1]}</span></div>`).join('')}${v>=S_.length?`<p class="ex"><b>Answer: ${ans}</b></p>`:''}<div class="bt"><button class="btn" ${v>=S_.length?'disabled':''} onclick="${set(`st['${k}']=(st['${k}']??0)+1`)}">${v?'Next step':'Show step 1'}</button><button class="ghost" onclick="${set(`st['${k}']=0`)}">Reset</button><span class="ex">${v} / ${S_.length}</span></div></div>`});
+const sl=(k,min,max,d,l)=>`<label>${l} = <b>${st[k]??d}</b> <input type="range" min="${min}" max="${max}" value="${st[k]??d}" onchange="st.${k}=+this.value;go()"></label>`;
+const PS=a=>a.reduce((r,x,i)=>(r.push((r[i-1]??0)+x),r),[]);
+const ng=x=>x<0?`(${x})`:x,mk=(m,i,l)=>{m[i]=(m[i]?m[i]+',':'')+l};
+const sl2=(k,min,max,d,l,rs)=>`<label>${l} = <b>${st[k]??d}</b> <input type="range" min="${min}" max="${max}" value="${st[k]??d}" onchange="st.${k}=+this.value;${rs};go()"></label>`;
+const btn=(k,max,first,nxt)=>{const v=st[k]??0;return `<div class="bt"><button class="btn" ${v>=max?'disabled':''} onclick="${set(`st.${k}=(st.${k}??0)+1`)}">${v?nxt:first}</button><button class="ghost" onclick="${set(`st.${k}=0`)}">Reset</button><span class="ex">${v} / ${max}</span></div>`};
+const asel=(k,A)=>`<div class="bt">${A.map((a,i)=>`<button class="${i==(st[k]??0)?'btn':'ghost'}" onclick="${set(`st.${k}=${i};st.${k}j=0`)}">[${a.join(', ')}]</button>`).join('')}</div>`;
+const SA=[3,2,5],CF=[-4,1,3,2],CA=[[1,2,3],[3,-2,4,-1,2,6]],AK=[-3,4,-2,5,3,-2,8,2,-1,4],KK=5;
+const pairs=n=>{const r=[];for(let i=0;i<n;i++)for(let j=i;j<n;j++)r.push([i,j]);return r};
+const bev=a=>{const e=[];let tot=0;for(let i=0;i<a.length;i++)for(let j=i;j<a.length;j++){let s=0;for(let k=i;k<=j;k++){s+=a[k];e.push({i,j,k,s,tot,t:'k'})}tot+=s;e.push({i,j,s,tot,t:'d'})}return e};
+const cev=a=>{const e=[];let tot=0;for(let i=0;i<a.length;i++){let cs=0;for(let j=i;j<a.length;j++){e.push({i,j,p:cs,cs:cs+=a[j],tot:tot+=cs})}}return e};
+const WS=AK.map((_,s)=>s+KK<=AK.length?AK.slice(s,s+KK).reduce((x,y)=>x+y,0):null).filter(x=>x!==null);
+const wsum=(a,s,K)=>a.slice(s,s+K).reduce((x,y)=>x+y,0);
+const rviz=(A,L,R)=>{const p=PS(A),pl=L?p[L-1]:0,n=A.length;const row=(l,f)=>`<span class="l">${l}</span>`+A.map((_,i)=>f(i)).join('');const bar=(l,lo,hi,c)=>row(l,i=>`<i class="bn" style="${i>=lo&&i<=hi?`background:${c};border-style:solid`:''}"></i>`);
+const col=i=>i>=L&&i<=R?'var(--ye)':i<L?'var(--gr)':'';const cs=i=>col(i)?`background:color-mix(in srgb,${col(i)} 32%,var(--cc));border-color:${col(i)}`:'';
+let h=`<div class="pgw"><div class="pg" style="grid-template-columns:96px repeat(${n},minmax(36px,1fr))">`+row('index',i=>`<span class="l" style="text-align:center">${i}</span>`)+row('arr',i=>`<span class="c" style="${cs(i)}">${A[i]}</span>`)+row('prefix',i=>`<span class="c" style="${i==R?'border-color:var(--ac);background:color-mix(in srgb,var(--ac) 45%,var(--cc))':''}${L&&i==L-1?'border-color:var(--gr);background:color-mix(in srgb,var(--gr) 45%,var(--cc))':''}">${p[i]}</span>`)+bar('prefix['+R+']',0,R,'var(--ac)')+(L?bar('prefix['+(L-1)+']',0,L-1,'var(--gr)'):row('nothing before',()=>'<i class="bn"></i>'))+bar('left over',L,R,'var(--ye)')+'</div></div>';
+return {h,v:p[R]-pl,a:p[R],b:pl}};
+const TABS=[
+{t:'Recap & plan',s:[
+think('Recap before we start','Last class: range sum = prefix[e] − prefix[s−1]. A subarray is a continuous slice. For [3, 2, 5], how many subarrays are there and what is the sum of all their sums?','6 subarrays: [3] [3,2] [3,2,5] [2] [2,5] [5]. Sums 3+5+10+2+7+5 = <b>32</b>. This was asked at Google and Facebook.','Let them list the subarrays aloud before revealing.'),
+info('Today’s plan','<p>Every problem goes brute force first, then the optimisation, one click at a time.</p>'+cards([['Part 1','Sum of all subarray sums','Brute O(n³) → prefix → carry forward'],['Part 2','Contribution technique','Count how often each element appears'],['Part 3','Window of length K','Count windows, brute force, sliding window'],['Part 4','Real world and AI prompts','180-day dashboard, prompt library']]),'Say the three words: prefix, carry forward, contribution.')]},
+{t:'All subarray sums',s:[
+ST('ASK',think('Problem 1','Given [3, 2, 5], find the total of all subarray sums. How would you generate every subarray and sum it?','Pick a start i, pick an end j, then add elements i to j. Three loops: <b>O(n³)</b>.','Ask for the loops before the code.')),
+ST('BRUTE FORCE',W('Brute force: three loops','One click = one step. k adds an element into subarray_sum; when k finishes, the sum goes into total.',k=>{const a=SA,ev=bev(a),v=st.bb??0,c=v?ev[v-1]:null,m={},cl={};if(c){for(let x=c.i;x<=c.j;x++)cl[x]='rg';mk(m,c.i,'i');mk(m,c.j,'j');if(c.t=='k'){cl[c.k]='sw sel';mk(m,c.k,'k')}}
+const done=ev.slice(0,v).filter(e=>e.t=='d').map(e=>`[${a.slice(e.i,e.j+1).join(', ')}] = ${e.s}`);const ks=ev.slice(0,v).filter(e=>e.t=='k').length;
+const msg=!c?'Press Start. i and j will pick a subarray.':c.t=='k'?`i=${c.i}, j=${c.j}, k=${c.k}: subarray_sum += A[${c.k}] → <b>${c.s}</b>`:`Subarray [${a.slice(c.i,c.j+1).join(', ')}] is finished: total += ${c.s} → <b>${c.tot}</b>`;
+return cells(a,m,cl)+`<p class="ex">${msg}</p><p class="ex">Finished: ${done.join(' · ')||'none yet'}</p><p class="ex">Element additions so far (k-loop): <b>${ks}</b> · total = <b>${c?(c.t=='d'?c.tot:c.tot):0}</b>${v>=ev.length?' · <b>Answer 32</b>. For n elements this is O(n³).':''}</p>`+btn('bb',ev.length,'Start','Next step')},'Point at the k-loop: it re-adds elements already added.')),
+ST('AI MOMENT 1',think('Find the redundancy','Prompt to paste: “Here is my brute force. Which lines do redundant work, what values could be reused, and what technique lets me reuse them?” Where does the waste sit in the three loops?','The inner <b>k-loop</b>. For (i, j) it re-sums A[i..j] although A[i..j−1] was just summed. AI suggests two ways to reuse it: <b>prefix sum</b> or <b>carry forward</b>. Both give O(n²).','Ask learners to predict the waste before revealing.')),
+ST('PREFIX SUM',W('Prefix sum: build the array','prefix[i] = prefix[i-1] + arr[i]. Done once, O(n).',k=>{const i=st.pb??0,p=PS(SA);return cells(SA,{[i]:'i'},{[i]:'sel'})+`<p class="ex">prefix</p>`+cells(SA.map((_,x)=>x<=i?p[x]:'·'),{},{[i]:'sw'})+code(['prefix[0] = arr[0]','for (i → 1 to n-1)','    prefix[i] = prefix[i-1] + arr[i]'],i?2:0)+`<p class="ex">${i?`prefix[${i}] = ${p[i-1]} + ${SA[i]} = <b>${p[i]}</b>`:'prefix[0] = arr[0] = <b>3</b>'}</p>`+btn('pb',2,'Next cell','Next cell')},'')),
+ST('PREFIX SUM',W('Prefix sum: one subtraction per subarray','Each click moves to the next (i, j). Blue minus green leaves exactly the yellow subarray. The k-loop is gone.',k=>{const P=pairs(3),v=st.pp??0;if(!v)return `<p class="ex">prefix = [3, 5, 10]. Press the button to take the first subarray.</p>`+btn('pp',P.length,'First subarray','Next subarray');const [L,R]=P[v-1],r=rviz(SA,L,R);let tot=0;P.slice(0,v).forEach(([x,y])=>tot+=rviz(SA,x,y).v);
+return `<p class="ex">Subarray (i=${L}, j=${R}) = [${SA.slice(L,R+1).join(', ')}]</p>`+r.h+`<p class="ex"><b>${L?`prefix[${R}] − prefix[${L-1}] = ${r.a} − ${r.b} = ${r.v}`:`i = 0 → prefix[${R}] = ${r.v}`}</b> · total so far <b>${tot}</b>${v>=P.length?' · <b>Answer 32</b>':''}</p>`+btn('pp',P.length,'First subarray','Next subarray')},'Blue covers 0..j. Green is the part before i.')),
+ST('PREFIX SUM',info('Prefix sum: complexity','<p>Two nested loops, each subarray sum is one subtraction.</p>'+code(['for (i → 0 to n-1)','    for (j → i to n-1)','        sum = (i == 0) ? prefix[j] : prefix[j] - prefix[i-1]','        total += sum'])+cards([['TIME','O(n²)','n(n+1)/2 subarrays, O(1) each'],['SPACE','O(n)','the prefix array']]),'')),
+ST('CARRY FORWARD',think('Reuse the previous sum','For A = [−4, 1, 3, 2], i = 0: j = 1 gives −4 + 1 and j = 2 gives −4 + 1 + 3. If you already have the first, how do you get the second?','Just add A[2]. Keep a running <b>currSum</b>: when j moves, add A[j] to it. Reset to 0 when i moves.','')),
+ST('CARRY FORWARD',W('Carry forward: currSum rolls along','One click = one (i, j). currSum += A[j], then total += currSum. currSum resets for each new i.',k=>{const ev=cev(CF),v=st.cf??0,c=v?ev[v-1]:null,m={},cl={};if(c){for(let x=c.i;x<=c.j;x++)cl[x]='rg';cl[c.j]='sw sel';mk(m,c.i,'i');mk(m,c.j,'j')}
+let h='';ev.slice(0,v).forEach(e=>h+=`<div class="row"><span>i=${e.i}, j=${e.j} · currSum = ${e.cs}</span><b>total ${e.tot}</b></div>`);const adds=ev.slice(0,v).length,brute=ev.slice(0,v).reduce((s,e)=>s+e.j-e.i+1,0);
+const msg=!c?'Press Start.':`${c.j==c.i?'New i: currSum reset to 0. ':''}currSum = ${c.p} + A[${c.j}] = <b>${c.cs}</b> → total = ${c.tot-c.cs} + ${c.cs} = <b>${c.tot}</b>`;
+return cells(CF,m,cl)+`<p class="ex">${msg}</p>`+h+`<p class="ex">Additions into currSum: <b>${adds}</b> (brute force would have used ${brute} by now)${v>=ev.length?' · <b>Answer 16</b>. O(n²) time, O(1) space.':''}</p>`+btn('cf',ev.length,'Start','Next step')},'The dry run table in the script, built live.')),
+ST('COMPARE',info('AI moment 2: compare structurally','<p>Both have the same two-loop skeleton. Only the way sum(i, j) is kept differs.</p>'+cards([['PREFIX SUM','prefix[j] − prefix[i−1]','Time O(n²) · Space O(n) · best for many range queries'],['CARRY FORWARD','currSum += arr[j]','Time O(n²) · Space O(1) · best for sequential walks']])+'<p class="ex">Prompt: “Compare the two solutions side by side. What is identical, what is the only thing that changed, which would you use when?”</p>','Same technique, different storage.'))]},
+{t:'Contribution',s:[
+ST('AI MOMENT 3',think('Flip the perspective','Instead of looping over subarrays, loop over <b>elements</b> and ask: in how many subarrays does this element appear? Try it on [1, 2, 3]. How many subarrays contain 2?','4 subarrays: [2], [1,2], [2,3], [1,2,3]. 1 appears in 3, 3 appears in 3. Total = 1·3 + 2·4 + 3·3 = <b>20</b>.','Prompt: “Can I iterate over elements instead, counting how many subarrays each belongs to?”')),
+ST('COUNT',W('Count subarrays containing A[i]','Per element: choose a start on the left, choose an end on the right. Three clicks per element.',k=>{const a=CA[st.cc??0],n=a.length,v=st.ccj??0,e=Math.floor((v-1)/3),g=(v-1)%3;let tot=0;for(let x=0;x<Math.max(0,e+(g==2?1:0));x++)tot+=a[x]*(x+1)*(n-x);const m={},cl={};
+if(v){for(let x=0;x<=e;x++)cl[x]='sw';m[e]='A['+e+']';if(g>=1)for(let x=e;x<n;x++)cl[x]=(x==e?'sw ':'')+'rg';}
+const l=e+1,r=n-e,subs=[];if(v&&g>=2)for(let s=0;s<=e;s++)for(let t=e;t<n;t++)subs.push(`[${a.slice(s,t+1).join(',')}]`);
+const T_=v?[`<b>Left choices:</b> the start can be 0 … ${e} → <b>${l}</b> options (green).`,`<b>Right choices:</b> the end can be ${e} … ${n-1} → <b>${r}</b> options (yellow).`,`${l} × ${r} = <b>${l*r}</b> subarrays contain A[${e}]. Contribution = ${a[e]} × ${l*r} = <b>${a[e]*l*r}</b>.`][g]:'Press the button to start with index 0.';
+const full=v>=3*n,brute=pairs(n).reduce((s,[i,j])=>s+wsum(a,i,j-i+1),0);
+return asel('cc',CA)+cells(a,m,cl)+`<p class="ex">${T_}</p>${subs.length?`<p class="ex">They are: ${subs.join(' ')}</p>`:''}<p class="ex">Running total: <b>${tot+(g==2&&v?0:0)}</b>${v&&g==2?' + '+a[e]*l*r+' = <b>'+(tot+a[e]*l*r)+'</b>':''}${full?` · matches brute force (${brute}) ✓`:''}</p>`+btn('ccj',3*n,'Start with index 0','Next')},'Pause before the product and ask learners for the number.')),
+ST('QUIZ',quiz('Quiz 1','A = [3, −2, 4, −1, 2, 6]. In how many subarrays does the element at index 1 appear?',null,['6','3','10','8'],2,'Starts: 0 or 1 (2 options). Ends: 1 … 5 (5 options). 2 × 5 = 10.','')),
+ST('QUIZ',quiz('Quiz 2','Same array. In how many subarrays does the element at index 2 appear?',null,['6','12','10','8'],1,'Starts: 0, 1, 2 (3). Ends: 2 … 5 (4). 3 × 4 = 12.','')),
+ST('FORMULA',info('The formula (i+1) × (n−i)','<p>Starts: 0 … i gives <b>i+1</b>. Ends: i … n−1 gives <b>n−i</b>. Contribution of A[i] = A[i] · (i+1) · (n−i).</p>'+code(['total = 0','for (i → 0 to n-1)','    total += arr[i] * (i+1) * (n-i)'])+cards([['BRUTE','Three loops','O(n³)'],['PREFIX','Two loops + array','O(n²), space O(n)'],['CARRY FORWARD','Two loops, currSum','O(n²), space O(1)'],['CONTRIBUTION','One loop','O(n), space O(1)']]),'The optimisation journey at a glance.'))]},
+{t:'Window of length K',s:[
+ST('COUNT',W('How many windows of length K?','The start decides the window: end = start + K − 1. Place windows one by one.',k=>{const N=st.cn??7,K=Math.min(st.ck??4,N),cnt=N-K+1,v=Math.min(st.cwj??0,cnt),s=v-1,A=[...Array(N).keys()],cl={};if(v)for(let x=s;x<s+K;x++)cl[x]='rg';
+return sl2('cn',3,10,7,'N','st.cwj=0')+sl2('ck',1,10,4,'K','st.cwj=0')+cells(A,{},cl)+`<p class="ex">${v?`Window ${v}: start = ${s}, end = ${s}+${K}−1 = <b>${s+K-1}</b>`:'Press the button to place the first window at start 0.'}</p><p class="ex">Starts used: ${[...Array(v).keys()].join(', ')||'none'}${v>=cnt?` · the last start is N−K = ${N-K}. Total = <b>N−K+1 = ${cnt}</b>`:''}</p>`+btn('cwj',cnt,'Place first window','Slide start by 1')},'Try K = N (only 1 window) and K = 1 (N windows).')),
+ST('QUIZ',quiz('Quiz 3','N = 7, K = 4. How many subarrays of length K?',null,['3','4','5','6'],1,'N − K + 1 = 7 − 4 + 1 = 4.','')),
+ST('ASK',think('Problem 2','A = [−3, 4, −2, 5, 3, −2, 8, 2, −1, 4], K = 5. Find the maximum sum among all subarrays of length 5.','There are 6 windows with sums 7, 8, 12, 16, 10, 11. Maximum <b>16</b>.','Ask for the method first.')),
+ST('BRUTE FORCE',W('Brute force: sum every window from scratch','One click = one window. Count the additions.',k=>{const v=st.kb??0,s=v-1,cl={},best=v?Math.max(...WS.slice(0,v)):null;if(v){const b=WS.slice(0,v).indexOf(best);for(let x=b;x<b+KK;x++)cl[x]='sw';for(let x=s;x<s+KK;x++)cl[x]='rg'}
+let h='';WS.slice(0,v).forEach((w,x)=>h+=`<div class="row"><span>[${x}…${x+KK-1}] ${AK.slice(x,x+KK).map(ng).join(' + ')}</span><b>= ${w}</b></div>`);
+return cells(AK,v?{[s]:'i',[s+KK-1]:'j'}:{},cl)+h+`<p class="ex">Additions so far: <b>${v*KK}</b> (K = ${KK} per window) · best so far: <b>${best??'·'}</b>${v>=WS.length?' · <b>Answer 16</b>. About K × (N−K+1) additions overall.':''}</p>`+btn('kb',WS.length,'First window','Next window')},'Green outline marks the best window so far.')),
+ST('BRUTE FORCE',W('When is brute force worst?','Additions = K × (N−K+1). Bars for N = 10, K = 1 … 10.',k=>{const N=10,v=[...Array(N)].map((_,x)=>(x+1)*(N-x)),mx=Math.max(...v);return `<div class="bars">${v.map((y,x)=>`<i class="${y==mx?'big':''}" style="height:${y/mx*100}%" title="K=${x+1}: ${y}"></i>`).join('')}</div><p class="ex">K = 1 … 10, left to right. Red bars are the worst: <b>${mx}</b> additions at K = 5 or 6, about N/2. Sliding window needs only about N = 10 for every K.</p>`},'Answer to the script’s question: K near N/2.')),
+ST('AI MOMENT 4',think('Predict the optimisation','If you know the sum of [A, B, C, D], what is the cheapest way to get the sum of [B, C, D, E]?','B, C, D are unchanged. Drop A, add E: <b>newSum = oldSum − A + E</b>. In indices: sum = sum + A[j] − A[i−1]. O(1) per window.','Ask them to derive it before the next step.')),
+ST('SLIDING WINDOW',W('Sliding window: drop one, add one','First window costs K additions. Every later window is one subtract and one add.',k=>{const v=st.ks??0,s=v-1,cl={},m={};if(v){for(let x=s;x<s+KK;x++)cl[x]='rg';if(v>1){cl[s-1]='rd2 gone';cl[s+KK-1]='sw';m[s-1]='out';m[s+KK-1]='in'}}
+const best=v?Math.max(...WS.slice(0,v)):null;let h='';WS.slice(0,v).forEach((w,x)=>h+=`<div class="row"><span>window [${x}…${x+KK-1}]</span><b>${w}</b></div>`);
+const msg=!v?'Press the button to sum the first window.':v==1?`First window: ${AK.slice(0,KK).map(ng).join(' + ')} = <b>${WS[0]}</b> (K additions).`:`sum = ${WS[v-2]} − ${ng(AK[s-1])} + ${ng(AK[s+KK-1])} = <b>${WS[v-1]}</b> (red leaves, green enters).`;
+return cells(AK,m,cl)+`<p class="ex">${msg}</p>`+code(['sum = A[0] + … + A[K-1]','while (j < N)','    sum = sum + A[j] - A[i-1]','    ans = max(ans, sum)'],v>1?2:0)+h+`<p class="ex">Operations: <b>${v?KK+2*(v-1):0}</b> · best: <b>${best??'·'}</b>${v>=WS.length?' · <b>Answer 16</b>. O(N) time, O(1) space, no modification of the array.':''}</p>`+btn('ks',WS.length,'Sum the first window','Slide right')},'Compare the operations with the brute force counter.'))]},
+{t:'Real world & AI',s:[
+think('A $2M/month dashboard','A system analyses each customer over a 180-day window and recomputes all 180 days every day. What actually changes from yesterday to today?','One day is <b>added</b>, one day is <b>removed</b>, 178 days are identical. This is the brute force idea.','Link to the K-window brute force.'),
+info('The fix: sliding window','<p><b>New result = previous result + new data − old data</b>, the same as sum = sum + A[j] − A[i−1].</p>'+cards([['BEFORE','Reprocess 180 days daily','Like the brute force window'],['AFTER','Add 1 day, remove 1 day','Like the sliding window']]),'Cost and runtime dropped sharply.'),
+info('Your prompt library','<p>Frame prompts around the thinking step. The answer is for AI, the thinking is yours.</p>'+cards([['FIND REDUNDANCY','Slow code?','Which lines repeat work?'],['COMPARE','Two solutions?','Same skeleton, what changed?'],['FLIP','Stuck?','Iterate over X instead of Y?'],['PREDICT','Before reading','Derive the formula first'],['META','Want a tutor','Ask me a clarifying question first']]),'Next class: memory management and sorting basics.')]}
+];
+function go(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;
+$('#tn').textContent='Instructor notes: '+(notes?'on':'off');
+$('#tabs').innerHTML=TABS.map((x,i)=>`<button class="${i==T?'on':''}" onclick="T=${i};S=0;go()"><i>0${i}</i>${x.t}</button>`).join('');
+$('#side').innerHTML=`<h3>${tb.t}</h3>`+tb.s.map((x,i)=>`<button class="${i==S?'on':''}" onclick="S=${i};go()"><span>${i+1}</span>${x.h}</button>`).join('');
+$('#main').innerHTML=`<small class="k">${tb.t.toUpperCase()} · STEP ${S+1} OF ${tb.s.length}</small>${tb.s.every(x=>x.st)?`<div class="stg">${[...new Set(tb.s.map(x=>x.st))].map(g=>`<span class="${g==s.st?'on':''}">${g}</span>`).join('›')}</div>`:''}<h2>${s.h}</h2>${s.r(k)}${notes&&s.n?`<div class="ins"><small>INSTRUCTOR</small><p>${s.n}</p></div>`:''}`;
+const last=S==tb.s.length-1,nt=TABS[T+1];
+$('#nx').textContent=s.th&&!rev[k]?'Reveal the answer ›':last?(nt?'Next: '+nt.t+' ›':'Done'):'Next ›';
+$('#nx').disabled=last&&!nt&&!(s.th&&!rev[k]);$('#bk').disabled=!T&&!S}
+function nx(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;if(s.th&&!rev[k])rev[k]=1;else if(S<tb.s.length-1)S++;else if(T<TABS.length-1){T++;S=0}go()}
+function bk(){if(S)S--;else if(T){T--;S=TABS[T].s.length-1}go()}
+addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;if(e.key=='ArrowRight')nx();if(e.key=='ArrowLeft')bk()});
+go();
+</script></body></html>
