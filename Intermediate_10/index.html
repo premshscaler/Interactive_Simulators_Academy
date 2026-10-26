@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Intermediate DSA · Strings</title>
+<style>
+:root,:root[data-theme=dark]{--bg:#0a0e1a;--cd:#151b2e;--bd:#2a3350;--tx:#e8ecf8;--mu:#8b95b5;--ac:#8b9cf8;--ye:#f5c84c;--gr:#5ed49a;--rd:#f07878;--cc:#0d1222;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f6fc;--cd:#fff;--bd:#d5dbee;--tx:#171c30;--mu:#5b6586;--ac:#4a5ce0;--ye:#a67600;--gr:#17874f;--rd:#c23b3b;--cc:#eef1fa}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+body::before{content:"s[i]";position:fixed;right:-2%;bottom:2%;font:800 clamp(40px,9vw,120px) ui-monospace,Menlo,monospace;color:var(--tx);opacity:.035;white-space:nowrap;pointer-events:none}
+header{max-width:1180px;margin:auto;padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header small{color:var(--mu);font:12px ui-monospace,Menlo,monospace}header h1{font-size:22px;margin:2px 0}
+.tg{background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:20px;padding:7px 14px;cursor:pointer;font:inherit}
+#tabs{max-width:1180px;margin:10px auto 0;padding:0 20px;display:flex;overflow-x:auto;border-bottom:1px solid var(--bd)}
+#tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:12px 14px;font:600 15px inherit;cursor:pointer;white-space:nowrap}
+#tabs button.on{color:var(--tx);border-color:var(--ac)}#tabs i{font:normal 12px ui-monospace,Menlo,monospace;opacity:.7;margin-right:4px}
+.wrap{max-width:1180px;margin:22px auto;padding:0 20px;display:grid;grid-template-columns:260px 1fr;gap:28px}
+#side h3{margin:0 0 12px;color:var(--mu)}#side button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:1px solid transparent;color:var(--mu);border-radius:10px;padding:9px;font:inherit;cursor:pointer}
+#side button.on{background:var(--cd);border-color:var(--bd);color:var(--tx);font-weight:600}
+#side span{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--ac);display:grid;place-items:center;font-size:12px}
+#side .on span{background:var(--ac);color:#0a0e1a}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:26px 28px;min-width:0}
+.k{color:var(--ac);font:12px ui-monospace,Menlo,monospace;letter-spacing:.06em}
+h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spacing:-.02em}
+.think,.card2{border:2px solid var(--ac);border-radius:16px;padding:18px 20px;background:var(--cc);margin-bottom:14px}.card2{border:1px solid var(--bd)}
+.tag{background:var(--ye);color:#1a1400;border-radius:6px;padding:2px 10px;font:700 12px ui-monospace,Menlo,monospace}
+.think h3,.card2 h3{font-size:22px;margin:12px 0}
+.btn{background:var(--ac);color:#0a0e1a;border:0;border-radius:10px;padding:10px 18px;font:700 15px inherit;cursor:pointer}.btn:disabled{opacity:.35;cursor:default}
+.ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}.ghost:disabled{opacity:.35}
+.ans{border-top:1px dashed var(--bd);padding-top:12px;margin:6px 0 14px}.ans small{color:var(--gr);font:700 12px ui-monospace,monospace}
+.ins{border-top:1px dashed var(--bd);margin-top:18px;padding-top:12px;color:var(--mu)}.ins small{color:var(--ye);font:700 12px ui-monospace,monospace}.ins p{margin:4px 0 0}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--bd);margin-top:20px;padding-top:16px;color:var(--mu);font:13px ui-monospace,monospace}
+.cells{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 26px}
+.cell{position:relative;min-width:56px;padding:12px 8px 22px;text-align:center;border:2px solid var(--bd);border-radius:10px;background:var(--cc);cursor:default}
+.cell b{font-size:20px}.cell small{position:absolute;bottom:3px;left:0;right:0;color:var(--mu);font-size:11px}
+.cell u{position:absolute;top:-24px;left:0;right:0;text-decoration:none;color:var(--ye);font:700 13px ui-monospace,monospace}
+.cell em{display:block;font:11px ui-monospace,monospace;color:var(--mu);margin-bottom:6px}
+.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 20%,var(--cc))}.sw{border-color:var(--gr)}.rg{border-color:var(--ye)}.emp{border-style:dashed;opacity:.5}
+.code{background:var(--cc);border-radius:12px;padding:12px 0;margin:10px 0;font:14px/1.7 ui-monospace,Menlo,monospace;overflow-x:auto}
+.code span{display:block;padding:0 16px;white-space:pre}.code i{color:var(--mu);margin-right:14px;font-style:normal}.code .hl{background:color-mix(in srgb,var(--ac) 22%,transparent)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font:600 15px inherit;cursor:pointer;text-align:left}
+.qf{margin-top:12px;padding:12px 14px;border-radius:12px;border:1px solid;font-size:14px;line-height:1.5}.qf.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 14%,var(--cd))}.qf.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 14%,var(--cd))}
+.opt b{background:var(--bd);border-radius:6px;padding:1px 8px;font-size:12px}.opt.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 18%,var(--cd))}.opt.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 18%,var(--cd))}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--bd)}.row span{flex:1 1 260px}.opt.sm{padding:6px 12px}
+.ex{color:var(--mu);margin:10px 0}.ex b{color:var(--tx)}mark{background:var(--ye);color:#1a1400;padding:0 4px;border-radius:3px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}.cd{border:1px solid var(--bd);border-radius:14px;padding:14px;background:var(--cc)}
+.cd small{color:var(--ac);font:12px ui-monospace,monospace}.cd h4{margin:4px 0;font-size:18px}.cd p{margin:0;color:var(--mu);font-size:14px}
+.bt{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}.bt label{color:var(--mu);font-size:14px}input[type=range]{accent-color:var(--ac)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:110px;margin:10px 0}.bars i{flex:1;background:var(--ac);border-radius:3px 3px 0 0;min-width:4px}.bars i.big{background:var(--rd)}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}#side{display:flex;gap:6px;overflow-x:auto}#side h3{display:none}#side button{white-space:nowrap;width:auto}.card{padding:18px}}
+.stg{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0;font:700 11px ui-monospace,Menlo,monospace;color:var(--mu);align-items:center}.stg span{padding:3px 9px;border-radius:12px;border:1px solid var(--bd)}.stg .on{background:var(--ye);color:#1a1400;border-color:var(--ye)}
+.pgw{overflow-x:auto}.pg{display:grid;grid-template-columns:82px repeat(10,minmax(36px,1fr));gap:5px;align-items:center;margin:12px 0;min-width:480px}.pg .l{color:var(--mu);font:12px ui-monospace,Menlo,monospace}.pg .c{text-align:center;padding:7px 0;border:2px solid var(--bd);border-radius:8px;background:var(--cc);font:600 14px ui-monospace,Menlo,monospace}.pg .bn{display:block;height:18px;border-radius:5px;border:1px dashed var(--bd)}
+ .rd2{border-color:var(--rd)}.gone b{text-decoration:line-through;opacity:.5}
+:focus-visible{outline:2px solid var(--ye);outline-offset:2px}
+</style></head><body>
+<header><div><small>INTERMEDIATE DSA · CLASS 10 </small><h1>Strings</h1></div>
+<button class="tg" id="tn" onclick="notes=!notes;go()"></button></header>
+<nav id="tabs"></nav>
+<div class="wrap"><aside id="side"></aside>
+<section class="card"><div id="main"></div>
+<div class="nav"><button class="ghost" id="bk" onclick="bk()">‹ Back</button><span>← → keys work too</span><button class="btn" id="nx" onclick="nx()">Next ›</button></div></section></div>
+<script>
+const $=s=>document.querySelector(s);let T=0,S=0,notes=true,rev={},st={};
+const code=(l,h)=>'<pre class="code" style="margin:10px 0">'+l.map((x,i)=>`<span class="${i==h?'hl':''}"><i>${i+1}</i>${x}</span>`).join('')+'</pre>';
+const cells=(a,m={},c={})=>`<div class="cells">${a.map((v,j)=>`<div class="cell ${c[j]||''}">${m[j]?`<u>${m[j]}</u>`:''}<b>${v}</b><small>[${j}]</small></div>`).join('')}</div>`;
+const cards=a=>`<div class="g">${a.map(x=>`<div class="cd"><small>${x[0]}</small><h4>${x[1]}</h4><p>${x[2]}</p></div>`).join('')}</div>`;
+const W=(h,n,r)=>({h,n,r}),info=(h,b,n)=>W(h,n,()=>b);
+const think=(h,q,a,n)=>({h,n,th:1,r:k=>`<div class="think"><span class="tag">THINK FIRST</span><h3>${q}</h3><button class="btn" onclick="rev['${k}']=!rev['${k}'];go()">${rev[k]?'Hide':'Reveal'} the answer</button></div>`+(rev[k]?`<div class="ans"><small>ANSWER</small><p>${a}</p></div>`:'')});
+const pickQ=(k,i,ok)=>{if(st[k]===ok)return;const t=st[k+'w']||[];if(i!==ok&&!t.includes(i))t.push(i);st[k+'w']=t;st[k]=i;st[k+'a']=(st[k+'a']||0)+1;go()};
+const quiz=(h,q,c,o,ok,why,n)=>W(h,n,k=>{const R=Array.isArray(why)?why:o.map((_,i)=>i==ok?why:'This option does not match. Re-read the question and try again.'),s=st[k],t=st[k+'w']||[],done=s===ok,at=st[k+'a']||0;
+return `<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3>${c?code(c):''}<div class="opts">${o.map((x,i)=>`<button class="opt ${done&&i==ok?'good':t.includes(i)?'bad':''}" ${done?'disabled':''} onclick="pickQ('${k}',${i},${ok})"><b>${'ABCD'[i]}</b>${x}</button>`).join('')}</div>`+(s==null?'':done?`<div class="qf good"><b>✓ Correct${at>1?' (after '+at+' tries)':' on the first try'}.</b> ${R[ok]}</div>`:`<div class="qf bad"><b>✗ Option ${'ABCD'[s]} is not right.</b> ${R[s]}<div class="bt"><button class="btn" onclick="st['${k}']=null;go()">Try again</button></div></div>`)+`</div>`});
+const sorter=(h,items,L,tail,n)=>W(h,n,k=>`<div class="card2">${items.map((t,i)=>{const v=st[k+i];return `<div class="row"><span>${t[0]}</span>${L.map((l,x)=>`<button class="opt sm ${v!=null&&x==t[1]?'good':v==x?'bad':''}" onclick="st['${k}${i}']=${x};go()">${l}</button>`).join('')}</div>`}).join('')}${items.every((_,i)=>st[k+i]!=null)?`<p class="ex"><b>${tail}</b></p>`:''}</div>`);
+const set=(f,v)=>`${f};go()`;
+const X=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').split('\n');
+const ST=(t,s)=>(s.st=t,s);
+const walk=(h,q,c,S_,ans)=>W(h,0,k=>{const v=st[k]??0;return `<div class="card2"><small class="k">WORK IT OUT</small><h3>${q}</h3>${c?code(X(c)):''}${S_.slice(0,v).map((s,i)=>`<div class="row"><span style="flex:0 0 26px"><b>${i+1}</b></span><span><b>${s[0]}</b><br>${s[1]}</span></div>`).join('')}${v>=S_.length?`<p class="ex"><b>Answer: ${ans}</b></p>`:''}<div class="bt"><button class="btn" ${v>=S_.length?'disabled':''} onclick="${set(`st['${k}']=(st['${k}']??0)+1`)}">${v?'Next step':'Show step 1'}</button><button class="ghost" onclick="${set(`st['${k}']=0`)}">Reset</button><span class="ex">${v} / ${S_.length}</span></div></div>`});
+const sl=(k,min,max,d,l)=>`<label>${l} = <b>${st[k]??d}</b> <input type="range" min="${min}" max="${max}" value="${st[k]??d}" onchange="st.${k}=+this.value;go()"></label>`;
+const btn=(k,max,first,nxt)=>{const v=st[k]??0;return `<div class="bt"><button class="btn" ${v>=max?'disabled':''} onclick="${set(`st.${k}=(st.${k}??0)+1`)}">${v?nxt:first}</button><button class="ghost" onclick="${set(`st.${k}=0`)}">Reset</button><span class="ex">${v} / ${max}</span></div>`};
+const nxb=(k,E,first,nxt,skip)=>{const v=st[k]??0;let t=-1;if(v<E.length){const g=E[v].g;t=E.reduce((a,e,i)=>e.g==g?i:a,-1)}return `<div class="bt"><button class="btn" ${v>=E.length?'disabled':''} onclick="${set(`st.${k}=(st.${k}??0)+1`)}">${v?nxt:first}</button><button class="ghost" ${t<0?'disabled':''} onclick="${set(`st.${k}=${t+1}`)}">${skip}</button><button class="ghost" onclick="${set(`st.${k}=0`)}">Reset</button><span class="ex">${v} / ${E.length}</span></div>`};
+const pick=(k,labels)=>`<div class="bt">${labels.map((l,i)=>`<button class="${i==(st[k]??0)?'btn':'ghost'}" onclick="${set(`st.${k}=${i};st.${k}j=0`)}">${l}</button>`).join('')}</div>`;
+const rvl=(k,items)=>{const v=st[k]??0;return items.slice(0,v).map(x=>`<div class="card2" style="padding:10px 14px;margin:8px 0"><small class="k">${x[0]}</small><br><b>${x[1]}</b>${x[2]?`<br><span class="ex">${x[2]}</span>`:''}</div>`).join('')+btn(k,items.length,'Reveal first','Reveal next')};
+const cb=(k,L,N)=>{const v=st[k]??0;return (v?code(L.slice(0,v),v-1)+`<p class="ex">${N[v-1]}</p>`:`<p class="ex">Empty function. Press the button to write the first line.</p>`)+btn(k,L.length,'Write first line','Write next line')};
+const sl2=(k,min,max,d,l,rs)=>`<label>${l} = <b>${st[k]??d}</b> <input type="range" min="${min}" max="${max}" value="${st[k]??d}" onchange="st.${k}=+this.value;${rs};go()"></label>`;
+const mx=(M,cl=()=>'',lb=()=>'',val=v=>v)=>`<div style="display:grid;grid-template-columns:repeat(${M[0].length},62px);gap:26px 8px;margin:24px 0 30px">${M.map((r,i)=>r.map((v,j)=>`<div class="cell ${cl(i,j)}"><u>${lb(i,j)}</u><b>${val(v,i,j)}</b><small>[${i}][${j}]</small></div>`).join('')).join('')}</div>`;
+const RV=(h,n,k,it)=>({h,n,r:()=>rvl(k,it),m:[k,it.length],ml:'Reveal next'});
+const CB=(h,n,k,L,N)=>({h,n,r:()=>cb(k,L,N),m:[k,L.length],ml:'Write next line'});
+const SB='anamadamm',PS='anamadamspe',PR=[[3,7],[0,3]],isP=t=>t==[...t].reverse().join(''),ch=String.fromCharCode;
+const cl0=(n,f)=>Object.fromEntries([...Array(n)].map((_,i)=>[i,f(i)]));
+// ---- ASCII of "Hello"
+const asw=()=>{const a=[...'Hello'],v=st.as??0,m={};a.forEach((x,i)=>{if(i<v)m[i]=x.charCodeAt(0)});
+return cells(a,m,cl0(5,i=>i<v?(i==v-1?'sel':'sw'):'emp'))+`<p class="ex">${v?`Index ${v-1} holds '${a[v-1]}', stored as the number <b>${a[v-1].charCodeAt(0)}</b>.`:'A string is an array of characters. Reveal them one at a time to see the number stored for each.'}</p>`+(v>=5?'<p class="ex"><b>"Hello" is stored as 72, 101, 108, 108, 111 at indices 0 to 4.</b></p>':'')+btn('as',5,'Show first character','Show next character')};
+// ---- toggle case
+const tgw=()=>{const w=['Hello','aDgbHJe'][st.tg??0],a=[...w],v=st.tgj??0,c=v-1,x=c>=0?a[c]:'',k=x?x.charCodeAt(0):0,up=x>='A'&&x<='Z',n=up?k+32:k-32,m={},out=a.map((y,i)=>i<v?ch(y.charCodeAt(0)^32):'·');a.forEach((y,i)=>{if(i<v)m[i]=y.charCodeAt(0)});
+return pick('tg',['"Hello"','"aDgbHJe"'])+'<p class="ex">Input (ASCII above each letter once visited)</p>'+cells(a,m,cl0(a.length,i=>i==c?'sel':i<c?'sw':''))+'<p class="ex">Output so far</p>'+cells(out,{},cl0(a.length,i=>i<v?(i==c?'sel':'sw'):'emp'))+code(['for (i → 0 to N-1)',"    if (arr[i] >= 'A' && arr[i] <= 'Z')",'        arr[i] = arr[i] + 32','    else','        arr[i] = arr[i] - 32'],c>=0?(up?2:4):-1)+`<p class="ex">${c>=0?`i = ${c}: '${x}' has ASCII ${k}, so it is ${up?'uppercase (65 to 90): add 32':'lowercase (97 to 122): subtract 32'} → ${k} ${up?'+':'−'} 32 = ${n} → '<b>${ch(n)}</b>'.`:'Press the button to look at the first character.'}</p>`+(v>=a.length?`<p class="ex"><b>Result: "${out.join('')}"</b></p>`:'')+btn('tgj',a.length,'Check first character','Next character')};
+// ---- palindrome check
+const pwE=([s,e])=>{const E=[];while(s<e){const ok=PS[s]==PS[e];E.push({s,e,ok});if(!ok)return E;s++;e--}E.push({s,e,fin:1});return E};
+const pww=()=>{const r=PR[st.pw??0],E=pwE(r),v=st.pwj??0,c=v?E[v-1]:null,m={},cl={};for(let i=r[0];i<=r[1];i++)cl[i]='rg';
+E.slice(0,v-1).forEach(e=>{cl[e.s]=cl[e.e]='sw'});
+if(c&&c.fin){for(let i=r[0];i<=r[1];i++)cl[i]='sw'}else if(c){cl[c.s]=cl[c.e]=c.ok?'sel':'rd2';m[c.s]='start';m[c.e]=c.s==c.e?'':'end'}
+return pick('pw',['[3, 7]','[0, 3]'])+cells([...PS],m,cl)+code(['while (start < end)','    if (s[start] != s[end]) return false','    start++, end--','return true'],c?(c.fin?3:c.ok?2:1):-1)+`<p class="ex">${c?(c.fin?`start = ${c.s} is no longer less than end = ${c.e}: every pair matched → return <b>true</b>.`:`start = ${c.s}, end = ${c.e}: s[${c.s}] = '${PS[c.s]}', s[${c.e}] = '${PS[c.e]}'. ${c.ok?'Equal → move inward: start++, end−−.':'Different → return <b>false</b> right away.'}`):`Substring ${PR[st.pw??0]} of "${PS}". Press the button to compare the first pair.`}</p>`+btn('pwj',E.length,'Compare first pair','Next step')};
+// ---- longest palindromic substring
+const bfE=()=>{const E=[],n=SB.length;for(let i=0;i<n;i++)for(let j=i;j<n;j++)E.push({g:i,i,j,hit:isP(SB.slice(i,j+1))});return E};
+const bfw=()=>{const E=bfE(),v=st.bf??0,c=v?E[v-1]:null;let b=0,bi=0;E.slice(0,v).forEach(e=>{if(e.hit&&e.j-e.i+1>b){b=e.j-e.i+1;bi=e.i}});const cl={};for(let k=bi;k<bi+b;k++)cl[k]='rg';if(c)for(let k=c.i;k<=c.j;k++)cl[k]=c.hit?'sw':'sel';
+return cells([...SB],{},cl)+`<p class="ex">${c?`Substring [${c.i}..${c.j}] = "<b>${SB.slice(c.i,c.j+1)}</b>": ${c.hit?'a palindrome, length '+(c.j-c.i+1):'not a palindrome'}.`:'Generate every substring [i..j] and test each one. Press the button for the first.'}</p><p class="ex">Best so far: <b>${b}</b>${b?` ("${SB.substr(bi,b)}")`:''} · substrings tested: <b>${v}</b> of ${E.length}</p>`+nxb('bf',E,'Test first substring','Next substring','Finish this start')};
+const ceE=()=>{const n=SB.length,E=[];let bl=0,bs=0;for(let c=0;c<n;c++)for(const m of[0,1]){let l=c,r=c+m;for(;;){const k=l<0||r>=n?'out':SB[l]!=SB[r]?'miss':'ok',e={g:c,c,m,l,r,k};E.push(e);if(k!='ok'){e.len=r-l-1;if(e.len>bl){bl=e.len;bs=l+1}e.bl=bl;e.bs=bs;break}e.bl=bl;e.bs=bs;l--;r++}}return E};
+const cew=()=>{const E=ceE(),v=st.ce??0,c=v?E[v-1]:null,m={},cl={},n=SB.length;
+if(c){for(let k=c.bs;k<c.bs+c.bl;k++)cl[k]='rg';for(let k=c.k=='ok'?c.l:c.l+1;k<=(c.k=='ok'?c.r:c.r-1);k++)cl[k]='sw';if(c.l>=0&&c.r<n){cl[c.l]=cl[c.r]=c.k=='miss'?'rd2':'sel';m[c.l]='l';m[c.r]=c.l==c.r?'l=r':'r'}}
+return cells([...SB],m,cl)+`<p class="ex">${c?`Centre ${c.c} (${c.m?'even':'odd'}): `+(c.k=='ok'?`s[${c.l}] = '${SB[c.l]}' equals s[${c.r}] = '${SB[c.r]}' → match. Expand: l−−, r++.`:c.k=='miss'?`s[${c.l}] = '${SB[c.l]}' and s[${c.r}] = '${SB[c.r]}' differ → stop. Length = r − l − 1 = <b>${c.len}</b>.`:`${c.l<0?'l went below 0':'r reached N'} → stop. Length = r − l − 1 = <b>${c.len}</b>.`):'Every character is an odd centre, every adjacent pair an even centre. Press the button for the first comparison.'}</p><p class="ex">Best so far: <b>${c?c.bl:0}</b>${c&&c.bl?` ("${SB.substr(c.bs,c.bl)}")`:''} · comparisons: <b>${v}</b> of ${E.length}</p>`+nxb('ce',E,'First comparison','Next comparison','Finish this centre')};
+// ---- immutability
+const ccw=()=>{const v=st.cc??0,a=[...'abcdef'].slice(0,v),t=v*(v+1)/2;
+return cells(a,{},cl0(v,i=>i==v-1?'sel':'sw'))+`<p class="ex">${v?`res += '${a[v-1]}': a <b>new</b> string "${a.join('')}" is created and all ${v} characters are copied. Objects created: <b>${v}</b> · total copies: 1${v>1?' + '+[...Array(v-1)].map((_,i)=>i+2).join(' + '):''} = <b>${t}</b>.`:'Build "abcdef" by adding one character at a time with res += ch. Press the button for the first character.'}</p>`+(v?`<p class="ex">StringBuilder: ${v} append${v>1?'s':''}, ${v} write${v>1?'s':''}, no copying of old characters.</p>`:'')+(v>=6?'<p class="ex"><b>6 objects and 21 copies: N(N+1)/2 → O(N²). StringBuilder: N writes → O(N).</b></p>':'')+btn('cc',6,'Add first character','Add next character')};
+const PL=['String s1 = "Hello"','String s2 = "Hello"','String s3 = s1','s1 = "Java"','s2.concat(" World")','String newS3 = s3.concat(" Scaler")'],
+PM=[[{s1:'Hello'},[['Hello',1]],'"Hello" is created in the pool and s1 points to it.'],
+[{s1:'Hello',s2:'Hello'},[['Hello',2]],'The pool already has "Hello", so no new object: s2 points to the same one.'],
+[{s1:'Hello',s2:'Hello',s3:'Hello'},[['Hello',3]],'Copying a reference: three arrows, one object.'],
+[{s1:'Java',s2:'Hello',s3:'Hello'},[['Hello',2],['Java',1]],'Did "Hello" change? No. A new object "Java" is created and only s1 moves.'],
+[{s1:'Java',s2:'Hello',s3:'Hello'},[['Hello',2],['Java',1],['Hello World',0]],'concat builds a new string, but nobody stores it, so it is orphaned. s2 still points to "Hello".'],
+[{s1:'Java',s2:'Hello',s3:'Hello',newS3:'Hello Scaler'},[['Hello',2],['Java',1],['Hello World',0],['Hello Scaler',1]],'This time the new object is captured by newS3. s3 is still "Hello".'],
+[{s1:'Java',s2:'Hello',s3:'Hello',newS3:'Hello Scaler'},[['Hello',2],['Java',1],['Hello World',0],['Hello Scaler',1]],'Final values: s1 = Java, s2 = Hello, s3 = Hello, newS3 = Hello Scaler. The orphan “Hello World” is eligible for garbage collection.']];
+const plw=()=>{const v=st.pl??0,p=v?PM[v-1]:null;
+return code(PL,v&&v<7?v-1:-1)+(p?`<div class="g"><div><b class="k">STACK</b>${Object.entries(p[0]).map(([k,x])=>`<div class="cd" style="margin:6px 0"><small>${k}</small><h4>→ "${x}"</h4></div>`).join('')}</div><div><b class="k">STRING POOL</b>${p[1].map(([t,r])=>`<div class="cd ${r?'':'rd2 gone'}" style="margin:6px 0"><small>${r?r+' reference'+(r>1?'s':''):'ORPHANED'}</small><h4><b>"${t}"</b></h4></div>`).join('')}</div></div><p class="ex">${p[2]}</p>`:'<p class="ex">Press the button to run the first statement.</p>')+btn('pl',7,'Run first statement','Next statement')};
+const AG=it=>it.map(x=>`<div class="card2" style="padding:10px 14px;margin:8px 0"><small class="k">${x[0]}</small><br><b>${x[1]}</b>${x[2]?`<br><span class="ex">${x[2]}</span>`:''}</div>`).join('');
+const TABS=[
+{t:'Recap & plan',s:[
+think('Text in a computer','A computer only understands numbers. How can it store the word “Hello”?','Every character has a number, its <b>ASCII value</b>, and the word is stored as an array of those characters. That is a <b>string</b>.','Take guesses before revealing.'),
+W('Today’s plan','Agenda: all parts are shown at once.',()=>AG([['PART 1','String basics','Characters and ASCII values'],['PART 2','Toggle case','Add or subtract 32'],['PART 3','Check palindrome','Two pointers'],['PART 4','Longest palindromic substring','Brute force, then centre expansion'],['PART 5','Immutability','Why += is slow, StringBuilder']]))]},
+{t:'String basics',s:[
+ST('ASK',think('What is a string?','A string is written in double quotes, like "Hello World!". What is it really made of, and how is a single character written?','A <b>sequence of characters</b>, in other words an array of characters. A single character is written in single quotes, like <b>\'a\'</b>.','')),
+ST('LEARN',RV('ASCII values','Reveal one range at a time.','as0',[['UPPERCASE','A to Z','ASCII 65 to 90'],['LOWERCASE','a to z','ASCII 97 to 122'],['DIGITS','0 to 9','ASCII 48 to 57'],['THE KEY GAP','+32 / −32','\'a\' (97) − \'A\' (65) = 32, so lowercase = uppercase + 32']])),
+ST('TRY',W('How “Hello” sits in memory','Reveal one character at a time.',asw)),
+ST('QUIZ',quiz('Quiz: char arithmetic','What is printed?',["char ch = (char)('a' + 1)",'print(ch)'],['98','b','a','c'],1,['98 is the ASCII value of b. We cast back to char, so the character is printed.','Correct. Arithmetic uses the ASCII value: 97 + 1 = 98, and (char)98 is b.','a is where we started. We added 1 before printing.','c would need + 2. Here we add only 1.'],''))]},
+{t:'Toggle case',s:[
+ST('ASK',think('Problem 1','Toggle every letter of "Hello": lowercase becomes uppercase and uppercase becomes lowercase. What is the output, and which ASCII fact could help?','<b>"hELLO"</b>. Both versions of a letter differ by exactly 32, so add or subtract 32.','')),
+ST('QUIZ',quiz('Quiz 1','What is the output for "aDgbHJe"?',null,['ADGBHJE','aDgbHJe','AdGBhjE','adgbhje'],2,['That makes every letter uppercase. Toggle must also turn uppercase letters lowercase.','That is the input unchanged. Toggling flips every letter.','Correct. a→A, D→d, g→G, b→B, H→h, J→j, e→E.','That makes every letter lowercase. Lowercase letters must become uppercase.'],'')),
+ST('LEARN',RV('The observation','Reveal one rule at a time.','tg0',[['LOWERCASE → UPPERCASE','subtract 32','\'e\' (101) − 32 = 69 = \'E\''],['UPPERCASE → LOWERCASE','add 32','\'H\' (72) + 32 = 104 = \'h\'']])),
+ST('CODE',CB('Write the code line by line','Convert to a char array, edit, convert back.','c1',['arr = A.toCharArray()','for (i → 0 to N-1)',"    if (arr[i] >= 'A' && arr[i] <= 'Z')",'        arr[i] = (char)(arr[i] + 32)','    else','        arr[i] = (char)(arr[i] - 32)','return new String(arr)'],['Strings cannot be edited in place in Java and Python, so copy into a character array first.','Visit every character.','Uppercase letters have ASCII 65 to 90.','Uppercase becomes lowercase: add 32.','Otherwise the letter is lowercase.','Lowercase becomes uppercase: subtract 32.','Convert the array back to a string.'])),
+ST('TRY',W('Run it, one character at a time','Pick an input and press the button.',tgw,'Pause and ask: what will happen to this character?')),
+ST('COMPLEXITY',RV('Complexity','','cx1',[['TIME','O(N)','one pass over the characters'],['SPACE','O(N)','the character array copy']]))]},
+{t:'Check palindrome',s:[
+ST('ASK',think('Problem 2','Is the substring from index 3 to 7 of "anamadamspe" a palindrome? How would you check it without reversing?','It is <b>"madam"</b>: true. Compare the first and last characters, then move inward with two pointers.','')),
+ST('LEARN',RV('Substrings','Reveal one fact at a time.','sb0',[['SUBSTRING','A contiguous part of a string','"abc": a, b, c, ab, bc, abc'],['COUNT','N × (N + 1) / 2','N = 3 → 3 × 4 / 2 = 6']])),
+ST('QUIZ',quiz('Quiz 3','How many substrings does "bxcd" have?',null,['7','8','10','9'],2,['Too few. Use N(N+1)/2 with N = 4.','Too few: 4 × 5 / 2 = 10.','Correct. 4 + 3 + 2 + 1 = 10 (lengths 1, 2, 3 and 4).','One short: 4 + 3 + 2 + 1 = 10.'],'')),
+ST('CODE',CB('Write the code line by line','Two pointers moving inward.','c2',['while (start < end)','    if (s[start] != s[end])','        return false','    start++','    end--','return true'],['Keep going until the pointers meet or cross.','Compare the outer pair.','A mismatch means it cannot be a palindrome.','Match: move the left pointer in.','Move the right pointer in.','Every pair matched.'])),
+ST('TRY',W('Run it, one pair at a time','Pick a range of "anamadamspe".',pww)),
+ST('COMPLEXITY',RV('Complexity','','cx2',[['TIME','O(N)','each character is compared at most once'],['SPACE','O(1)','just two pointers']]))]},
+{t:'Longest palindrome',s:[
+ST('ASK',think('Problem 3','Find the length of the longest palindromic substring of "anamadamm". What is the most direct idea?','The answer is <b>5</b> ("madam"). Direct idea: generate every substring and test each one.','')),
+ST('QUIZ',quiz('Quiz 4','Longest palindromic substring of "feacabacabgf"?',null,['6','3','7','10'],2,['A longer one exists: “acabaca” has 7 characters.','3 is only “aca” or “bab”. A longer one is centred on b.','Correct. Centred on b (index 5): “acabaca” is 7 long.','10 is too long: no 10-character window mirrors itself.'],'')),
+ST('QUIZ',quiz('Quiz 5','Longest palindromic substring of "adaebcdfdcbetggte"?',null,['6','3','9','10'],2,['6 is “etggte”, but a longer one exists.','3 is “ada”. A longer one is centred on f.','Correct. Centred on f: “ebcdfdcbe” is 9 long.','10 is too long: next to “ebcdfdcbe” the characters a and t differ.'],'')),
+ST('BRUTE FORCE',W('Brute force: test every substring','“Finish this start” skips ahead.',bfw,'N² substrings × O(N) check = O(N³).')),
+ST('OPTIMIZE',think('Observation','A palindrome mirrors around its middle. How can we use that instead of testing every substring?','Take every character as an <b>odd</b> centre and every adjacent pair as an <b>even</b> centre, then expand while the two ends match.','')),
+ST('CODE',CB('Write the code line by line','Centre expansion.','c3',['maxLength = 0','for (c → 0 to N-1)','    left = c, right = c','    while (left >= 0 and right < N and s[left] == s[right])','        left--, right++','    maxLength = max(maxLength, right - left - 1)','    left = c, right = c + 1','    (same while loop)','    maxLength = max(maxLength, right - left - 1)','return maxLength'],['Best length found so far.','Try every character as a centre.','Odd length: start with both pointers on the centre.','Expand while inside the string and both ends match.','Step outward.','When it stops, the palindrome is right − left − 1 long.','Even length: start with the centre and its right neighbour.','Run the same expansion.','Update the best length.','Answer.'])),
+ST('TRY',W('Run it, one comparison at a time','“Finish this centre” skips ahead.',cew,'Key moment: centre 5 (d) expands to “madam”.')),
+ST('COMPLEXITY',RV('Complexity','','cx3',[['BRUTE FORCE','O(N³) time','N² substrings, O(N) check each'],['CENTRE EXPANSION','O(N²) time, O(1) space','2N centres, each expands up to N']]))]},
+{t:'Immutability',s:[
+ST('ASK',think('Can you change a string?','In Java, Python, C#, JavaScript and Go, can you change one character of an existing string?','No. Strings are <b>immutable</b>. A “change” creates a new string and the old one stays as it was.','')),
+ST('TRY',W('Why res += ch is slow','Build "abcdef" one character at a time.',ccw)),
+ST('QUIZ',quiz('Quiz 2','Starting from an empty string and adding one character at a time to form "abcdef", how many string objects are created?',null,['7','6','12','1'],1,['7 would count the empty string too. Only the 6 new strings count.','Correct. "a", "ab", "abc", "abcd", "abcde", "abcdef": one per character.','Too many: each append creates one new string.','That would need in-place editing, which strings do not allow.'],'')),
+ST('LEARN',RV('The fixes','Reveal one at a time.','fx',[['PROBLEM','res += ch in a loop','a new string and a full copy every time: O(N²)'],['FIX 1','Character array','convert once, edit, convert back'],['FIX 2 (Java)','StringBuilder','sb.append(ch) is O(1) on average']])),
+ST('CODE',CB('StringBuilder, line by line','Appending without copying.','c4',['StringBuilder sb = new StringBuilder()','for (i → 0 to n-1)',"    sb.append('a')",'String result = sb.toString()'],['A mutable buffer that can grow.','Repeat n times.','Write into the buffer: no copy of old characters.','Convert once at the end.'])),
+ST('TRY',W('String pool simulator','Run the 6 Java statements one at a time.',plw)),
+ST('QUIZ',quiz('Quiz: concat','What does s2 refer to at the end?',['String s2 = "Hello"','s2.concat(" World")','print(s2)'],['Hello World','Hello','null','Java'],1,['concat returns a new string and leaves s2 alone. The result was not stored.','Correct. Strings are immutable: the new “Hello World” is orphaned and s2 still points to “Hello”.','s2 was never set to null.','Java was never assigned to s2 here.'],'')),
+ST('LEARN',RV('Why immutability?','Reveal one reason at a time.','wi',[['SECURITY','Safe to share','passwords, file paths and connections cannot be altered behind your back'],['CACHING','The string pool','identical literals share one object, saving memory']]))]},
+{t:'Wrap-up',s:[
+RV('Recap','Reveal one idea at a time.','wr',[['BASICS','String = array of characters','characters are stored as ASCII values'],['TOGGLE CASE','±32','lowercase = uppercase + 32; O(N) time'],['PALINDROME CHECK','Two pointers','compare outer pair and move inward: O(N)'],['LONGEST PALINDROME','Centre expansion','O(N²) instead of O(N³)'],['IMMUTABILITY','New object on every change','use a char array or StringBuilder']])]}
+];
+function go(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S,mv=s.m&&(st[s.m[0]]??0)<s.m[1];
+$('#tn').textContent='Instructor notes: '+(notes?'on':'off');
+$('#tabs').innerHTML=TABS.map((x,i)=>`<button class="${i==T?'on':''}" onclick="T=${i};S=0;go()"><i>0${i}</i>${x.t}</button>`).join('');
+$('#side').innerHTML=`<h3>${tb.t}</h3>`+tb.s.map((x,i)=>`<button class="${i==S?'on':''}" onclick="S=${i};go()"><span>${i+1}</span>${x.h}</button>`).join('');
+$('#main').innerHTML=`<small class="k">${tb.t.toUpperCase()} · STEP ${S+1} OF ${tb.s.length}</small>${tb.s.every(x=>x.st)?`<div class="stg">${[...new Set(tb.s.map(x=>x.st))].map(g=>`<span class="${g==s.st?'on':''}">${g}</span>`).join('›')}</div>`:''}<h2>${s.h}</h2>${s.r(k)}${notes&&s.n?`<div class="ins"><small>INSTRUCTOR</small><p>${s.n}</p></div>`:''}`;
+const last=S==tb.s.length-1,nt=TABS[T+1],tr=s.th&&!rev[k];
+$('#nx').textContent=tr?'Reveal the answer ›':mv?s.ml+' ›':last?(nt?'Next: '+nt.t+' ›':'Done'):'Next ›';
+$('#nx').disabled=last&&!nt&&!tr&&!mv;$('#bk').disabled=!T&&!S}
+function nx(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;if(s.th&&!rev[k])rev[k]=1;else if(s.m&&(st[s.m[0]]??0)<s.m[1])st[s.m[0]]=(st[s.m[0]]??0)+1;else if(S<tb.s.length-1)S++;else if(T<TABS.length-1){T++;S=0}go()}
+function bk(){if(S)S--;else if(T){T--;S=TABS[T].s.length-1}go()}
+addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;if(e.key=='ArrowRight')nx();if(e.key=='ArrowLeft')bk()});
+go();
+</script></body></html>
