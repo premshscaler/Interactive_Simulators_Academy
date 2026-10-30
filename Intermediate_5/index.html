@@ -40,7 +40,17 @@ h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spa
 .code span{display:block;padding:0 16px;white-space:pre}.code i{color:var(--mu);margin-right:14px;font-style:normal}.code .hl{background:color-mix(in srgb,var(--ac) 22%,transparent)}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
 .opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font:600 15px inherit;cursor:pointer;text-align:left}
-.opt b{background:var(--bd);border-radius:6px;padding:1px 8px;font-size:12px}.opt.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 18%,var(--cd))}.opt.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 18%,var(--cd))}
+.opt b{background:var(--bd);border-radius:6px;padding:1px 8px;font-size:12px}
+.opt.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 30%,var(--cd));box-shadow:0 0 0 2px var(--gr)}
+.opt.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 30%,var(--cd));box-shadow:0 0 0 2px var(--rd)}
+.opt.dim{opacity:.5}
+.opt:disabled{cursor:default;color:var(--tx)}
+.opt.good b{background:var(--gr);color:#0a0e1a}.opt.bad b{background:var(--rd);color:#0a0e1a}
+.opt .mk{margin-left:auto;font:normal 700 18px system-ui}.opt.good .mk{color:var(--gr)}.opt.bad .mk{color:var(--rd)}
+.fb{border-left:4px solid;border-radius:8px;padding:10px 14px;margin-top:12px;background:var(--cc)}
+.fb.good{border-color:var(--gr)}.fb.bad{border-color:var(--rd)}
+.fb.good strong{color:var(--gr)}.fb.bad strong{color:var(--rd)}
+.fb p{margin:6px 0 0;color:var(--mu)}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--bd)}.row span{flex:1 1 260px}.opt.sm{padding:6px 12px}
 .ex{color:var(--mu);margin:10px 0}.ex b{color:var(--tx)}mark{background:var(--ye);color:#1a1400;padding:0 4px;border-radius:3px}
 .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}.cd{border:1px solid var(--bd);border-radius:14px;padding:14px;background:var(--cc)}
@@ -66,7 +76,7 @@ const cells=(a,m={},c={})=>`<div class="cells">${a.map((v,j)=>`<div class="cell 
 const cards=a=>`<div class="g">${a.map(x=>`<div class="cd"><small>${x[0]}</small><h4>${x[1]}</h4><p>${x[2]}</p></div>`).join('')}</div>`;
 const W=(h,n,r)=>({h,n,r}),info=(h,b,n)=>W(h,n,()=>b);
 const think=(h,q,a,n)=>({h,n,th:1,r:k=>`<div class="think"><span class="tag">THINK FIRST</span><h3>${q}</h3><button class="btn" onclick="rev['${k}']=!rev['${k}'];go()">${rev[k]?'Hide':'Reveal'} the answer</button></div>`+(rev[k]?`<div class="ans"><small>ANSWER</small><p>${a}</p></div>`:'')});
-const quiz=(h,q,c,o,ok,ex,n)=>W(h,n,k=>`<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3>${c?code(c):''}<div class="opts">${o.map((t,i)=>`<button class="opt ${st[k]!=null?(i==ok?'good':i==st[k]?'bad':''):''}" onclick="st['${k}']=${i};go()"><b>${'ABCD'[i]}</b>${t}</button>`).join('')}</div>${st[k]!=null?`<p class="ex">${ex}</p>`:''}</div>`);
+const quiz=(h,q,c,o,ok,ex,n)=>W(h,n,k=>{const a=st[k],done=a!=null;return `<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3>${c?code(c):''}<div class="opts">${o.map((t,i)=>{const cls=done?(i==ok?'good':i==a?'bad':'dim'):'';return `<button class="opt ${cls}" ${done?'disabled':''} onclick="st['${k}']=${i};go()"><b>${'ABCD'[i]}</b><span>${t}</span>${done&&i==ok?'<em class="mk">✓</em>':done&&i==a?'<em class="mk">✗</em>':''}</button>`}).join('')}</div>${done?`<div class="fb ${a==ok?'good':'bad'}"><strong>${a==ok?'✓ Correct!':'✗ Not quite. Correct answer: '+'ABCD'[ok]+') '+o[ok]}</strong><p>${ex}</p></div><div class="bt"><button class="ghost" onclick="delete st['${k}'];go()">Try again</button></div>`:''}</div>`});
 const sorter=(h,items,L,tail,n)=>W(h,n,k=>`<div class="card2">${items.map((t,i)=>{const v=st[k+i];return `<div class="row"><span>${t[0]}</span>${L.map((l,x)=>`<button class="opt sm ${v!=null&&x==t[1]?'good':v==x?'bad':''}" onclick="st['${k}${i}']=${x};go()">${l}</button>`).join('')}</div>`}).join('')}${items.every((_,i)=>st[k+i]!=null)?`<p class="ex"><b>${tail}</b></p>`:''}</div>`);
 const set=(f,v)=>`${f};go()`;
 const X=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').split('\n');
