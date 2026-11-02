@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Advanced DSA · Graphs 2: BFS &amp; MST</title>
+<style>
+:root,:root[data-theme=dark]{--bg:#0a0e1a;--cd:#151b2e;--bd:#2a3350;--tx:#e8ecf8;--mu:#8b95b5;--ac:#8b9cf8;--ye:#f5c84c;--gr:#5ed49a;--rd:#f07878;--cc:#0d1222;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f6fc;--cd:#fff;--bd:#d5dbee;--tx:#171c30;--mu:#5b6586;--ac:#4a5ce0;--ye:#a67600;--gr:#17874f;--rd:#c23b3b;--cc:#eef1fa}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+body::before{content:"queue → heap";position:fixed;right:-2%;bottom:2%;font:800 clamp(40px,9vw,120px) ui-monospace,Menlo,monospace;color:var(--tx);opacity:.035;white-space:nowrap;pointer-events:none}
+header{max-width:1180px;margin:auto;padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header small{color:var(--mu);font:12px ui-monospace,Menlo,monospace}header h1{font-size:22px;margin:2px 0}
+.tg{background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:20px;padding:7px 14px;cursor:pointer;font:inherit}
+#tabs{max-width:1180px;margin:10px auto 0;padding:0 20px;display:flex;overflow-x:auto;border-bottom:1px solid var(--bd)}
+#tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:12px 14px;font:600 15px inherit;cursor:pointer;white-space:nowrap}
+#tabs button.on{color:var(--tx);border-color:var(--ac)}#tabs i{font:normal 12px ui-monospace,Menlo,monospace;opacity:.7;margin-right:4px}
+.wrap{max-width:1180px;margin:22px auto;padding:0 20px;display:grid;grid-template-columns:260px 1fr;gap:28px}
+#side h3{margin:0 0 12px;color:var(--mu)}#side button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:1px solid transparent;color:var(--mu);border-radius:10px;padding:9px;font:inherit;cursor:pointer}
+#side button.on{background:var(--cd);border-color:var(--bd);color:var(--tx);font-weight:600}
+#side span{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--ac);display:grid;place-items:center;font-size:12px}
+#side .on span{background:var(--ac);color:#0a0e1a}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:26px 28px;min-width:0}
+.k{color:var(--ac);font:12px ui-monospace,Menlo,monospace;letter-spacing:.06em}
+h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spacing:-.02em}
+.think,.card2{border:2px solid var(--ac);border-radius:16px;padding:18px 20px;background:var(--cc);margin-bottom:14px}.card2{border:1px solid var(--bd)}
+.tag{background:var(--ye);color:#1a1400;border-radius:6px;padding:2px 10px;font:700 12px ui-monospace,Menlo,monospace}
+.think h3,.card2 h3{font-size:22px;margin:12px 0}
+.btn{background:var(--ac);color:#0a0e1a;border:0;border-radius:10px;padding:10px 18px;font:700 15px inherit;cursor:pointer}.btn:disabled{opacity:.35;cursor:default}
+.ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}.ghost:disabled{opacity:.35}
+.ans{border-top:1px dashed var(--bd);padding-top:12px;margin:6px 0 14px}.ans small{color:var(--gr);font:700 12px ui-monospace,monospace}
+.ins{border-top:1px dashed var(--bd);margin-top:18px;padding-top:12px;color:var(--mu)}.ins small{color:var(--ye);font:700 12px ui-monospace,monospace}.ins p{margin:4px 0 0}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--bd);margin-top:20px;padding-top:16px;color:var(--mu);font:13px ui-monospace,monospace}
+.cells{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 22px}
+.cell{position:relative;min-width:56px;padding:12px 8px 22px;text-align:center;border:2px solid var(--bd);border-radius:10px;background:var(--cc)}
+.cell b{font-size:20px}.cell small{position:absolute;bottom:3px;left:0;right:0;color:var(--mu);font-size:11px}
+.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 20%,var(--cc))}.sw{border-color:var(--gr)}.rg{border-color:var(--ye)}.emp{border-style:dashed;opacity:.5}.rd2{border-color:var(--rd)}
+.code{background:var(--cc);border-radius:12px;padding:12px 0;margin:10px 0;font:14px/1.7 ui-monospace,Menlo,monospace;overflow-x:auto}
+.code span{display:block;padding:0 16px;white-space:pre}.code i{color:var(--mu);margin-right:14px;font-style:normal}.code .hl{background:color-mix(in srgb,var(--ac) 22%,transparent)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font:600 15px inherit;cursor:pointer;text-align:left}
+.opt b{background:var(--bd);border-radius:6px;padding:1px 8px;font-size:12px}.opt.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 18%,var(--cd))}.opt.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 18%,var(--cd))}
+.qf{margin-top:12px;padding:12px 14px;border-radius:12px;border:1px solid;font-size:14px;line-height:1.5}.qf.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 14%,var(--cd))}.qf.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 14%,var(--cd))}
+.ex{color:var(--mu);margin:10px 0}.ex b{color:var(--tx)}mark{background:var(--ye);color:#1a1400;padding:0 4px;border-radius:3px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}.cd{border:1px solid var(--bd);border-radius:14px;padding:14px;background:var(--cc)}
+.cd small{color:var(--ac);font:12px ui-monospace,monospace}.cd h4{margin:4px 0;font-size:18px}.cd p{margin:0;color:var(--mu);font-size:14px}
+.bt{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}.bt label{color:var(--mu);font-size:14px}input[type=range]{accent-color:var(--ac)}
+.stg{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0;font:700 11px ui-monospace,Menlo,monospace;color:var(--mu);align-items:center}.stg span{padding:3px 9px;border-radius:12px;border:1px solid var(--bd)}.stg .on{background:var(--ye);color:#1a1400;border-color:var(--ye)}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}#side{display:flex;gap:6px;overflow-x:auto}#side h3{display:none}#side button{white-space:nowrap;width:auto}.card{padding:18px}}
+:focus-visible{outline:2px solid var(--ye);outline-offset:2px}
+</style></head><body>
+<header><div><small>ADVANCED DSA · GRAPHS 2</small><h1>BFS &amp; Minimum Spanning Tree</h1></div>
+<button class="tg" id="tn" onclick="notes=!notes;go()"></button></header>
+<nav id="tabs"></nav>
+<div class="wrap"><aside id="side"></aside>
+<section class="card"><div id="main"></div>
+<div class="nav"><button class="ghost" id="bk" onclick="bk()">‹ Back</button><span>← → keys work too</span><button class="btn" id="nx" onclick="nx()">Next ›</button></div></section></div>
+<script>
+const $=s=>document.querySelector(s);let T=0,S=0,notes=true,rev={},st={};
+const code=(l,h)=>'<pre class="code" style="margin:10px 0">'+l.map((x,i)=>`<span class="${i==h?'hl':''}"><i>${i+1}</i>${x}</span>`).join('')+'</pre>';
+const cells=(a,m={},c={},r)=>`<div class="cells">${a.map((v,j)=>`<div class="cell ${c[j]||''}"><b>${v}</b><small>${r?r(j):'['+j+']'}</small></div>`).join('')}</div>`;
+const cards=a=>`<div class="g">${a.map(x=>`<div class="cd"><small>${x[0]}</small><h4>${x[1]}</h4><p>${x[2]}</p></div>`).join('')}</div>`;
+const W=(h,n,r)=>({h,n,r}),info=(h,b,n)=>W(h,n,()=>b),ST=(t,s)=>(s.st=t,s),set=f=>`${f};go()`;
+const think=(h,q,a,n)=>({h,n,th:1,r:k=>`<div class="think"><span class="tag">THINK FIRST</span><h3>${q}</h3><button class="btn" onclick="rev['${k}']=!rev['${k}'];go()">${rev[k]?'Hide':'Reveal'} the answer</button></div>`+(rev[k]?`<div class="ans"><small>ANSWER</small><p>${a}</p></div>`:'')});
+const pickQ=(k,i,ok)=>{if(st[k]===ok)return;const t=st[k+'w']||[];if(i!==ok&&!t.includes(i))t.push(i);st[k+'w']=t;st[k]=i;st[k+'a']=(st[k+'a']||0)+1;go()};
+const quiz=(h,q,c,o,ok,R,n)=>W(h,n,k=>{const s=st[k],t=st[k+'w']||[],done=s===ok,at=st[k+'a']||0;
+return `<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3>${c?code(c):''}<div class="opts">${o.map((x,i)=>`<button class="opt ${done&&i==ok?'good':t.includes(i)?'bad':''}" ${done?'disabled':''} onclick="pickQ('${k}',${i},${ok})"><b>${'ABCD'[i]}</b>${x}</button>`).join('')}</div>`+(s==null?'':done?`<div class="qf good"><b>✓ Correct${at>1?' (after '+at+' tries)':' on the first try'}.</b> ${R[ok]}</div>`:`<div class="qf bad"><b>✗ Option ${'ABCD'[s]} is not right.</b> ${R[s]}<div class="bt"><button class="btn" onclick="st['${k}']=null;go()">Try again</button></div></div>`)+`</div>`});
+const btn=(k,max,first,nxt)=>{const v=st[k]??0;return `<div class="bt"><button class="btn" ${v>=max?'disabled':''} onclick="${set(`st.${k}=(st.${k}??0)+1`)}">${v?nxt:first}</button><button class="ghost" onclick="${set(`st.${k}=0`)}">Reset</button><span class="ex">${v} / ${max}</span></div>`};
+const pick=(k,L)=>`<div class="bt">${L.map((l,i)=>`<button class="${i==(st[k]??0)?'btn':'ghost'}" onclick="${set(`st.${k}=${i};st.${k}j=0`)}">${l}</button>`).join('')}</div>`;
+const rvl=(k,items)=>{const v=st[k]??0;return items.slice(0,v).map(x=>`<div class="card2" style="padding:10px 14px;margin:8px 0"><small class="k">${x[0]}</small><br><b>${x[1]}</b>${x[2]?`<br><span class="ex">${x[2]}</span>`:''}</div>`).join('')+btn(k,items.length,'Reveal first','Reveal next')};
+const cb=(k,L,N)=>{const v=st[k]??0;return (v?code(L.slice(0,v),v-1)+`<p class="ex">${N[v-1]}</p>`:`<p class="ex">Empty function. Press the button to write the first line.</p>`)+btn(k,L.length,'Write first line','Write next line')};
+const sl=(k,min,max,d,l)=>`<label>${l} = <b>${st[k]??d}</b> <input type="range" min="${min}" max="${max}" value="${st[k]??d}" onchange="st.${k}=+this.value;go()"></label>`;
+/* ---------- BFS engine ---------- */
+const G1={A:['B','C'],B:['A','C'],C:['A','B','D'],D:['C']};
+const G3={A:['B','C'],B:['A','E'],C:['A','D'],D:['C','E'],E:['B','D']};
+const G2={S1:['A'],S2:['C'],S3:['A'],A:['S1','B','S3'],B:['A','D'],C:['D','S2'],D:['B','C']};
+const bfsSteps=(G,src,mode)=>{const dist={},q=[...src],ord=[];src.forEach(s=>dist[s]=0);
+const out=[{u:null,q:[...q],dist:{...dist},ord:[],note:`Put ${src.join(', ')} in the ${mode=='s'?'stack':'queue'} at distance 0 and mark ${src.length>1?'them':'it'} visited.`}];
+while(q.length){const u=mode=='s'?q.pop():q.shift();ord.push(u);const add=[];
+for(const w of G[u])if(dist[w]==null){dist[w]=dist[u]+1;q.push(w);add.push(w)}
+out.push({u,q:[...q],dist:{...dist},ord:[...ord],note:`Take ${u} (distance ${dist[u]}). ${add.length?'Newly discovered: '+add.map(w=>w+' = '+dist[w]).join(', ')+'.':'No new neighbours.'}`})}
+return out};
+const bfsW=(k,G,src,mode,fin)=>{const L=bfsSteps(G,src,mode),v=st[k]??0,s=v?L[v-1]:null,N=Object.keys(G),cl={};
+if(s){N.forEach((n,j)=>{if(s.dist[n]!=null)cl[j]='sw';if(s.q.includes(n))cl[j]='rg';if(s.u==n)cl[j]='sel'})}
+return `<div class="card2" style="padding:10px 14px">${N.map(n=>`<div class="ex" style="margin:2px 0;font:14px ui-monospace,monospace"><b>${n}</b> → ${G[n].join(', ')}</div>`).join('')}</div>`+
+(s?`<p class="ex">${mode=='s'?'Stack (top on the right)':'Queue (front on the left)'}</p>`+(s.q.length?cells(s.q,{},{0:'rg'},j=>mode=='s'?(j==s.q.length-1?'top':''):(j==0?'front':'')):`<p class="ex"><b>empty</b></p>`)+`<p class="ex">Distance of every node (· = not discovered yet)</p>`+cells(N.map(n=>s.dist[n]??'·'),{},cl,j=>N[j])+`<p class="ex">${s.note}</p><p class="ex">Taken so far: <b>${s.ord.join(' → ')||'·'}</b>${v>=L.length?' · '+fin(s.dist):''}</p>`:`<p class="ex">Press the button to start.</p>`)+btn(k,L.length,'Start','Next step')};
+/* ---------- grid engine ---------- */
+const GR=[[[2,1,1],[1,1,0],[0,1,1]],[[2,1,0],[0,1,1],[1,0,1]],[[2,1,1],[1,1,1],[1,1,2]]];
+const rotSteps=g0=>{const g=g0.map(r=>[...r]);let fresh=0,cur=[];g.forEach((r,i)=>r.forEach((x,j)=>{if(x==2)cur.push([i,j]);if(x==1)fresh++}));
+const snap=(t,nw)=>({g:g.map(r=>[...r]),t,fresh,nw});const steps=[snap(0,[...cur])];let t=0;
+while(cur.length){const nx=[];for(const [i,j] of cur)for(const [a,b] of [[-1,0],[1,0],[0,-1],[0,1]]){const x=i+a,y=j+b;if(g[x]&&g[x][y]===1){g[x][y]=2;fresh--;nx.push([x,y])}}if(!nx.length)break;t++;steps.push(snap(t,nx));cur=nx}
+return {steps,ans:fresh?-1:t}};
+const rotW=()=>{const gi=st.rg??0,{steps,ans}=rotSteps(GR[gi]),L=steps.length-1,v=Math.min(st.rgj??0,L),s=steps[v],C=s.g[0].length;
+const cls=(i,j)=>{const x=s.g[i][j];return x==0?'emp':x==1?'rg':(v>0&&s.nw.some(c=>c[0]==i&&c[1]==j))?'rd2 sel':'rd2'};
+const msg=v==0?`Minute 0: all ${s.nw.length} rotten orange${s.nw.length>1?'s go':' goes'} into the queue together. Fresh oranges: ${s.fresh}.`:`Minute ${v}: ${s.nw.length} fresh orange${s.nw.length>1?'s':''} rot${s.nw.length>1?'':'s'} at the same moment. Fresh left: ${s.fresh}.`;
+const fin=v>=L?(ans<0?`The queue is empty but ${s.fresh} fresh orange${s.fresh>1?'s are':' is'} never reached → <b>−1</b>.`:`The queue is empty and no fresh orange remains → <b>${ans} minute${ans==1?'':'s'}</b>.`):'';
+return pick('rg',['Grid A','Grid B','Grid C'])+`<div style="display:grid;grid-template-columns:repeat(${C},62px);gap:8px;margin:16px 0">`+s.g.map((r,i)=>r.map((x,j)=>`<div class="cell ${cls(i,j)}"><b>${x}</b><small>[${i}][${j}]</small></div>`).join('')).join('')+`</div><p class="ex">0 empty · 1 fresh (yellow) · 2 rotten (red, bright = just rotted)</p><p class="ex">${msg}</p><p class="ex">${fin}</p>`+btn('rgj',L,'Start minute 1','Next minute')};
+/* ---------- Prim engine ---------- */
+const PE=[[5,3,2],[5,4,3],[5,6,5],[3,4,4],[3,1,6],[4,2,7],[6,2,1]],PG={};
+PE.forEach(([a,b,w])=>{(PG[a]=PG[a]||[]).push([b,w]);(PG[b]=PG[b]||[]).push([a,w])});
+const primSteps=s0=>{const vis=[],heap=[[0,s0,0]],out=[],mst=[];let tot=0;
+while(heap.length){heap.sort((x,y)=>x[0]-y[0]||x[1]-y[1]);const [w,v,f]=heap.shift();
+if(vis.includes(v)){out.push({w,v,skip:1,heap:heap.map(h=>[h[0],h[1]]),vis:[...vis],tot,mst:[...mst],add:[]});continue}
+vis.push(v);tot+=w;if(f)mst.push([f,v,w]);const add=[];for(const [u,x] of PG[v])if(!vis.includes(u)){heap.push([x,u,v]);add.push([x,u])}
+out.push({w,v,f,skip:0,heap:heap.map(h=>[h[0],h[1]]),vis:[...vis],tot,mst:[...mst],add})}
+return out};
+const primW=()=>{const L=primSteps(5),v=st.pm??0,s=v?L[v-1]:null;
+const hp=s?s.heap:[[0,5]];
+return code(PE.map(([a,b,w])=>`${a} — ${b}   weight ${w}`))+`<p class="ex">Heap of (weight, vertex), smallest first</p>`+(hp.length?cells(hp.map(h=>`(${h[0]}, ${h[1]})`),{},{0:'sel'},j=>j==0?'min':''):`<p class="ex"><b>empty</b></p>`)+
+(s?`<p class="ex">${s.skip?`Pop (${s.w}, ${s.v}): ${s.v} is already visited → <b>skip</b>. This was an old entry left in the heap.`:`Pop (${s.w}, ${s.v}): ${s.v} is new → mark visited${s.f?', connect it to '+s.f:''} and add ${s.w} to the total. ${s.add.length?'Push: '+s.add.map(a=>`(${a[0]}, ${a[1]})`).join(' '):'Nothing new to push.'}`}</p><p class="ex">Visited: <b>${s.vis.join(', ')}</b> · MST edges: <b>${s.mst.map(e=>e[0]+'–'+e[1]+' ('+e[2]+')').join(', ')||'none yet'}</b> · total weight: <b>${s.tot}</b>${v>=L.length?` · <b>Done: ${s.mst.length} edges = N − 1, weight ${s.tot}.</b>`:''}</p>`:`<p class="ex">Start at vertex 5: push (0, 5). Press the button to pop the first entry.</p>`)+btn('pm',L.length,'Pop first entry','Pop next entry')};
+const comb=(n,k)=>{let r=1;for(let i=1;i<=k;i++)r=r*(n-k+i)/i;return Math.round(r)};
+const fmtN=n=>n<1e15?n.toLocaleString():n.toExponential(2);
+const fmtT=s=>s<1?'under a second':s<3600?Math.round(s)+' seconds':s<86400?(s/3600).toFixed(1)+' hours':s<3.15e7?(s/86400).toFixed(1)+' days':(s/3.15e7).toExponential(1)+' years';
+const TABS=[
+{t:'Recap & plan',s:[
+think('Which container?','BFS keeps needing “the node I discovered earliest”. Prim’s algorithm keeps needing “the cheapest road I currently know about”. Which container would you reach for in each case?','BFS: a <b>queue</b> (first found, first explored). Prim’s: a <b>min-heap</b> (smallest weight comes out first). Today is these two containers doing two different jobs.','Take guesses first. Share the Contest 4 message in the class and WhatsApp group before starting.'),
+info('Today’s plan','<p>Both problems are about spreading outward from a start. One spreads by <mark>distance</mark>, the other by <mark>cost</mark>.</p>'+cards([['Part 1','BFS','Level by level with a queue'],['Part 2','Multi-source BFS','Many starting points at once'],['Part 3','Rotten oranges','BFS on a grid'],['Part 4','Cost of construction','Why the answer is a tree (MST)'],['Part 5','Prim’s algorithm','Grow the tree with a min-heap']]),'Unlock the assignment later and ask for “Rotten Oranges”.')]},
+{t:'BFS',s:[
+ST('ASK',think('Fewest stations','You stand at a metro station and want the minimum number of stations to pass through to reach another one. In what order would you explore stations so that the first time you meet your destination is guaranteed to be the shortest route?','Level by level: everything one stop away, then everything two stops away, and so on. The first time a station appears, it has been reached in the fewest stops. That is <b>BFS</b>.','Take two suggestions before revealing.')),
+ST('OBSERVE',W('Queue or stack?','Same graph, same start A. Only the container changes. Run each and compare the distance found for E.',()=>{const m=(st.qs??0)==0?'q':'s';return pick('qs',['Queue (BFS)','Stack'])+bfsW('qsj',G3,['A'],m,d=>`dist[E] = <b>${d.E}</b> ${m=='q'?'✓ the shortest route A–B–E has 2 edges':'✗ longer than the true shortest route (2). A stack dives deep first (that is DFS).'}`)},'The first node we discover should be the first we explore: FIFO gives level order, LIFO dives deep.')),
+ST('TRACE',W('Trace BFS','One click = one node taken from the queue. Edges: A–B, B–C, A–C, C–D.',()=>bfsW('b1j',G1,['A'],'q',d=>'Queue empty: BFS ends.'),'Walk the table live. The diagram in the old script omits the A–C edge, but its table assumes it.')),
+ST('CODE',W('Write the code line by line','Build BFS one line at a time.',()=>cb('c1',['vis[start] = true; queue.push(start)','while (queue is not empty)','    cur = queue.pop()','    print(cur)','    for (nb in graph[cur])','        if (!vis[nb])','            vis[nb] = true','            queue.push(nb)'],['Mark the start visited the moment it enters the queue.','Run until nothing is left to explore.','Take the node that was discovered earliest.','Process it (print or any other work).','Look at each neighbour.','Only unvisited ones matter.','Mark on push, so no node enters the queue twice.','Discovered nodes wait their turn at the back.']),'Ask what each line should be before revealing.')),
+ST('QUIZ',quiz('Quiz 1','For the graph with this adjacency matrix, what is the BFS visiting order starting from node 0?',['[0, 1, 1, 0]','[1, 0, 0, 0]','[1, 0, 0, 1]','[0, 0, 1, 0]'],['0, 1, 2, 3','0, 1, 3, 2','0, 2, 3, 1','0, 1, 3, 1'],0,['Correct. Node 0’s neighbours are 1 and 2 (level 1). Node 1 has no unvisited neighbours. Node 2’s neighbour 3 is the last level.','3 is a neighbour of node 2, not node 1, and it sits one level deeper than node 2. So 2 must be visited before 3.','Nodes 1 and 2 are both neighbours of 0, so both come before node 3, which is one level further away.','BFS visits every node exactly once. Node 1 cannot appear a second time.'],'')),
+ST('QUIZ',quiz('Quiz 2','BFS starts at node 0. Which data structure makes the nodes come out level by level?',null,['Stack','Queue','Priority Queue','HashMap'],1,['A stack returns the most recently found node, so it dives down one branch first. That order is DFS.','Correct. A queue returns the earliest discovered node first, which is exactly level order.','A priority queue orders by a key, not by discovery time. It is not needed when every edge counts as one step.','A hash map stores items for lookup and has no notion of “who goes next”.'],'')),
+ST('COMPLEXITY',W('Complexity','Reveal each part.',()=>rvl('cx1',[['TIME','O(V + E)','every vertex enters the queue once and every edge is checked a constant number of times'],['SPACE','O(V)','the visited array and the queue']]),''))]},
+{t:'Multi-source BFS',s:[
+ST('ASK',think('Several sources','Three cities S1, S2 and S3 are sources. For a destination D, find the shortest distance to the nearest source. What is the first thing you would try?','The natural first try: run a BFS from each source and keep the smallest distance to D. It works. Next we see what it costs.','Let learners propose before revealing.')),
+ST('BRUTE FORCE',W('One BFS per source','Run a full BFS from each source and read off the distance to D.',()=>{const v=st.mb??0,srcs=['S1','S2','S3'],R=srcs.map(s=>{const l=bfsSteps(G2,[s],'q');return l[l.length-1].dist.D});const shown=R.slice(0,v);return `<div class="card2" style="padding:10px 14px">${Object.keys(G2).map(n=>`<div class="ex" style="margin:2px 0;font:14px ui-monospace,monospace"><b>${n}</b> → ${G2[n].join(', ')}</div>`).join('')}</div>`+shown.map((d,i)=>`<div class="card2" style="padding:10px 14px;margin:8px 0"><b>BFS from ${srcs[i]}</b> visits all 7 nodes and 6 edges → dist(D) = <b>${d}</b></div>`).join('')+`<p class="ex">Runs so far: <b>${v}</b> · smallest distance so far: <b>${shown.length?Math.min(...shown):'·'}</b> · work ≈ <b>${v} × (V + E)</b>${v>=3?' → S × (V + E) for S sources':''}</p>`+btn('mb',3,'Run BFS from S1','Run next source')},'With S sources the work is S × (V + E).')),
+ST('OBSERVE',think('Spot the repeat','Each of those BFS runs spreads outward from one source at the same speed. What if all three sources spread at the same time, like three ripples in a pond? When would D first get wet?','D gets wet when the <b>first ripple</b> reaches it, and that ripple comes from the nearest source. One BFS with <b>every source in the queue at distance 0</b>.','Link to level-by-level: all sources are level 0.')),
+ST('OPTIMIZE',W('Multi-source BFS','Same BFS, but the queue starts with S1, S2 and S3 together at distance 0.',()=>bfsW('msj',G2,['S1','S2','S3'],'q',d=>`dist[D] = <b>${d.D}</b>: the nearest source is 2 edges away.`),'The only change from plain BFS is the initial queue.')),
+ST('COMPARE',info('One run beats many','<p>Same answer, one pass instead of S passes.</p>'+cards([['BRUTE FORCE','BFS from each source','Time S × O(V + E)'],['OPTIMIZED','All sources start in the queue','Time O(V + E)']])+'<p class="ex">Space: O(V) extra for distances and the queue, plus O(V + E) for the adjacency list itself.</p>',''))]},
+{t:'Rotten oranges',s:[
+ST('ASK',think('Spreading rot','In a grid, 0 is empty, 1 is a fresh orange and 2 is a rotten one. Every minute, each rotten orange makes its up, down, left and right fresh neighbours rotten at the same time. How would you find the minute when the last orange rots, or detect that some never will?','Think ripples again: every rotten orange is a source and they all spread together. The answer is the number of BFS levels, or <b>−1</b> if some fresh orange is never reached.','Link back to multi-source BFS.')),
+ST('BRUTE FORCE',W('Rescan the grid every minute','Each minute, scan every cell to find rotten ones and rot their neighbours.',()=>rvl('rb',[['EACH MINUTE','Scan all R × C cells','9 cells for a 3 × 3 grid'],['HOW MANY MINUTES','Up to about R × C in a snake-shaped grid','the rot can crawl one cell per minute'],['TOTAL','O((R × C)²)','a 100 × 100 grid: about 10⁸ cell checks']]),'Most of the cells re-checked did not change last minute.')),
+ST('OBSERVE',think('What gets repeated?','In the rescan approach, most cells you check again did not change in the last minute. Which cells can possibly cause a change in the next minute?','Only the oranges that <b>just turned rotten</b>. Keep them in a queue and spread from those. Every cell is then handled once.','')),
+ST('OPTIMIZE',W('Run it, one minute per click','Pick a grid. All rotten oranges spread at the same moment each minute.',()=>rotW(),'Grid B has an orange cut off by an empty cell. Grid C has two sources.')),
+ST('CODE',W('Write the code line by line','Build the solution one line at a time.',()=>cb('c2',['queue = every rotten cell with time 0; fresh = count of 1s','if (fresh == 0) return 0','while (queue is not empty)','    (x, y, t) = queue.pop(); minutes = t','    for (each of 4 directions)','        if (inside the grid and grid[nx][ny] == 1)','            grid[nx][ny] = 2; fresh--','            queue.push(nx, ny, t + 1)','return (fresh == 0) ? minutes : -1'],['Seed the queue with all rotten oranges at once.','Nothing fresh to rot: zero minutes.','Process minute by minute.','The time of the last popped cell is the answer so far.','Up, down, left, right.','Only fresh neighbours inside the grid can rot.','Rot it now so no other orange rots it again.','It will spread one minute later.','If any fresh orange is left, it was unreachable.']),'')),
+ST('QUIZ',quiz('Quiz 3','Before the main loop of the rotten-oranges solution starts, what should the queue hold?',null,['Only the first rotten orange found','Every rotten orange, each at time 0','Every fresh orange','Every cell of the grid'],1,['Other rotten oranges would never spread, so the times would be wrong. Rot spreads from all of them at once.','Correct. All rotten oranges spread together, so all of them start at time 0. That is multi-source BFS.','Fresh oranges are what we discover and rot. They are pushed only when they turn rotten.','Empty cells never take part. Putting every cell in would also mix up fresh and empty ones.'],'')),
+ST('COMPLEXITY',W('Complexity','Reveal each part.',()=>rvl('cx2',[['TIME','O(R × C)','each cell is rotted and pushed at most once'],['SPACE','O(R × C)','the queue can hold many cells at once']]),''))]},
+{t:'Cost of construction',s:[
+ST('ASK',think('Connect the centers','N distribution centers must be connected by roads, and every possible road has a cost. You want every center reachable from every other at the lowest total cost. Could the cheapest network ever contain a cycle?','No. If a cycle exists, removing any one road in it keeps every center connected and never raises the cost. So the best network is a <b>tree</b>: N centers joined by exactly <b>N − 1</b> roads.','Students usually say “yes, remove cycles”.')),
+ST('BRUTE FORCE',W('Check every set of N − 1 roads','Try all ways to choose N − 1 roads, keep those that connect everything with no cycle, and take the cheapest.',()=>{const n=st.mn??10,E=3*n,c=comb(E,n-1);return `<div class="card2"><b>Our 6-center example</b><p class="ex">7 possible roads, choose 5: C(7, 5) = <b>${comb(7,5)}</b> candidates. Easy.</p></div><div class="bt">${sl('mn',4,20,10,'Centers N')}</div><p class="ex">A city with ${n} centers and ${E} possible roads: C(${E}, ${n-1}) = <b>${fmtN(c)}</b> candidates. At 10⁸ checks per second that is <b>${fmtT(c/1e8)}</b>.</p>`},'Drag N upward and watch it explode.')),
+ST('OBSERVE',W('Spanning tree and MST','Reveal one idea at a time.',()=>rvl('mf',[['SPANNING TREE','Covers every vertex with the fewest edges','N vertices, N − 1 edges, no cycle'],['MINIMUM SPANNING TREE','The spanning tree with the smallest total weight','Our construction answer'],['UNIQUENESS','Distinct edge weights → exactly one MST','Equal weights can give several MSTs with the same total'],['ALGORITHMS','Prim’s and Kruskal’s','Same problem, same complexity. Prim’s today, Kruskal’s in DSA 4.2']]),'The weight is the sum of the N − 1 chosen edges.')),
+ST('COMPARE',info('From the story to the graph','<p>Turn the Flipkart story into a graph and let the MST do the choosing.</p>'+cards([['CENTERS','Vertices','one per distribution center'],['ROADS','Edges','each with its construction cost'],['ANSWER','MST weight','lowest total cost, all centers connected']]),''))]},
+{t:'Prim’s algorithm',s:[
+ST('ASK',think('Grow from one vertex','Start at vertex 5 with nothing connected yet. Among the roads leaving 5 you must build one first. Which one would you pick, and why is that choice never a mistake?','The cheapest: here (5, 3) with weight 2. Every vertex must be connected somehow, and no cheaper way out of the group exists. Then repeat with the group that has grown.','Let them argue before you name the rule.')),
+ST('OBSERVE',info('The one rule','<div class="card2"><small class="k">CORE INVARIANT</small><h3>At every step, take the cheapest edge from the visited set to an unvisited vertex.</h3></div><p class="ex">Visited set = the partial MST. Keep this one sentence in mind: everything else is bookkeeping.</p>','')),
+ST('QUIZ',quiz('Quiz 4','At some point during Prim’s algorithm, which edge may be chosen next?',null,['The smallest edge in the entire graph','The smallest edge from the visited set to an unvisited vertex','The largest edge','Any edge not chosen yet'],1,['That edge may not touch the visited set at all, or may join two visited vertices and form a cycle.','Correct. The tree grows by one new vertex each time, through the cheapest edge leaving the visited set.','The largest edge would make the total as big as possible, not as small as possible.','An edge between two visited vertices would close a cycle, and one far from the tree would leave it disconnected.'],'')),
+ST('QUIZ',quiz('Quiz 5','Which data structure is best suited to repeatedly pick the cheapest edge in Prim’s algorithm?',null,['Linked List','Array','Heap','Stack'],2,['Finding the minimum in a linked list means scanning all of it every time.','An unsorted array also needs a full scan for each minimum, and keeping it sorted makes each insertion slow.','Correct. A min-heap gives the smallest element at the top, and both insert and remove-min are O(log n).','A stack returns the most recent item, not the smallest weight.'],'')),
+ST('OPTIMIZE',W('Run Prim’s from vertex 5','One click = one pop from the heap. Entries are (weight, vertex).',()=>primW(),'The heap is shown sorted for clarity. Watch the “skip” steps: a vertex can be pushed twice before it is visited.')),
+ST('CODE',W('Write the code line by line','Build the loop one line at a time.',()=>cb('c3',['heap.add({0, start}); ans = 0','while (heap is not empty)','    (weight, v) = heap.removeMin()','    if (vis[v]) continue','    vis[v] = true','    ans = ans + weight','    for ((u, w) in adj[v])','        if (!vis[u]) heap.add({w, u})','return ans'],['Start vertex costs nothing.','Run until no candidate edge remains.','Take the cheapest candidate.','An older, costlier entry for a vertex that is already in: ignore it.','The vertex joins the tree.','Add the cost of the edge used.','Look at the new vertex’s edges.','Offer each one that leads somewhere new.','The total weight of the MST.']),'')),
+ST('COMPLEXITY',W('Complexity','Reveal each part.',()=>rvl('cx3',[['TIME','O(E log V)','each edge is pushed at most twice and each push or pop costs log of the heap size'],['SAME THING','O(E log E)','since E ≤ V², log E ≤ 2 log V'],['SPACE','O(V + E)','adjacency list plus the heap']]),''))]},
+{t:'Wrap-up',s:[
+W('Recap','Reveal one idea at a time.',()=>rvl('wr',[['BFS','Queue, level by level','Shortest hops in an unweighted graph: O(V + E)'],['MULTI-SOURCE','All sources in the queue at distance 0','One BFS instead of S of them'],['ROTTEN ORANGES','Multi-source BFS on a grid','Levels = minutes; fresh left over → −1'],['MST','A tree with N − 1 edges','Cheapest way to connect everything'],['PRIM’S','Cheapest edge leaving the visited set','Min-heap: O(E log V)']]),'Next: Kruskal’s algorithm in DSA 4.2.'),
+info('Assignment','<p>Unlock the assignment and ask everyone to submit <mark>Rotten Oranges</mark>.</p><div class="card2"><b>Live solution session</b><p class="ex">1. Ask for a volunteer to solve it live.<br>2. Give them screen-share permission: Settings › Admin › Unmuted Audience Can Share › Audio, Video and Screen.<br>3. Guide them through it and keep the class involved.</p></div>','Unlock via the question-mark button on the top bar.')]}
+];
+function go(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;
+$('#tn').textContent='Instructor notes: '+(notes?'on':'off');
+$('#tabs').innerHTML=TABS.map((x,i)=>`<button class="${i==T?'on':''}" onclick="T=${i};S=0;go()"><i>0${i}</i>${x.t}</button>`).join('');
+$('#side').innerHTML=`<h3>${tb.t}</h3>`+tb.s.map((x,i)=>`<button class="${i==S?'on':''}" onclick="S=${i};go()"><span>${i+1}</span>${x.h}</button>`).join('');
+$('#main').innerHTML=`<small class="k">${tb.t.toUpperCase()} · STEP ${S+1} OF ${tb.s.length}</small>${tb.s.every(x=>x.st)?`<div class="stg">${[...new Set(tb.s.map(x=>x.st))].map(g=>`<span class="${g==s.st?'on':''}">${g}</span>`).join('›')}</div>`:''}<h2>${s.h}</h2>${s.r(k)}${notes&&s.n?`<div class="ins"><small>INSTRUCTOR</small><p>${s.n}</p></div>`:''}`;
+const last=S==tb.s.length-1,nt=TABS[T+1];
+$('#nx').textContent=s.th&&!rev[k]?'Reveal the answer ›':last?(nt?'Next: '+nt.t+' ›':'Done'):'Next ›';
+$('#nx').disabled=last&&!nt&&!(s.th&&!rev[k]);$('#bk').disabled=!T&&!S}
+function nx(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;if(s.th&&!rev[k])rev[k]=1;else if(S<tb.s.length-1)S++;else if(T<TABS.length-1){T++;S=0}go()}
+function bk(){if(S)S--;else if(T){T--;S=TABS[T].s.length-1}go()}
+addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;if(e.key=='ArrowRight')nx();if(e.key=='ArrowLeft')bk()});
+go();
+</script></body></html>
