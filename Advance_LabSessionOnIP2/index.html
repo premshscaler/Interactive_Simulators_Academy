@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lab Session · Interview Problems 2</title>
+<style>
+:root,:root[data-theme=dark]{--bg:#0a0e1a;--cd:#151b2e;--bd:#2a3350;--tx:#e8ecf8;--mu:#8b95b5;--ac:#8b9cf8;--ye:#f5c84c;--gr:#5ed49a;--rd:#f07878;--cc:#0d1222;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f6fc;--cd:#fff;--bd:#d5dbee;--tx:#171c30;--mu:#5b6586;--ac:#4a5ce0;--ye:#a67600;--gr:#17874f;--rd:#c23b3b;--cc:#eef1fa}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+body::before{content:"grid[i][j]";position:fixed;right:-2%;bottom:2%;font:800 clamp(40px,9vw,120px) ui-monospace,Menlo,monospace;color:var(--tx);opacity:.035;white-space:nowrap;pointer-events:none}
+header{max-width:1180px;margin:auto;padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header small{color:var(--mu);font:12px ui-monospace,Menlo,monospace}header h1{font-size:22px;margin:2px 0}
+.tg{background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:20px;padding:7px 14px;cursor:pointer;font:inherit}
+#tabs{max-width:1180px;margin:10px auto 0;padding:0 20px;display:flex;overflow-x:auto;border-bottom:1px solid var(--bd)}
+#tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:12px 14px;font:600 15px inherit;cursor:pointer;white-space:nowrap}
+#tabs button.on{color:var(--tx);border-color:var(--ac)}#tabs i{font:normal 12px ui-monospace,Menlo,monospace;opacity:.7;margin-right:4px}
+.wrap{max-width:1180px;margin:22px auto;padding:0 20px;display:grid;grid-template-columns:260px 1fr;gap:28px}
+#side h3{margin:0 0 12px;color:var(--mu)}#side button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:1px solid transparent;color:var(--mu);border-radius:10px;padding:9px;font:inherit;cursor:pointer}
+#side button.on{background:var(--cd);border-color:var(--bd);color:var(--tx);font-weight:600}
+#side span{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--ac);display:grid;place-items:center;font-size:12px}
+#side .on span{background:var(--ac);color:#0a0e1a}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:26px 28px;min-width:0}
+.k{color:var(--ac);font:12px ui-monospace,Menlo,monospace;letter-spacing:.06em}
+h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spacing:-.02em}
+.think,.card2{border:2px solid var(--ac);border-radius:16px;padding:18px 20px;background:var(--cc);margin-bottom:14px}.card2{border:1px solid var(--bd)}
+.tag{background:var(--ye);color:#1a1400;border-radius:6px;padding:2px 10px;font:700 12px ui-monospace,Menlo,monospace}
+.think h3,.card2 h3{font-size:22px;margin:12px 0}
+.btn{background:var(--ac);color:#0a0e1a;border:0;border-radius:10px;padding:10px 18px;font:700 15px inherit;cursor:pointer}.btn:disabled{opacity:.35;cursor:default}
+.ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}.ghost:disabled{opacity:.35}
+.ans{border-top:1px dashed var(--bd);padding-top:12px;margin:6px 0 14px}.ans small{color:var(--gr);font:700 12px ui-monospace,monospace}
+.ins{border-top:1px dashed var(--bd);margin-top:18px;padding-top:12px;color:var(--mu)}.ins small{color:var(--ye);font:700 12px ui-monospace,monospace}.ins p{margin:4px 0 0}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--bd);margin-top:20px;padding-top:16px;color:var(--mu);font:13px ui-monospace,monospace}
+.cells{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 26px}
+.cell{position:relative;min-width:56px;padding:12px 8px 22px;text-align:center;border:2px solid var(--bd);border-radius:10px;background:var(--cc);cursor:default}
+.cell b{font-size:20px}.cell small{position:absolute;bottom:3px;left:0;right:0;color:var(--mu);font-size:11px}
+.cell u{position:absolute;top:-24px;left:0;right:0;text-decoration:none;color:var(--ye);font:700 13px ui-monospace,monospace}
+.cell em{display:block;font:11px ui-monospace,monospace;color:var(--mu);margin-bottom:6px}
+.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 20%,var(--cc))}.sw{border-color:var(--gr)}.rg{border-color:var(--ye)}.emp{border-style:dashed;opacity:.5}
+.code{background:var(--cc);border-radius:12px;padding:12px 0;margin:10px 0;font:14px/1.7 ui-monospace,Menlo,monospace;overflow-x:auto}
+.code span{display:block;padding:0 16px;white-space:pre}.code i{color:var(--mu);margin-right:14px;font-style:normal}.code .hl{background:color-mix(in srgb,var(--ac) 22%,transparent)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font:600 15px inherit;cursor:pointer;text-align:left}
+.qf{margin-top:12px;padding:12px 14px;border-radius:12px;border:1px solid;font-size:14px;line-height:1.5}.qf.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 14%,var(--cd))}.qf.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 14%,var(--cd))}
+.opt b{background:var(--bd);border-radius:6px;padding:1px 8px;font-size:12px}.opt.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 18%,var(--cd))}.opt.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 18%,var(--cd))}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--bd)}.row span{flex:1 1 260px}.opt.sm{padding:6px 12px}
+.ex{color:var(--mu);margin:10px 0}.ex b{color:var(--tx)}mark{background:var(--ye);color:#1a1400;padding:0 4px;border-radius:3px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}.cd{border:1px solid var(--bd);border-radius:14px;padding:14px;background:var(--cc)}
+.cd small{color:var(--ac);font:12px ui-monospace,monospace}.cd h4{margin:4px 0;font-size:18px}.cd p{margin:0;color:var(--mu);font-size:14px}
+.bt{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}.bt label{color:var(--mu);font-size:14px}input[type=range]{accent-color:var(--ac)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:110px;margin:10px 0}.bars i{flex:1;background:var(--ac);border-radius:3px 3px 0 0;min-width:4px}.bars i.big{background:var(--rd)}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}#side{display:flex;gap:6px;overflow-x:auto}#side h3{display:none}#side button{white-space:nowrap;width:auto}.card{padding:18px}}
+.stg{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0;font:700 11px ui-monospace,Menlo,monospace;color:var(--mu);align-items:center}.stg span{padding:3px 9px;border-radius:12px;border:1px solid var(--bd)}.stg .on{background:var(--ye);color:#1a1400;border-color:var(--ye)}
+.pgw{overflow-x:auto}.pg{display:grid;grid-template-columns:82px repeat(10,minmax(36px,1fr));gap:5px;align-items:center;margin:12px 0;min-width:480px}.pg .l{color:var(--mu);font:12px ui-monospace,Menlo,monospace}.pg .c{text-align:center;padding:7px 0;border:2px solid var(--bd);border-radius:8px;background:var(--cc);font:600 14px ui-monospace,Menlo,monospace}.pg .bn{display:block;height:18px;border-radius:5px;border:1px dashed var(--bd)}
+ .rd2{border-color:var(--rd)}.gone b{text-decoration:line-through;opacity:.5}
+:focus-visible{outline:2px solid var(--ye);outline-offset:2px}
+</style></head><body>
+<header><div><small>LAB SESSION</small><h1>Interview Problems 2</h1></div>
+<button class="tg" id="tn" onclick="notes=!notes;go()"></button></header>
+<nav id="tabs"></nav>
+<div class="wrap"><aside id="side"></aside>
+<section class="card"><div id="main"></div>
+<div class="nav"><button class="ghost" id="bk" onclick="bk()">‹ Back</button><span>← → keys work too</span><button class="btn" id="nx" onclick="nx()">Next ›</button></div></section></div>
+<script>
+const $=s=>document.querySelector(s);let T=0,S=0,notes=true,rev={},st={};
+const code=(l,h)=>'<pre class="code" style="margin:10px 0">'+l.map((x,i)=>`<span class="${i==h?'hl':''}"><i>${i+1}</i>${x}</span>`).join('')+'</pre>';
+const cells=(a,m={},c={})=>`<div class="cells">${a.map((v,j)=>`<div class="cell ${c[j]||''}">${m[j]?`<u>${m[j]}</u>`:''}<b>${v}</b><small>[${j}]</small></div>`).join('')}</div>`;
+const cards=a=>`<div class="g">${a.map(x=>`<div class="cd"><small>${x[0]}</small><h4>${x[1]}</h4><p>${x[2]}</p></div>`).join('')}</div>`;
+const W=(h,n,r)=>({h,n,r}),info=(h,b,n)=>W(h,n,()=>b);
+const think=(h,q,a,n)=>({h,n,th:1,r:k=>`<div class="think"><span class="tag">THINK FIRST</span><h3>${q}</h3><button class="btn" onclick="rev['${k}']=!rev['${k}'];go()">${rev[k]?'Hide':'Reveal'} the answer</button></div>`+(rev[k]?`<div class="ans"><small>ANSWER</small><p>${a}</p></div>`:'')});
+const pickQ=(k,i,ok)=>{if(st[k]===ok)return;const t=st[k+'w']||[];if(i!==ok&&!t.includes(i))t.push(i);st[k+'w']=t;st[k]=i;st[k+'a']=(st[k+'a']||0)+1;go()};
+const quiz=(h,q,c,o,ok,why,n)=>W(h,n,k=>{const R=Array.isArray(why)?why:o.map((_,i)=>i==ok?why:'This option does not match. Re-read the question and try again.'),s=st[k],t=st[k+'w']||[],done=s===ok,at=st[k+'a']||0;
+return `<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3>${c?code(c):''}<div class="opts">${o.map((x,i)=>`<button class="opt ${done&&i==ok?'good':t.includes(i)?'bad':''}" ${done?'disabled':''} onclick="pickQ('${k}',${i},${ok})"><b>${'ABCD'[i]}</b>${x}</button>`).join('')}</div>`+(s==null?'':done?`<div class="qf good"><b>✓ Correct${at>1?' (after '+at+' tries)':' on the first try'}.</b> ${R[ok]}</div>`:`<div class="qf bad"><b>✗ Option ${'ABCD'[s]} is not right.</b> ${R[s]}<div class="bt"><button class="btn" onclick="st['${k}']=null;go()">Try again</button></div></div>`)+`</div>`});
+const sorter=(h,items,L,tail,n)=>W(h,n,k=>`<div class="card2">${items.map((t,i)=>{const v=st[k+i];return `<div class="row"><span>${t[0]}</span>${L.map((l,x)=>`<button class="opt sm ${v!=null&&x==t[1]?'good':v==x?'bad':''}" onclick="st['${k}${i}']=${x};go()">${l}</button>`).join('')}</div>`}).join('')}${items.every((_,i)=>st[k+i]!=null)?`<p class="ex"><b>${tail}</b></p>`:''}</div>`);
+const set=(f,v)=>`${f};go()`;
+const X=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').split('\n');
+const ST=(t,s)=>(s.st=t,s);
+const walk=(h,q,c,S_,ans)=>W(h,0,k=>{const v=st[k]??0;return `<div class="card2"><small class="k">WORK IT OUT</small><h3>${q}</h3>${c?code(X(c)):''}${S_.slice(0,v).map((s,i)=>`<div class="row"><span style="flex:0 0 26px"><b>${i+1}</b></span><span><b>${s[0]}</b><br>${s[1]}</span></div>`).join('')}${v>=S_.length?`<p class="ex"><b>Answer: ${ans}</b></p>`:''}<div class="bt"><button class="btn" ${v>=S_.length?'disabled':''} onclick="${set(`st['${k}']=(st['${k}']??0)+1`)}">${v?'Next step':'Show step 1'}</button><button class="ghost" onclick="${set(`st['${k}']=0`)}">Reset</button><span class="ex">${v} / ${S_.length}</span></div></div>`});
+const sl=(k,min,max,d,l)=>`<label>${l} = <b>${st[k]??d}</b> <input type="range" min="${min}" max="${max}" value="${st[k]??d}" onchange="st.${k}=+this.value;go()"></label>`;
+const btn=(k,max,first,nxt)=>{const v=st[k]??0;return `<div class="bt"><button class="btn" ${v>=max?'disabled':''} onclick="${set(`st.${k}=(st.${k}??0)+1`)}">${v?nxt:first}</button><button class="ghost" onclick="${set(`st.${k}=0`)}">Reset</button><span class="ex">${v} / ${max}</span></div>`};
+const nxb=(k,E,first,nxt,skip)=>{const v=st[k]??0;let t=-1;if(v<E.length){const g=E[v].g;t=E.reduce((a,e,i)=>e.g==g?i:a,-1)}return `<div class="bt"><button class="btn" ${v>=E.length?'disabled':''} onclick="${set(`st.${k}=(st.${k}??0)+1`)}">${v?nxt:first}</button><button class="ghost" ${t<0?'disabled':''} onclick="${set(`st.${k}=${t+1}`)}">${skip}</button><button class="ghost" onclick="${set(`st.${k}=0`)}">Reset</button><span class="ex">${v} / ${E.length}</span></div>`};
+const pick=(k,labels)=>`<div class="bt">${labels.map((l,i)=>`<button class="${i==(st[k]??0)?'btn':'ghost'}" onclick="${set(`st.${k}=${i};st.${k}j=0`)}">${l}</button>`).join('')}</div>`;
+const rvl=(k,items)=>{const v=st[k]??0;return items.slice(0,v).map(x=>`<div class="card2" style="padding:10px 14px;margin:8px 0"><small class="k">${x[0]}</small><br><b>${x[1]}</b>${x[2]?`<br><span class="ex">${x[2]}</span>`:''}</div>`).join('')+btn(k,items.length,'Reveal first','Reveal next')};
+const cb=(k,L,N)=>{const v=st[k]??0;return (v?code(L.slice(0,v),v-1)+`<p class="ex">${N[v-1]}</p>`:`<p class="ex">Empty function. Press the button to write the first line.</p>`)+btn(k,L.length,'Write first line','Write next line')};
+const sl2=(k,min,max,d,l,rs)=>`<label>${l} = <b>${st[k]??d}</b> <input type="range" min="${min}" max="${max}" value="${st[k]??d}" onchange="st.${k}=+this.value;${rs};go()"></label>`;
+const mx=(M,cl=()=>'',lb=()=>'',val=v=>v)=>`<div style="display:grid;grid-template-columns:repeat(${M[0].length},62px);gap:26px 8px;margin:24px 0 30px">${M.map((r,i)=>r.map((v,j)=>`<div class="cell ${cl(i,j)}"><u>${lb(i,j)}</u><b>${val(v,i,j)}</b><small>[${i}][${j}]</small></div>`).join('')).join('')}</div>`;
+const RV=(h,n,k,it)=>({h,n,r:()=>rvl(k,it),m:[k,it.length],ml:'Reveal next'});
+const CB=(h,n,k,L,N)=>({h,n,r:()=>cb(k,L,N),m:[k,L.length],ml:'Write next line'});
+const cl0=(n,f)=>Object.fromEntries([...Array(n)].map((_,i)=>[i,f(i)]));
+const HL=s=>`<span style="background:#f5c542;color:#1a1a1a;padding:1px 7px;border-radius:6px">${s}</span>`;
+const AG=(intro,it)=>`<p style="font-size:1.12em;line-height:1.6;margin:6px 0 18px">${intro}</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">`+it.map((x,i)=>`<div class="card2" style="padding:18px 20px;margin:0"><small class="k">Part ${i+1}</small><div style="font-size:1.35em;font-weight:700;margin:10px 0 6px">${x[0]}</div><span class="ex">${x[1]}</span></div>`).join('')+'</div>';
+// ---- islands
+const IG=['11000','11000','00100','00011'].map(r=>[...r].map(Number));
+const isE=()=>{const G=IG.map(r=>[...r]),E=[],D=[[0,-1],[-1,0],[0,1],[1,0]];let k=0;const dfs=(i,j)=>{G[i][j]=0;E.push({g:k,t:'d',i,j,k,G:G.map(r=>[...r])});for(const[a,b]of D){const x=i+a,y=j+b;if(x>=0&&x<4&&y>=0&&y<5&&G[x][y])dfs(x,y)}};
+for(let i=0;i<4;i++)for(let j=0;j<5;j++)if(G[i][j]){k++;E.push({g:k,t:'f',i,j,k,G:G.map(r=>[...r])});dfs(i,j)}return E};
+const isw=()=>{const E=isE(),v=st.is??0,c=v?E[v-1]:null,seen={};E.slice(0,v).forEach(e=>{if(e.t=='d')seen[e.i+','+e.j]=e.k});
+return mx(IG.map((r,i)=>r.map((x,j)=>seen[i+','+j]?'I'+seen[i+','+j]:x)),(i,j)=>c&&c.i==i&&c.j==j?'sel':seen[i+','+j]?'sw':'')+`<p class="ex">${c?(c.t=='f'?`The scan reaches grid[${c.i}][${c.j}] = 1: a new island. islands = <b>${c.k}</b>. Call dfs.`:`dfs(${c.i}, ${c.j}): set it to 0, then try left, up, right, down.`):'Scan the grid row by row. Press the button to reach the first land cell.'}</p><p class="ex">islands so far: <b>${c?c.k:0}</b> · I1, I2, I3 = cells already erased (set to 0) by that island’s dfs${v>=E.length?' · scan finished. Answer = <b>3</b>.':''}</p>`+nxb('is',E,'Scan to first land','Next step','Finish this island')};
+// ---- maze (Dijkstra)
+const MZ=[[0,0,0],[0,1,0],[0,0,0],[1,0,0]],MB=[1,0],MC=[2,1];
+const mzE=()=>{const N=4,M=3,D=[['up',-1,0],['down',1,0],['left',0,-1],['right',0,1]],dist=MZ.map(r=>r.map(()=>Infinity)),E=[];dist[MB[0]][MB[1]]=0;const pq=[[0,MB[0],MB[1]]];
+while(pq.length){pq.sort((a,b)=>a[0]-b[0]);const[d,x,y]=pq.shift();if(d>dist[x][y])continue;const e={d,x,y,res:[],done:x==MC[0]&&y==MC[1]};if(!e.done)for(const[nm,a,b]of D){let nx=x,ny=y,c=0,ps=0;while(nx+a>=0&&nx+a<N&&ny+b>=0&&ny+b<M&&!MZ[nx+a][ny+b]){nx+=a;ny+=b;c++;if(nx==MC[0]&&ny==MC[1])ps=1}const th=ps&&!(nx==MC[0]&&ny==MC[1]),nd=d+c,up=nd<dist[nx][ny];if(up){dist[nx][ny]=nd;pq.push([nd,nx,ny])}e.res.push({nm,nx,ny,c,nd,up,th})}e.dist=dist.map(r=>[...r]);E.push(e);if(e.done)break}return E};
+const mzw=()=>{const E=mzE(),v=st.mz??0,c=v?E[v-1]:null,D=c?c.dist:MZ.map((r,i)=>r.map((_,j)=>i==MB[0]&&j==MB[1]?0:Infinity));
+return mx(MZ.map((r,i)=>r.map((w,j)=>w?'#':D[i][j]<Infinity?D[i][j]:'·')),(i,j)=>MZ[i][j]?'rd2':c&&c.x==i&&c.y==j?'sel':i==MC[0]&&j==MC[1]?'rg':D[i][j]<Infinity?'sw':'')+`<p class="ex">${c?(c.done?`Pop (${c.x}, ${c.y}) with distance ${c.d}: the destination. Its distance is final, so return <b>${c.d}</b>.`:`Pop (${c.x}, ${c.y}) with distance ${c.d}, the smallest in the heap.<br>`+c.res.map(r=>`${r.nm}: ${r.c?`rolls ${r.c} to (${r.nx}, ${r.ny}), distance ${r.nd} → ${r.up?'<b>better, update and push</b>':'not better, ignore'}${r.th?' <i>(rolls over the destination but cannot stop there)</i>':''}`:'no room to roll'}`).join('<br>')):'Start (1, 0) has distance 0. A · means no known distance yet (∞). Yellow is the destination, red # cells are walls.'}</p>`+btn('mz',E.length,'Pop the start','Pop next')};
+// ---- min jumps
+const JA=[[2,3,1,1,4],[2,3,0,1,4]];
+const jmE=a=>{const n=a.length,r=[...a],E=[];for(let i=1;i<n-1;i++){r[i]=Math.max(a[i]+i,r[i-1]);E.push({t:'p',i,r:[...r]})}let cur=0,j=0;while(cur<n-1){j++;const to=r[cur],src=a.findIndex((x,m)=>m<=cur&&x+m==to);E.push({t:'j',j,from:cur,to,src,r:[...r]});cur=to}return E};
+const jmw=()=>{const a=JA[st.jm??0],E=jmE(a),v=st.jmj??0,c=v?E[v-1]:null,n=a.length;
+return pick('jm',['[2, 3, 1, 1, 4]','[2, 3, 0, 1, 4]'])+'<p class="ex">arr</p>'+cells(a,{},cl0(n,i=>c&&c.t=='p'&&c.i==i?'sel':c&&c.t=='j'&&c.src==i?'sel':''))+'<p class="ex">farthest index reachable using any index up to i (the last index is never a starting point)</p>'+cells((c?c.r:a).map((x,i)=>i==n-1?'–':x),{},cl0(n,i=>c&&c.t=='p'&&i<=c.i?(i==c.i?'sel':'sw'):c&&c.t=='j'?(c.to==i?'rg':'sw'):''))+`<p class="ex">${c?(c.t=='p'?`i = ${c.i}: max(arr[${c.i}] + ${c.i}, previous reach) = max(${a[c.i]} + ${c.i}, ${c.r[c.i-1]}) = <b>${c.r[c.i]}</b>.`:`Jump ${c.j}: indices 0 to ${c.from} are already reachable. The best jump among them starts at index ${c.src} (arr[${c.src}] + ${c.src} = ${c.to}), so we can now reach index ${c.to}.${c.to>=n-1?` That is the last index, so the answer is <b>${c.j}</b>.`:''}`):'Step 1 builds the reach array, one index per click. Step 2 jumps greedily.'}</p>`+btn('jmj',E.length,'Process index 1','Next step')};
+// ---- stock profit
+const SA=[[8,2,6,3,8,4],[1,2,3,4],[4,3,2,1]];
+const skw=()=>{const a=SA[st.sk??0],v=st.skj??0,c=v-1;let t=0;for(let i=0;i<v;i++)if(a[i+1]>a[i])t+=a[i+1]-a[i];const up=c>=0&&a[c+1]>a[c];
+return pick('sk',['[8, 2, 6, 3, 8, 4]','[1, 2, 3, 4]','[4, 3, 2, 1]'])+cells(a,{},cl0(a.length,i=>c>=0&&(i==c||i==c+1)?(up?'sw':'rd2'):''))+`<p class="ex">${c>=0?`Index ${c} (price ${a[c]}) → index ${c+1} (price ${a[c+1]}): ${up?`a rise of ${a[c+1]-a[c]}. Buy on index ${c}, sell on index ${c+1}: total += <b>${a[c+1]-a[c]}</b>.`:'no rise: skip it, we never sell at a loss.'}`:'Compare every pair of neighbouring days. Press the button for the first pair.'}</p><p class="ex">Total profit so far: <b>${t}</b>${v>=a.length-1?' · all pairs checked.':''}</p>`+btn('skj',a.length-1,'Compare first pair','Next pair')};
+const GRID=r=>'<br><span style="font-family:monospace;font-size:1.3em;font-weight:500;line-height:1.5;letter-spacing:.25em">'+r.join('<br>')+'</span>';
+const TABS=[
+{t:'Agenda',s:[
+W('Today’s agenda','Unlock all assignment problems and keep the live-tracking query open.',()=>AG(`Four interview problems, one habit: find the thing that really matters. Whole ${HL('islands')}, ${HL('stop positions')}, the ${HL('farthest reach')}, every ${HL('rise')}.`,[['Number of islands','DFS flood fill on a grid'],['Shortest distance in a maze','Rolling ball, Dijkstra with a min-heap'],['Minimum jumps to reach the end','Farthest reach, O(N)'],['Maximum profit from stock prices','Sum every rise']]))]},
+{t:'Number of islands',s:[
+ST('ASK',think('Problem 1','A grid of 1s (land) and 0s (water). Land cells touching left, right, up or down belong to one island. How would you count the islands?','Scan the grid. At every unvisited land cell, count one island and <b>explore all of it</b> with DFS or BFS, marking cells as visited. No adjacency list is needed: the grid already is the graph.','Give 5 minutes to think.')),
+ST('CODE',CB('Write the scan line by line','The scan counts, DFS erases.','c1',['islands = 0','for (i → 0 to N-1)','    for (j → 0 to M-1)','        if (grid[i][j] == 1)','            islands++','            dfs(i, j)','return islands'],['Counter for islands.','Visit every row.','Visit every column.','Found unvisited land.','This is a new island.','Erase the whole island so it is never counted again.','Return how many islands were found.'])),
+ST('CODE',CB('Write dfs line by line','Four directions only, no diagonals. Interview note: this erases the input grid; use a boolean visited[][] if the input must be kept (extra O(N × M) space).','c2',['dfs(i, j):','    grid[i][j] = 0','    for each (dx, dy) in (0,-1), (-1,0), (0,1), (1,0)','        x = i + dx, y = j + dy','        if (0 <= x < N and 0 <= y < M and grid[x][y] == 1)','            dfs(x, y)'],['Flood fill from one land cell.','Mark it visited by turning it into water.','The four neighbours: left, up, right, down. Diagonals are not included.','Row and column of that neighbour.','Stay inside the grid and only enter land.','Recurse into that neighbour.'])),
+ST('TRY',W('Run it, one step at a time','“Finish this island” skips the dfs.',isw,'Show that each dfs erases exactly one island. “Finish this island” skips ahead; Reset replays the trace.')),
+ST('QUIZ',quiz('Quiz','How many islands does this grid have?'+GRID(['1 0 1','0 1 0','1 0 1']),null,['1','3','5','9'],2,['Diagonal cells do not connect, so it is not one island.','There are 5 land cells, and none touches another.','Correct. Five land cells and no two share a side (diagonals do not connect): 5 islands.','9 is the number of cells, not islands.'],'')),
+ST('COMPLEXITY',RV('Complexity','','cx1',[['TIME','O(N × M)','every cell is scanned once and erased at most once'],['SPACE','O(N × M)','worst-case recursion depth (a snake-shaped island); a visited[][] array would also cost O(N × M)']]))]},
+{t:'Maze',s:[
+ST('ASK',think('Problem 2','A ball starts in a maze and must reach a destination cell. It rolls in a straight line until it hits a wall or the border, and only then can turn. Which positions matter, and what does a move cost?','Only <b>stop positions</b> matter. A move costs the number of cells rolled, so edges have <b>different weights</b>.','We minimise the total number of cells rolled, not the number of turns: rolling 3 cells costs 3, rolling 1 costs 1.')),
+ST('LEARN',RV('Model it as a graph','Reveal one idea at a time.','mz0',[['NODES','Stop positions','cells where the ball halts'],['EDGES','One roll in one direction','weight = number of cells rolled'],['TOOL','Dijkstra + min-heap','the first time the destination is popped, its distance is final']])),
+ST('CODE',CB('Write Dijkstra line by line','Give 10 minutes to write it first.','c3',['dist[start] = 0, push (0, start) into a min-heap','while (heap is not empty)','    (d, x, y) = pop the smallest','    if (d > dist[x][y]) continue','    if ((x, y) == destination) return d','    for each direction','        roll until the next cell is a wall or outside, count cells','        if (d + count < dist[nx][ny])','            dist[nx][ny] = d + count, push it','return -1'],['Start costs nothing.','Keep going while stops are waiting.','Always expand the cheapest known stop.','Stale entry: a shorter path was already processed.','Destination popped: distance is final.','Try up, down, left, right.','The ball cannot stop in the middle.','Found a cheaper way to this stop?','Update and push.','Heap emptied: unreachable.'])),
+ST('TRY',W('Run it on the 4×3 maze','Start (1, 0), destination (2, 1).',mzw,'The ball passes through (2, 1) without stopping on the way along row 2.')),
+ST('QUIZ',quiz('Quiz','Start (0,1), destination (1,0). What is the answer?'+GRID(['0 0 1','0 1 0','0 1 0']),null,['1','2','-1','3'],2,['The ball cannot stop at (1,0) after one roll.','Left to (0,0), then down: it keeps rolling to (2,0), not (1,0).','Correct. From (0,1) the only move is left, to (0,0). From (0,0), rolling down overshoots (1,0) and stops at (2,0); rolling up from (2,0) overshoots it again. The ball can never stop at (1,0).','Not reachable in any number of moves.'],'')),
+ST('COMPLEXITY',RV('Complexity','','cx2',[['TIME','O(N × M × max(N, M) + N × M × log(N × M))','each stop is expanded once (4 rolls of up to max(N, M) cells), plus heap work for at most 4 × N × M pushes'],['SPACE','O(N × M)','dist array and heap']]))]},
+{t:'Minimum jumps',s:[
+ST('ASK',think('Problem 3','arr[i] is the farthest forward jump from index i. For [2,3,1,1,4], what is the minimum number of jumps to the last index?','<b>2</b>: index 0 → 1 → 4. For each index, store the farthest index reachable using any index up to it.','Give 5 minutes to think.')),
+ST('LEARN',RV('Two approaches','Reveal one at a time.','jm0',[['SLOWER','jumps[i] from every earlier j that reaches i','O(N²) time, O(N) space'],['OPTIMISED','Farthest reach per index, then jump greedily','O(N) time, O(1) space']])),
+ST('CODE',CB('Write the optimised code line by line','Give 10 minutes to write it first. The problem guarantees the end is reachable; otherwise cur would stop advancing.','c4',['if (n <= 1) return 0','for (i → 1 to n-2)','    arr[i] = max(arr[i] + i, arr[i-1])','cur = 0, jumps = 0','while (cur < n - 1)','    jumps++','    cur = arr[cur]','return jumps'],['Already on the last index: no jump needed.','Preprocess up to the second-to-last index; we never jump from the last one.','Reach from i, or reach from any earlier index.','Start at index 0.','Stop as soon as we stand on the last index (cur < n − 1; using cur < n would count one extra jump).','One more jump.','Everything up to cur is already reachable; go to the farthest index the next jump can reach.','Return the number of jumps.'])),
+ST('TRY',W('Run it, one step at a time','Preprocess first, then jump.',jmw)),
+ST('QUIZ',quiz('Quiz','Minimum jumps for [1,1,1,1]?',null,['1','2','3','4'],2,['Each jump moves only 1, so one jump is not enough.','Two jumps cover indices 0 to 2 only.','Correct. 0 → 1 → 2 → 3: three jumps.','Four jumps would go past the last index.'],''))]},
+{t:'Stock profit',s:[
+ST('ASK',think('Problem 4','You may trade as many times as you like, one holding at a time. For prices [8,2,6,3,8,4], what is the best profit?','<b>9</b>: buy at 2, sell at 6 (+4); buy at 3, sell at 8 (+5).','Give 5 minutes to think.')),
+ST('LEARN',RV('Key observations','Reveal one at a time.','sk0',[['NOTE 1','Never sell at a loss',''],['NOTE 2','If A[i] < A[i+1]','buy on i and sell on i+1: always a profit, same as waiting'],['RESULT','Add up every rise','O(N) time, O(1) space; the DP version is O(N²)']])),
+ST('CODE',CB('Write the optimised code line by line','Give 10 minutes to write it first.','c5',['total = 0','for (i → 0 to n-2)','    if (A[i+1] > A[i])','        total += A[i+1] - A[i]','return total'],['Profit so far.','Compare each day with the next.','A rise: we can profit.','Collect that rise.','Return the total profit.'])),
+ST('TRY',W('Run it, one pair at a time','Try all three arrays.',skw)),
+ST('QUIZ',quiz('Quiz','Maximum profit for [1,5,3,8]?',null,['7','9','4','12'],1,['7 is one trade, 8 − 1. Two trades earn more.','Correct. Rises: 1→5 (+4) and 3→8 (+5): total 9.','4 is only the first rise.','12 is more than any sequence of trades earns.'],''))]},
+{t:'Wrap-up',s:[
+RV('Recap','Reveal one idea at a time.','wr',[['ISLANDS','Scan, count, erase with DFS','O(N × M)'],['MAZE','Stop positions + variable weights','Dijkstra with a min-heap'],['MIN JUMPS','Farthest reach per index, jump greedily','O(N) time, O(1) space'],['STOCK PROFIT','Sum every rise','O(N) time, O(1) space']])]}
+];
+function go(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S,mv=s.m&&(st[s.m[0]]??0)<s.m[1];
+$('#tn').textContent='Instructor notes: '+(notes?'on':'off');
+$('#tabs').innerHTML=TABS.map((x,i)=>`<button class="${i==T?'on':''}" onclick="T=${i};S=0;go()"><i>0${i}</i>${x.t}</button>`).join('');
+$('#side').innerHTML=`<h3>${tb.t}</h3>`+tb.s.map((x,i)=>`<button class="${i==S?'on':''}" onclick="S=${i};go()"><span>${i+1}</span>${x.h}</button>`).join('');
+$('#main').innerHTML=`<small class="k">${tb.t.toUpperCase()} · STEP ${S+1} OF ${tb.s.length}</small>${tb.s.every(x=>x.st)?`<div class="stg">${[...new Set(tb.s.map(x=>x.st))].map(g=>`<span class="${g==s.st?'on':''}">${g}</span>`).join('›')}</div>`:''}<h2>${s.h}</h2>${s.r(k)}${notes&&s.n?`<div class="ins"><small>INSTRUCTOR</small><p>${s.n}</p></div>`:''}`;
+const last=S==tb.s.length-1,nt=TABS[T+1],tr=s.th&&!rev[k];
+$('#nx').textContent=tr?'Reveal the answer ›':mv?s.ml+' ›':last?(nt?'Next: '+nt.t+' ›':'Done'):'Next ›';
+$('#nx').disabled=last&&!nt&&!tr&&!mv;$('#bk').disabled=!T&&!S}
+function nx(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;if(s.th&&!rev[k])rev[k]=1;else if(s.m&&(st[s.m[0]]??0)<s.m[1])st[s.m[0]]=(st[s.m[0]]??0)+1;else if(S<tb.s.length-1)S++;else if(T<TABS.length-1){T++;S=0}go()}
+function bk(){if(S)S--;else if(T){T--;S=TABS[T].s.length-1}go()}
+addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;if(e.key=='ArrowRight')nx();if(e.key=='ArrowLeft')bk()});
+go();
+</script></body></html>
