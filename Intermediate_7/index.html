@@ -12,7 +12,7 @@ header{max-width:1180px;margin:auto;padding:18px 20px 0;display:flex;justify-con
 header small{color:var(--mu);font:12px ui-monospace,Menlo,monospace}header h1{font-size:22px;margin:2px 0}
 .tg{background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:20px;padding:7px 14px;cursor:pointer;font:inherit}
 #tabs{max-width:1180px;margin:10px auto 0;padding:0 20px;display:flex;overflow-x:auto;border-bottom:1px solid var(--bd)}
-#tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:12px 14px;font:600 15px inherit;cursor:pointer;white-space:nowrap}
+#tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:12px 14px;font-weight:600;font-size:15px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer;white-space:nowrap}
 #tabs button.on{color:var(--tx);border-color:var(--ac)}#tabs i{font:normal 12px ui-monospace,Menlo,monospace;opacity:.7;margin-right:4px}
 .wrap{max-width:1180px;margin:22px auto;padding:0 20px;display:grid;grid-template-columns:260px 1fr;gap:28px}
 #side h3{margin:0 0 12px;color:var(--mu)}#side button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:1px solid transparent;color:var(--mu);border-radius:10px;padding:9px;font:inherit;cursor:pointer}
@@ -25,7 +25,7 @@ h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spa
 .think,.card2{border:2px solid var(--ac);border-radius:16px;padding:18px 20px;background:var(--cc);margin-bottom:14px}.card2{border:1px solid var(--bd)}
 .tag{background:var(--ye);color:#1a1400;border-radius:6px;padding:2px 10px;font:700 12px ui-monospace,Menlo,monospace}
 .think h3,.card2 h3{font-size:22px;margin:12px 0}
-.btn{background:var(--ac);color:#0a0e1a;border:0;border-radius:10px;padding:10px 18px;font:700 15px inherit;cursor:pointer}.btn:disabled{opacity:.35;cursor:default}
+.btn{background:var(--ac);color:#0a0e1a;border:0;border-radius:10px;padding:10px 18px;font-weight:700;font-size:15px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}.btn:disabled{opacity:.35;cursor:default}
 .ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}.ghost:disabled{opacity:.35}
 .ans{border-top:1px dashed var(--bd);padding-top:12px;margin:6px 0 14px}.ans small{color:var(--gr);font:700 12px ui-monospace,monospace}
 .ins{border-top:1px dashed var(--bd);margin-top:18px;padding-top:12px;color:var(--mu)}.ins small{color:var(--ye);font:700 12px ui-monospace,monospace}.ins p{margin:4px 0 0}
@@ -39,7 +39,7 @@ h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spa
 .code{background:var(--cc);border-radius:12px;padding:12px 0;margin:10px 0;font:14px/1.7 ui-monospace,Menlo,monospace;overflow-x:auto}
 .code span{display:block;padding:0 16px;white-space:pre}.code i{color:var(--mu);margin-right:14px;font-style:normal}.code .hl{background:color-mix(in srgb,var(--ac) 22%,transparent)}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
-.opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font:600 15px inherit;cursor:pointer;text-align:left}
+.opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font-weight:600;font-size:15px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer;text-align:left}
 .qf{margin-top:12px;padding:12px 14px;border-radius:12px;border:1px solid;font-size:14px;line-height:1.5}.qf.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 14%,var(--cd))}.qf.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 14%,var(--cd))}
 .opt b{background:var(--bd);border-radius:6px;padding:1px 8px;font-size:12px}.opt.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 18%,var(--cd))}.opt.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 18%,var(--cd))}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--bd)}.row span{flex:1 1 260px}.opt.sm{padding:6px 12px}
@@ -53,6 +53,56 @@ h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spa
 .pgw{overflow-x:auto}.pg{display:grid;grid-template-columns:82px repeat(10,minmax(36px,1fr));gap:5px;align-items:center;margin:12px 0;min-width:480px}.pg .l{color:var(--mu);font:12px ui-monospace,Menlo,monospace}.pg .c{text-align:center;padding:7px 0;border:2px solid var(--bd);border-radius:8px;background:var(--cc);font:600 14px ui-monospace,Menlo,monospace}.pg .bn{display:block;height:18px;border-radius:5px;border:1px dashed var(--bd)}
  .rd2{border-color:var(--rd)}.gone b{text-decoration:line-through;opacity:.5}
 :focus-visible{outline:2px solid var(--ye);outline-offset:2px}
+/* ---------- animation kit ---------- */
+@keyframes fin{from{opacity:0;transform:translateY(-26px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes fout{from{opacity:1;max-height:90px}to{opacity:0;transform:translateY(-26px) rotate(-3deg);max-height:0;padding-top:0;padding-bottom:0;margin:0;border-width:0}}
+@keyframes fade{from{opacity:0}}
+@keyframes flash{0%,35%{background:var(--ye);color:#1a1400}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+@keyframes drop{from{transform:translateY(-140px);opacity:0}}
+@keyframes lift{to{transform:translateY(-140px) rotate(-8deg);opacity:0}}
+@keyframes pp{0%{transform:scale(.85)}60%{transform:scale(1.06)}100%{transform:none}}
+@keyframes grow{from{transform:scaleY(0)}}
+@keyframes drw{to{stroke-dashoffset:0}}
+.fin{animation:fin .45s cubic-bezier(.2,.9,.3,1.25) both}.fout{animation:fout .45s ease-in forwards;overflow:hidden}.fade{animation:fade .5s both}.fl{animation:flash 1.2s ease-out}.shk{animation:shake .45s}.pp{animation:pp .45s}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}@media(max-width:700px){.two{grid-template-columns:1fr}}
+.frm{border:2px solid var(--bd);border-radius:12px;padding:8px 12px;margin:6px 0;background:var(--cd)}
+.frm.top{border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent)}
+.frm>b{font:700 14px ui-monospace,Menlo,monospace}.fv{font:13px ui-monospace,Menlo,monospace;color:var(--mu);margin-top:4px;border-radius:5px;padding:0 4px}
+.vars{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.var{font:13px ui-monospace,Menlo,monospace;border:1px solid var(--bd);border-radius:6px;padding:3px 8px;background:var(--cc)}
+.var.ptr{border-color:var(--ac);color:var(--ac);font-weight:700}.var.ptr::after{content:" ●"}
+.mem{position:relative;display:grid;grid-template-columns:1fr 1.25fr;gap:50px;margin:12px 0}
+.hp2{display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:start}.hc.v{flex-direction:column;align-items:flex-start}
+.hc.v span{padding:7px 8px 15px}
+.mem>svg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.mem path{fill:none;stroke:var(--ac);stroke-width:2.4}.mem path.hh{stroke:var(--ye);stroke-dasharray:none}.mem .ahd{fill:var(--ac);stroke:none}
+.mem path.drw{stroke-dasharray:1;stroke-dashoffset:1;animation:drw .6s .1s ease-out forwards}
+.hb{border:2px solid var(--bd);border-radius:12px;padding:8px 10px;margin:6px 0;background:var(--cd)}.hb>b{font:700 13px ui-monospace,Menlo,monospace;color:var(--ac)}.hb.gc{opacity:.5;border-style:dashed}
+.hc{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}.hc span{position:relative;min-width:40px;text-align:center;padding:5px 6px 15px;border:1px solid var(--bd);border-radius:7px;background:var(--cc);font:600 14px ui-monospace,Menlo,monospace}.hc small{position:absolute;bottom:1px;left:0;right:0;font:10px ui-monospace,Menlo,monospace;color:var(--mu)}
+.outp{font:700 16px ui-monospace,Menlo,monospace;margin:4px 0 0}
+/* idli stand */
+.stand{position:relative;display:flex;flex-direction:column-reverse;align-items:center;height:300px;padding:0 0 28px;border-radius:16px;background:var(--cc);overflow:hidden}
+.stand::before{content:"";position:absolute;left:50%;top:16px;bottom:20px;width:8px;margin-left:-4px;border-radius:4px;background:var(--bd)}
+.stand::after{content:"";position:absolute;left:18%;right:18%;bottom:10px;height:12px;border-radius:6px;background:var(--bd)}
+.plate{position:relative;z-index:1;flex:none;width:200px;height:40px;margin-top:9px;border-radius:50%;border:4px solid var(--h);background:color-mix(in srgb,var(--h) 22%,var(--cd));display:flex;justify-content:center;align-items:center;gap:10px}
+.plate i{width:34px;height:19px;border-radius:50%;background:#fdfbf2;box-shadow:inset 0 -3px 0 #e2d9bb}
+.plate span{position:absolute;left:-34px;font:700 14px ui-monospace,Menlo,monospace;color:var(--mu)}
+.plate.tp::after{content:"← TOP";position:absolute;right:-62px;font:700 11px ui-monospace,Menlo,monospace;color:var(--ac)}
+.plate.fin{animation:drop .55s cubic-bezier(.3,1.35,.5,1) both}.plate.fout{animation:lift .5s ease-in forwards}.plate.blk{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 25%,var(--cd))}
+.map{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px;margin:8px 0}.map b{font:700 13px ui-monospace,Menlo,monospace;color:var(--ye)}
+/* predict panel */
+.pvs{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:10px 0}
+.pv{border:2px solid var(--bd);border-radius:12px;padding:8px 10px;background:var(--cc)}.pv small{color:var(--mu);font:12px ui-monospace,Menlo,monospace}
+.pv input{width:100%;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:6px 8px;font:700 18px ui-monospace,Menlo,monospace;margin:4px 0}
+.pv.ok{border-color:var(--gr)}.pv.no{border-color:var(--rd)}.pv .act{font:700 13px ui-monospace,Menlo,monospace;min-height:18px}.pv.ok .act{color:var(--gr)}.pv.no .act{color:var(--rd)}
+.dt{display:flex;align-items:flex-end;gap:5px;height:96px;padding:0 4px;border-bottom:2px solid var(--bd);background:repeating-linear-gradient(to top,transparent 0 29px,color-mix(in srgb,var(--bd) 70%,transparent) 29px 30px)}
+.dt i{flex:1;background:var(--ac);border-radius:4px 4px 0 0;transform-origin:bottom}.dt i.e{height:3px!important;background:var(--bd)}.dt i.mx{background:var(--ye)}.dt i.cur{outline:2px solid var(--tx);outline-offset:1px}.dt i.gr{animation:grow .4s ease-out}
+/* runtime game + rounds */
+.evt{border:2px solid var(--ac);border-radius:14px;padding:14px 16px;background:var(--cc);margin:12px 0}.evt h4{margin:4px 0 12px;font-size:20px}
+.lg{font:13px ui-monospace,Menlo,monospace;color:var(--mu);padding:2px 0}.lg b{color:var(--gr)}
+.chip{padding:7px 12px!important;font-size:14px!important}
+.rule{border:2px solid var(--ye);border-radius:14px;padding:14px 16px;margin:12px 0;background:color-mix(in srgb,var(--ye) 10%,var(--cd))}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important;transition:none!important}}
 </style></head><body>
 <header><div><small>INTERMEDIATE DSA · CLASS 7</small><h1>Memory, Sorting &amp; Noble Integer</h1></div>
 <button class="tg" id="tn" onclick="notes=!notes;go()"></button></header>
@@ -65,13 +115,103 @@ const $=s=>document.querySelector(s);let T=0,S=0,notes=true,rev={},st={};
 const code=(l,h)=>'<pre class="code" style="margin:10px 0">'+l.map((x,i)=>`<span class="${i==h?'hl':''}"><i>${i+1}</i>${x}</span>`).join('')+'</pre>';
 const cells=(a,m={},c={})=>`<div class="cells">${a.map((v,j)=>`<div class="cell ${c[j]||''}">${m[j]?`<u>${m[j]}</u>`:''}<b>${v}</b><small>[${j}]</small></div>`).join('')}</div>`;
 const cards=a=>`<div class="g">${a.map(x=>`<div class="cd"><small>${x[0]}</small><h4>${x[1]}</h4><p>${x[2]}</p></div>`).join('')}</div>`;
-const W=(h,n,r)=>({h,n,r}),info=(h,b,n)=>W(h,n,()=>b);
+const W=(h,n,r,n2)=>n2===undefined?{h,n,r}:{h,d:n,n:n2,r},info=(h,b,n)=>W(h,n,()=>b);
 const think=(h,q,a,n)=>({h,n,th:1,r:k=>`<div class="think"><span class="tag">THINK FIRST</span><h3>${q}</h3><button class="btn" onclick="rev['${k}']=!rev['${k}'];go()">${rev[k]?'Hide':'Reveal'} the answer</button></div>`+(rev[k]?`<div class="ans"><small>ANSWER</small><p>${a}</p></div>`:'')});
 const pickQ=(k,i,ok)=>{if(st[k]===ok)return;const t=st[k+'w']||[];if(i!==ok&&!t.includes(i))t.push(i);st[k+'w']=t;st[k]=i;st[k+'a']=(st[k+'a']||0)+1;go()};
 const quiz=(h,q,c,o,ok,why,n)=>W(h,n,k=>{const R=Array.isArray(why)?why:o.map((_,i)=>i==ok?why:'This option does not match. Re-read the question and try again.'),s=st[k],t=st[k+'w']||[],done=s===ok,at=st[k+'a']||0;
 return `<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3>${c?code(c):''}<div class="opts">${o.map((x,i)=>`<button class="opt ${done&&i==ok?'good':t.includes(i)?'bad':''}" ${done?'disabled':''} onclick="pickQ('${k}',${i},${ok})"><b>${'ABCD'[i]}</b>${x}</button>`).join('')}</div>`+(s==null?'':done?`<div class="qf good"><b>✓ Correct${at>1?' (after '+at+' tries)':' on the first try'}.</b> ${R[ok]}</div>`:`<div class="qf bad"><b>✗ Option ${'ABCD'[s]} is not right.</b> ${R[s]}<div class="bt"><button class="btn" onclick="st['${k}']=null;go()">Try again</button></div></div>`)+`</div>`});
 const sorter=(h,items,L,tail,n)=>W(h,n,k=>`<div class="card2">${items.map((t,i)=>{const v=st[k+i];return `<div class="row"><span>${t[0]}</span>${L.map((l,x)=>`<button class="opt sm ${v!=null&&x==t[1]?'good':v==x?'bad':''}" onclick="st['${k}${i}']=${x};go()">${l}</button>`).join('')}</div>`}).join('')}${items.every((_,i)=>st[k+i]!=null)?`<p class="ex"><b>${tail}</b></p>`:''}</div>`);
-const set=(f,v)=>`${f};go()`;
+const fr=(n,v)=>[n,v],hp=(a,v)=>[a,v];
+let FX=0,SHK=0,PLX=null,PT=0,AT=0,PA=new Set();
+const set=(f,v)=>`${f};FX=1;go()`;
+// ---------- animated call stack ----------
+const fnorm=f=>typeof f=='string'?{n:f.split(' · ')[0],v:f.split(' · ')[1]||''}:f;
+const csR=(fr,pv,anim)=>{fr=fr.map(fnorm);pv=pv.map(fnorm);const box=(f,c,ch)=>`<div class="frm ${c}"><b>${f.n}()</b>${c.includes('top')?' <small class="k">TOP · running</small>':''}${f.v?`<div class="fv ${ch?'fl':''}">${f.v}</div>`:''}</div>`;let h='';
+if(anim&&pv.length>fr.length)for(let i=pv.length-1;i>=fr.length;i--)h+=box(pv[i],'fout');
+for(let i=fr.length-1;i>=0;i--){const nw=anim&&(!pv[i]||pv[i].n!=fr[i].n);h+=box(fr[i],(i==fr.length-1?'top ':'')+(nw?'fin':''),anim&&!nw&&pv[i].v!=fr[i].v)}
+return h||'<p class="ex">empty</p>'};
+// ---------- animated stack + heap with arrows ----------
+const isP=v=>typeof v=='string'&&v[0]=='#';
+const memR=(cur,prev,anim)=>{const refs=new Set();cur.f.forEach(f=>f[1].forEach(x=>isP(x[1])&&refs.add(x[1])));cur.h.forEach(h=>h[1].forEach(x=>isP(x)&&refs.add(x)));
+const pf=prev.f,ph=Object.fromEntries(prev.h.map(h=>[h[0],h[1]]));
+const frame=(f,i,cls)=>{const p=pf[i]&&pf[i][0]==f[0]?Object.fromEntries(pf[i][1]):null;return `<div class="frm ${cls}"><b>${f[0]}()</b>${cls.includes('top')?' <small class="k">TOP</small>':''}<div class="vars">${f[1].map(x=>{const ch=anim&&p&&p[x[0]]!==x[1]&&!cls.includes('fout')?' fl':'';return isP(x[1])?`<span class="var ptr${ch}" data-ptr="${x[1]}" data-k="${f[0]}.${x[0]}">${x[0]} = ${x[1]}</span>`:`<span class="var${ch}">${x[0]} = <b>${x[1]}</b></span>`}).join('')||'<span class="ex" style="margin:0">no locals yet</span>'}</div></div>`};
+let S='';if(anim&&pf.length>cur.f.length)for(let i=pf.length-1;i>=cur.f.length;i--)S+=frame(pf[i],i,'fout');
+for(let i=cur.f.length-1;i>=0;i--)S+=frame(cur.f[i],i,(i==cur.f.length-1?'top ':'')+(anim&&(i>=pf.length||pf[i][0]!=cur.f[i][0])?'fade':''));
+const inner=new Set();cur.h.forEach(h=>h[1].forEach(x=>isP(x)&&inner.add(x)));
+const blk=h=>{const p=ph[h[0]],gc=!refs.has(h[0]),vt=h[1].some(isP);return `<div class="hb ${gc?'gc':''} ${anim&&!p?'fade':''}" data-addr="${h[0]}"><b>${h[0]}</b>${gc?' <small class="k" style="color:var(--rd)">no arrows point here → garbage</small>':''}<div class="hc ${vt?'v':''}">${h[1].map((v,j)=>`<span class="${anim&&p&&p[j]!==v?'fl':''}" ${isP(v)?`data-ptr="${v}" data-k="${h[0]}[${j}]"`:''}>${v}<small>${j}</small></span>`).join('')}</div></div>`};
+const H1=cur.h.filter(h=>!inner.has(h[0])).map(blk).join(''),H2=cur.h.filter(h=>inner.has(h[0])).map(blk).join(''),H=H2?`<div class="hp2"><div>${H1}</div><div>${H2}</div></div>`:H1;
+return `<div class="mem"><div><small class="k">STACK</small>${S||'<p class="ex">empty</p>'}</div><div><small class="k">HEAP</small>${H||'<p class="ex">nothing on the heap yet</p>'}</div><svg></svg></div>`};
+function arrows(){const m=document.querySelector('.mem');if(!m){PA=new Set();return}const sv=m.querySelector('svg'),R=m.getBoundingClientRect(),K=new Set();let h='<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ahd"/></marker></defs>';
+m.querySelectorAll('[data-ptr]').forEach(p=>{const t=m.querySelector(`.hb[data-addr="${p.dataset.ptr}"]`);if(!t)return;const a=p.getBoundingClientRect(),b=t.getBoundingClientRect(),k=p.dataset.k+'>'+p.dataset.ptr,inH=p.closest('.hb');K.add(k);let d;
+{const x1=(inH?inH.getBoundingClientRect().right:a.right)-R.left,y1=a.top+a.height/2-R.top,x2=b.left-R.left,y2=(inH?b.top+b.height/2:b.top+14)-R.top,dx=Math.max(24,(x2-x1)/2);d=`M${x1} ${y1} C${x1+dx} ${y1},${x2-dx} ${y2},${x2-3} ${y2}`}
+h+=`<path d="${d}" pathLength="1" class="${inH?'hh ':''}${PA.has(k)?'':'drw'}" marker-end="url(#ah)"/>`});sv.innerHTML=h;PA=K}
+addEventListener('resize',()=>arrows());
+// ---------- 1 · idli stand ----------
+const HUE=['#f5c84c','#8b9cf8','#5ed49a','#f07878','#c58cf5','#5ec8e8','#f5a04c'];
+const plAct=t=>{const p=st.pl??[1,2,3];let n=st.plN??3;PLX={t};
+if(t=='push'){if(p.length>=5){st.plMsg='The stand is full. Pop a plate first.';PLX=null}else{st.pl=[...p,++n];st.plN=n;st.plMsg=`push(${n}): plate ${n} lands on top.`}}
+else if(t=='pop'){if(!p.length){st.plMsg='Nothing to pop: the stand is empty.';PLX=null}else{PLX.p=p[p.length-1];st.pl=p.slice(0,-1);st.plMsg=`pop(): plate ${PLX.p} comes off the top.${p.length==1?' The stand is empty.':' Plate '+p[p.length-2]+' is the new top.'}`}}
+else{if(!p.length){st.plMsg='No plates to take.';PLX=null}else st.plMsg=p.length>1?`<b style="color:var(--rd)">Blocked!</b> Plate ${p[0]} is under ${p.length-1} other plate${p.length>2?'s':''}. You must pop ${p.length>2?'them':'it'} first.`:`Plate ${p[0]} is the only plate, so it is also the top. pop() takes it.`}
+FX=1;go()};
+const plate=(n,c)=>`<div class="plate ${c}" style="--h:${HUE[n%HUE.length]}"><i></i><i></i><i></i><span>${n}</span></div>`;
+const plw=k=>{const p=st.pl??[1,2,3],x=FX?PLX:null;let h=p.map((n,i)=>plate(n,(i==p.length-1?'tp ':'')+(x&&x.t=='push'&&i==p.length-1?'fin':'')+(x&&x.t=='bot'&&i==0&&p.length>1?'shk blk':''))).join('');if(x&&x.t=='pop')h+=plate(x.p,'fout');
+return `<div class="two"><div><div class="stand">${h}</div><div class="bt"><button class="btn" onclick="plAct('push')">Push plate</button><button class="ghost" onclick="plAct('pop')">Pop top</button><button class="ghost" onclick="plAct('bot')" style="border-color:var(--rd)">Grab the bottom plate</button></div><p class="ex">${st.plMsg||'An idli stand is a stack. Try all three buttons.'}</p></div>
+<div class="cd"><small>PLATES ↔ FUNCTIONS</small><div class="map"><b>plate</b><span>a function’s frame (its locals, parameters, return spot)</span><b>push</b><span>a function is <b>called</b></span><b>pop</b><span>a function <b>returns</b></span><b>top only</b><span>only the newest call is running; the ones below wait</span><b>bottom</b><span>main(): first in, last out</span></div></div></div>`
++quiz('','main() calls add(x, y). While add is running, which frame is on top?',null,['main','add','both, side by side','none: add is too small to need one'],1,['main is underneath, paused and waiting for add to return.','Right. The running function is always the top plate. When add returns, its frame is popped and main is on top again.','A stack has exactly one top. Frames never sit side by side.','Every call gets a frame, even a one-line function. It holds x, y and where to return.']).r(k+'q')};
+// ---------- 2 · you are the runtime ----------
+const RGC=['function steam():','    return "soft idli"','function makeIdli():','    idli = steam()','    return idli','function serve(food):','    print(food)','function main():','    food = makeIdli()','    serve(food)'];
+const RGE=[{t:'main() starts running',a:0,f:'main',l:7},{t:'main calls makeIdli()',a:0,f:'makeIdli',l:8},{t:'makeIdli calls steam()',a:0,f:'steam',l:3},{t:'steam returns "soft idli"',a:1,l:1},{t:'makeIdli stores it: idli = "soft idli"',a:2,l:3,set:'idli = "soft idli"'},{t:'makeIdli returns idli to main',a:1,l:4},{t:'main stores it: food = "soft idli"',a:2,l:8,set:'food = "soft idli"'},{t:'main calls serve(food)',a:0,f:'serve',fv:'food = "soft idli"',l:9},{t:'serve prints "soft idli" and returns',a:1,l:6,o:1},{t:'main reaches its end and returns',a:1,l:9}];
+const RGW=[e=>`This is a <b>call</b>, and every call pushes a new frame (for ${e.f}) on top.`,e=>'This is a <b>return</b>: the top function is finished, so its frame is popped.',e=>'Storing a value only updates a variable inside the top frame. No call, no return, so <b>nothing</b> is pushed or popped.'];
+const rgStack=n=>{const s=[];RGE.slice(0,n).forEach(e=>{if(e.a==0)s.push({n:e.f,v:e.fv||''});else if(e.a==1)s.pop();else s[s.length-1]={n:s[s.length-1].n,v:e.set}});return s};
+const rgAns=x=>{const i=st.rg??0,e=RGE[i];if(x===e.a){st.rg=i+1;st.rgW='';FX=1}else{st.rgM=(st.rgM||0)+1;st.rgW=RGW[e.a](e);SHK=1}go()};
+const rtw=()=>{const i=st.rg??0,done=i>=RGE.length,e=RGE[i],fr=rgStack(i),pv=rgStack(Math.max(0,i-1)),out=RGE.slice(0,i).some(x=>x.o);
+return `<div class="two"><div>${code(RGC,done?-1:e.l)}</div><div class="cd" style="min-height:240px"><small>CALL STACK</small>${csR(fr,pv,FX)}<small>OUTPUT</small><p class="outp">${out?'soft idli':'·'}</p></div></div>`
++(done?`<div class="rule"><b>All ${RGE.length} events handled${st.rgM?` with ${st.rgM} mistake${st.rgM>1?'s':''}`:' with no mistakes'}.</b><br>Deepest point: 3 frames (main → makeIdli → steam). Frames left in the order steam, makeIdli, serve, main: <b>last in, first out</b>.</div>`
+:`<div class="evt ${SHK?'shk':''}"><small class="k">EVENT ${i+1} OF ${RGE.length}</small><h4>${e.t}</h4><div class="opts"><button class="opt" onclick="rgAns(0)"><b>A</b>PUSH a new frame</button><button class="opt" onclick="rgAns(1)"><b>B</b>POP the top frame</button><button class="opt" onclick="rgAns(2)"><b>C</b>Nothing changes on the stack</button></div>${st.rgW?`<div class="qf bad"><b>✗ Not quite.</b> ${st.rgW}</div>`:''}</div>`)
++RGE.slice(0,i).map(x=>`<div class="lg">✓ ${x.t} → <b>${x.a==0?'PUSH '+x.f:x.a==1?'POP':'no change'}</b></div>`).join('')
++`<div class="bt"><button class="ghost" onclick="st.rg=0;st.rgM=0;st.rgW='';go()">Reset</button><span class="ex">mistakes: ${st.rgM||0}</span></div>`};
+// ---------- 3 · predict then run (Example 1) ----------
+const E1C=['function add(x, y): return x + y','function product(x, y): return x * y','function subtract(x, y): return x - y','function main():','    x = 10; y = 20','    temp1 = add(x, y)','    temp2 = product(x, y)','    temp3 = subtract(x, y)','    print(temp1 + temp2 + temp3)'];
+const m_=v=>({n:'main',v:'x=10, y=20'+v}),cl_=n=>({n,v:'x=10, y=20'}),T1=', temp1=30',T2=T1+', temp2=200',T3=T2+', temp3=-10';
+const E1=[[3,[{n:'main',v:''}],{},'main() is called: its frame is pushed. Depth 1.'],[4,[m_('')],{},'x and y are stored in main’s frame.'],
+[5,[m_(''),cl_('add')],{},'add(x, y) is called: its frame goes on top. Depth 2.'],[0,[m_(''),cl_('add')],{},'add computes 10 + 20 and returns 30.'],[5,[m_(T1)],{t1:30},'add’s frame is popped. temp1 = 30. Back to depth 1.'],
+[6,[m_(T1),cl_('product')],{},'product(x, y) is pushed. Depth is 2 again, <b>not 3</b>: add is already gone.'],[1,[m_(T1),cl_('product')],{},'product returns 10 × 20 = 200.'],[6,[m_(T2)],{t2:200},'Popped. temp2 = 200.'],
+[7,[m_(T2),cl_('subtract')],{},'subtract(x, y) is pushed. Depth 2.'],[2,[m_(T2),cl_('subtract')],{},'subtract returns 10 − 20 = −10.'],[7,[m_(T3)],{t3:-10},'Popped. temp3 = −10.'],
+[8,[m_(T3)],{o:220},'print(30 + 200 + (−10)) → <b>220</b>'],[8,[],{},'main returns. The stack is empty.']];
+const PF=[['t1','temp1',30],['t2','temp2',200],['t3','temp3',-10],['o','printed',220]];
+const prTick=()=>{if(!document.getElementById('prw')||(st.prj??0)>=E1.length){clearInterval(PT);PT=0;if(document.getElementById('prw'))go();return}st.prj=(st.prj??0)+1;FX=1;go()};
+const prRun=()=>{if(PF.some(f=>st['p_'+f[0]]==null||st['p_'+f[0]]==='')||st.pd==null){st.prMsg='Fill in all four values and pick a depth first.';go();return}st.prMsg='';st.prL=1;clearInterval(PT);PT=setInterval(prTick,1300);prTick()};
+const prPause=()=>{clearInterval(PT);PT=0;go()};
+const prStep=()=>{clearInterval(PT);PT=0;if((st.prj??0)<E1.length){st.prj=(st.prj??0)+1;FX=1}go()};
+const prReset=()=>{clearInterval(PT);PT=0;st.prL=0;st.prj=0;st.prMsg='';go()};
+const prw=()=>{const v=st.prj??0,L=st.prL,s=v?E1[v-1]:null,pv=v>1?E1[v-2][1]:[],vals=Object.assign({},...E1.slice(0,v).map(x=>x[2])),dep=E1.slice(0,v).map(x=>x[1].length),mx=Math.max(0,...dep),done=v>=E1.length;
+const fld=f=>{const a=vals[f[0]],p=st['p_'+f[0]],ok=a!=null&&+p===a,just=FX&&s&&s[2][f[0]]!=null;return `<div class="pv ${a==null?'':ok?'ok':'no'} ${just?'pp':''}"><small>${f[1]}</small><input type="number" value="${p??''}" ${L?'disabled':''} oninput="st['p_${f[0]}']=this.value" placeholder="?"><div class="act">${a==null?'':(ok?'✓ correct':'✗ actual '+a)}</div></div>`};
+const dOk=done?st.pd==mx:null,score=done?PF.filter(f=>+st['p_'+f[0]]===f[2]).length+(dOk?1:0):0;
+return `<div id="prw"><small class="k">YOUR PREDICTIONS</small><div class="pvs">${PF.map(fld).join('')}<div style="grid-column:span 2" class="pv ${done?(dOk?'ok':'no'):''}"><small>max frames on stack</small><div class="bt" style="margin:6px 0">${[1,2,3,4].map(d=>`<button class="${st.pd==d?'btn':'ghost'}" style="padding:6px 12px" ${L?'disabled':''} onclick="st.pd=${d};go()">${d}</button>`).join('')}</div><div class="act">${done?(dOk?'✓ correct':'✗ actual '+mx):''}</div></div></div>${st.prMsg?`<p class="ex" style="color:var(--rd)">${st.prMsg}</p>`:''}
+<div class="two"><div>${code(E1C,s?s[0]:-1)}</div><div class="cd" style="min-height:230px"><small>CALL STACK</small>${csR(s?s[1]:[],pv,FX)}</div></div>
+<small class="k">STACK DEPTH OVER TIME</small><div class="dt">${E1.map((x,i)=>`<i class="${i<v?'':'e'} ${i<v&&x[1].length==mx&&mx>1?'mx':''} ${i==v-1?'cur'+(FX?' gr':''):''}" style="height:${x[1].length*30}px" title="step ${i+1}: depth ${x[1].length}"></i>`).join('')}</div>
+<p class="ex">${s?s[3]:L?'':'Type your guesses, pick a depth, then lock them in.'}</p>
+${done?`<div class="rule"><b>You got ${score} / 5.</b> The three calls happen <b>one after another</b>, so each frame is popped before the next is pushed: the depth never goes above 2. Compare Example 3 in the trace, where fun calls add while fun is still running: that nesting reaches 3.</div>`:''}
+<div class="bt">${!L?`<button class="btn" onclick="prRun()">Lock in &amp; run ▶</button>`:`${done?'':PT?`<button class="ghost" onclick="prPause()">❚❚ Pause</button>`:`<button class="btn" onclick="prRun()">▶ Play</button>`}${done?'':`<button class="ghost" onclick="prStep()">Step ›</button>`}<button class="ghost" onclick="prReset()">↺ Predict again</button><span class="ex">step ${v} / ${E1.length}</span>`}</div></div>`};
+// ---------- 4 · copy or share? ----------
+const CR=[
+{n:'Value copy',c:['x = 10','y = x','y = 99','print(x)'],o:['10','99'],ok:0,why:['Right. y = x copied the value, so changing y later cannot touch x.','No. y = x made a separate copy of 10. Changing y to 99 changes only y’s box.'],tk:'Simple values are copied into each variable’s own box.',
+s:[[0,[fr('main',[['x',10]])],[],'x = 10: the value sits directly in main’s frame.'],[1,[fr('main',[['x',10],['y',10]])],[],'y = x copies the VALUE 10 into y’s own box.'],[2,[fr('main',[['x',10],['y',99]])],[],'Only y’s box changes. x still holds 10.'],[3,[fr('main',[['x',10],['y',99]])],[],'print(x) → 10','10']]},
+{n:'Array copy',c:['ar = new array[3]','ar2 = ar','ar2[0] = 9','print(ar[0])'],o:['0','9'],ok:1,why:['Not quite. ar2 = ar copied the address, not the array. Both names reach the same array, so the write through ar2 shows up through ar.','Right. ar and ar2 hold the same address: two names, one array.'],tk:'Assigning an array variable copies the address, not the array.',
+s:[[0,[fr('main',[['ar','#4k']])],[hp('#4k',[0,0,0])],'new builds the array on the heap. ar stores only its address #4k.'],[1,[fr('main',[['ar','#4k'],['ar2','#4k']])],[hp('#4k',[0,0,0])],'ar2 = ar copies the ADDRESS. Two arrows, still one array.'],[2,[fr('main',[['ar','#4k'],['ar2','#4k']])],[hp('#4k',[9,0,0])],'ar2[0] = 9: follow the arrow and write slot 0 of the shared array.'],[3,[fr('main',[['ar','#4k'],['ar2','#4k']])],[hp('#4k',[9,0,0])],'print(ar[0]) follows ar’s arrow to the same array → 9','9']]},
+{n:'Pass an array',c:['function fun(a):','    a[1] = 5','function main():','    ar = new array[3]','    fun(ar)','    print(ar[1])'],o:['0','5'],ok:1,why:['Not quite. fun got a copy of the address, not a copy of the array. a[1] = 5 changes the one array that ar also points to.','Right. The address is copied, the array is shared, so main sees the change.'],tk:'A function that receives an array gets its address, so it can change the caller’s array.',
+s:[[3,[fr('main',[['ar','#9k']])],[hp('#9k',[0,0,0])],'ar points to a new array at #9k.'],[4,[fr('main',[['ar','#9k']]),fr('fun',[['a','#9k']])],[hp('#9k',[0,0,0])],'fun(ar): a new frame. a receives a COPY OF THE ADDRESS, so it points to the same array.'],[1,[fr('main',[['ar','#9k']]),fr('fun',[['a','#9k']])],[hp('#9k',[0,5,0])],'a[1] = 5 writes into the shared heap array.'],[5,[fr('main',[['ar','#9k']])],[hp('#9k',[0,5,0])],'fun’s frame is popped, but the heap change stays. print(ar[1]) → 5','5']]},
+{n:'Pass a value',c:['function inc(n):','    n = n + 1','function main():','    x = 10','    inc(x)','    print(x)'],o:['10','11'],ok:0,why:['Right. n is a copy of the value. Changing n does nothing to x.','Not quite. inc changed its own copy n. x in main is a separate box and still holds 10.'],tk:'A function that receives a simple value gets a copy; the caller’s variable is safe.',
+s:[[3,[fr('main',[['x',10]])],[],'x = 10 in main’s frame.'],[4,[fr('main',[['x',10]]),fr('inc',[['n',10]])],[],'inc(x): n gets its own COPY of 10.'],[1,[fr('main',[['x',10]]),fr('inc',[['n',11]])],[],'n becomes 11. main’s x is a different box and does not change.'],[5,[fr('main',[['x',10]])],[],'inc’s frame (and n with it) is gone. print(x) → 10','10']]},
+{n:'Bonus trap',c:['function reset(a):','    a = new array[3]','    a[0] = 7','function main():','    ar = new array[3]','    ar[0] = 9','    reset(ar)','    print(ar[0])'],o:['9','7','0'],ok:0,why:['Right! Reassigning a only changes where a points. ar still points to the original array, which holds 9.','Tempting, but a = new array[3] pointed a at a brand-new array. The 7 went into that new array, not ar’s.','No. ar[0] was set to 9 before the call, and reset never wrote into that array.'],tk:'<code>a = …</code> moves the arrow. <code>a[i] = …</code> changes what the arrow points at.',
+s:[[4,[fr('main',[['ar','#4k']])],[hp('#4k',[0,0,0])],'ar points to #4k.'],[5,[fr('main',[['ar','#4k']])],[hp('#4k',[9,0,0])],'ar[0] = 9.'],[6,[fr('main',[['ar','#4k']]),fr('reset',[['a','#4k']])],[hp('#4k',[9,0,0])],'reset(ar): a gets a copy of the address #4k.'],[1,[fr('main',[['ar','#4k']]),fr('reset',[['a','#7k']])],[hp('#4k',[9,0,0]),hp('#7k',[0,0,0])],'a = new array[3] moves only a’s arrow to a NEW array #7k. ar is untouched.'],[2,[fr('main',[['ar','#4k']]),fr('reset',[['a','#7k']])],[hp('#4k',[9,0,0]),hp('#7k',[7,0,0])],'a[0] = 7 writes into #7k, not #4k.'],[7,[fr('main',[['ar','#4k']])],[hp('#4k',[9,0,0]),hp('#7k',[7,0,0])],'reset returns. Nothing points to #7k any more, so the garbage collector cleans it up. print(ar[0]) → 9','9']]}];
+const crw=()=>{const r=st.cr??0,R=CR[r],a=st['cra'+r],v=st['crj'+r]??0,s=v?R.s[v-1]:null,q=v>1?R.s[v-2]:null,E={f:[],h:[]},done=v>=R.s.length,score=CR.filter((x,i)=>st['cra'+i]===x.ok).length,all=CR.every((x,i)=>st['cra'+i]!=null&&(st['crj'+i]??0)>=x.s.length);
+return `<div class="bt">${CR.map((x,i)=>`<button class="${i==r?'btn':'ghost'} chip" onclick="st.cr=${i};go()">${i+1} · ${x.n}${st['cra'+i]==null?'':st['cra'+i]===x.ok?' ✓':' ✗'}</button>`).join('')}</div>
+<div class="two"><div>${code(R.c,s?s[0]:-1)}<div class="card2" style="margin:0"><small class="k">PREDICT FIRST</small><h3 style="margin:6px 0 10px;font-size:18px">What does the last line print?</h3><div class="opts">${R.o.map((x,i)=>`<button class="opt ${a==null?'':i==R.ok?'good':i==a?'bad':''}" ${a==null?'':'disabled'} onclick="st['cra${r}']=${i};go()"><b>${'ABC'[i]}</b>${x}</button>`).join('')}</div>${a==null?'':`<div class="qf ${a===R.ok?'good':'bad'}">${R.why[a]}</div>`}</div></div>
+<div>${memR(s?{f:s[1],h:s[2]}:E,q?{f:q[1],h:q[2]}:E,FX)}<p class="ex">${s?s[3]:a==null?'Lock in a prediction, then run the code line by line.':'Now run it and watch the memory.'}</p>${s&&s[4]?`<p class="outp">Output: ${s[4]}</p>`:''}</div></div>
+${a==null?'':btn('crj'+r,R.s.length,'Run line by line','Next line')}
+${done?`<div class="rule">${R.tk}${r<CR.length-1?`<div class="bt"><button class="btn" onclick="st.cr=${r+1};go()">Next round ›</button></div>`:''}</div>`:''}
+${all?`<div class="rule"><b>Score: ${score} / ${CR.length} predicted right.</b><br>The one rule behind all five rounds: <code>name = …</code> changes the variable’s own box (a value, or where its arrow points). <code>name[i] = …</code> follows the arrow and changes the shared heap data.</div>`:''}`};
 const X=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').split('\n');
 const ST=(t,s)=>(s.st=t,s);
 const walk=(h,q,c,S_,ans)=>W(h,0,k=>{const v=st[k]??0;return `<div class="card2"><small class="k">WORK IT OUT</small><h3>${q}</h3>${c?code(X(c)):''}${S_.slice(0,v).map((s,i)=>`<div class="row"><span style="flex:0 0 26px"><b>${i+1}</b></span><span><b>${s[0]}</b><br>${s[1]}</span></div>`).join('')}${v>=S_.length?`<p class="ex"><b>Answer: ${ans}</b></p>`:''}<div class="bt"><button class="btn" ${v>=S_.length?'disabled':''} onclick="${set(`st['${k}']=(st['${k}']??0)+1`)}">${v?'Next step':'Show step 1'}</button><button class="ghost" onclick="${set(`st['${k}']=0`)}">Reset</button><span class="ex">${v} / ${S_.length}</span></div></div>`});
@@ -89,10 +229,9 @@ const CS=[
 {n:'Example 2',c:['function add(x, y): return x + y','function main():','    x = 10; y = 20','    temp1 = add(x, y)','    temp2 = add(temp1, 30)','    temp3 = add(temp2, 40)','    print(temp3)'],s:seq(1,2,'x=10, y=20',[{l:3,f:0,n:'add',a:'x=10, y=20',r:30,v:'temp1'},{l:4,f:0,n:'add',a:'x=30, y=30',r:60,v:'temp2'},{l:5,f:0,n:'add',a:'x=60, y=40',r:100,v:'temp3'}],6,'100')},
 {n:'Example 3',c:['function add(x, y): return x + y','function fun(a, b):','    sum = add(a, b)','    ans = sum * 10; return ans','function extra(w):','    print("Hello"); print(w)','function main():','    x = 10; y = 20','    z = fun(x, y)','    print(z)','    extra(z)'],s:[
 [6,['main'],'main() is called.'],[7,[M0],'x and y live in main’s frame.'],[8,[M0,F0],'fun(x, y): a new frame is pushed.'],[2,[M0,F0,'add · x=10, y=20'],'fun calls add: a third frame sits on top.'],[0,[M0,F0,'add · x=10, y=20'],'add returns 30.'],[2,[M0,F0+', sum=30'],'add’s frame is popped. sum = 30.'],[3,[M0,F0+', sum=30, ans=300'],'ans = 300 and fun returns it.'],[8,[M0+', z=300'],'fun’s frame is popped. z = 300.'],[9,[M0+', z=300'],'print(z) → 300',['300']],[10,[M0+', z=300','extra · w=300'],'extra(z): a new frame, w gets a copy of 300.'],[5,[M0+', z=300','extra · w=300'],'prints Hello, then w (= 300, not 310)',['Hello','300']],[10,[M0+', z=300'],'extra returns: its frame is popped.'],[10,[],'main returns: the stack is empty.']]}];
-const csw=k=>{const p=CS[st.cs??0],v=st.csj??0,s=v?p.s[v-1]:null,out=[].concat(...p.s.slice(0,v).map(x=>x[3]||[]));
-return pick('cs',CS.map(x=>x.n))+code(p.c,s?s[0]:-1)+`<div class="g" style="grid-template-columns:1fr 1fr"><div class="cd"><small>CALL STACK (top first)</small>${s&&s[1].length?[...s[1]].reverse().map((f,i)=>`<div class="card2" style="padding:8px 12px;margin:6px 0;${i==0?'border-color:var(--ac)':''}"><b>${f}</b>${i==0?' <small class="k">TOP</small>':''}</div>`).join(''):'<p>empty</p>'}</div><div class="cd"><small>OUTPUT</small><p><b>${out.join('<br>')||'·'}</b></p></div></div><p class="ex">${s?s[2]:'Press the button to start main().'}</p>`+btn('csj',p.s.length,'Run first step','Next step')};
+const csw=k=>{const p=CS[st.cs??0],v=st.csj??0,s=v?p.s[v-1]:null,pv=v>1?p.s[v-2][1]:[],out=[].concat(...p.s.slice(0,v).map(x=>x[3]||[]));
+return pick('cs',CS.map(x=>x.n))+code(p.c,s?s[0]:-1)+`<div class="g" style="grid-template-columns:1fr 1fr"><div class="cd" style="min-height:200px"><small>CALL STACK (top first)</small>${csR(s?s[1]:[],pv,FX)}</div><div class="cd"><small>OUTPUT</small><p class="outp">${out.map((o,i)=>`<span class="${FX&&s&&s[3]&&i>=out.length-s[3].length?'fl':''}">${o}</span>`).join('<br>')||'·'}</p></div></div><p class="ex">${s?s[2]:'Press the button to start main().'}</p>`+btn('csj',p.s.length,'Run first step','Next step')};
 // ---------- stack vs heap programs ----------
-const fr=(n,v)=>[n,v],hp=(a,v)=>[a,v];
 const MM=[
 {n:'1 · array',c:['function main():','    x = 10','    ar = new array[3]','    print(ar)        // #4k','    ar[1] = 7'],s:[
 [0,[fr('main',[])],[],'main starts.'],[1,[fr('main',[['x',10]])],[],'x = 10 is a simple value: stored directly on the stack.'],[2,[fr('main',[['x',10],['ar','#4k']])],[hp('#4k',[0,0,0])],'new creates the array on the HEAP. ar holds only its address #4k.'],[3,[fr('main',[['x',10],['ar','#4k']])],[hp('#4k',[0,0,0])],'print(ar) shows the address #4k, not the contents.'],[4,[fr('main',[['x',10],['ar','#4k']])],[hp('#4k',[0,7,0])],'ar[1] = 7: follow #4k to the heap, write slot 1.']]},
@@ -102,8 +241,8 @@ const MM=[
 [2,[fr('main',[])],[],'main starts.'],[3,[fr('main',[['ar','#9k']])],[hp('#9k',[0,0,0])],'ar holds #9k.'],[4,[fr('main',[['ar','#9k']])],[hp('#9k',[90,50,0])],'Values are written on the heap.'],[5,[fr('main',[['ar','#9k']]),fr('fun',[['a','#9k']])],[hp('#9k',[90,50,0])],'fun(ar) receives a COPY OF THE ADDRESS. a and ar both point to #9k.'],[1,[fr('main',[['ar','#9k']]),fr('fun',[['a','#9k']])],[hp('#9k',[90,5,0])],'a[1] = 5 changes the one shared heap array.'],[6,[fr('main',[['ar','#9k']])],[hp('#9k',[90,5,0])],'fun’s frame is popped but the heap change stays: print(ar[1]) → 5.']]},
 {n:'4 · 2D array',c:['y = 7.84','mat = new array[3][4]','print(mat[1])       // #2k','print(mat[1][3])    // 0'],s:[
 [0,[fr('main',[['y',7.84]])],[],'y is a simple value on the stack.'],[1,[fr('main',[['y',7.84],['mat','#9k']])],[hp('#9k',['#1k','#2k','#3k']),hp('#1k',[0,0,0,0]),hp('#2k',[0,0,0,0]),hp('#3k',[0,0,0,0])],'A 2D array is an array of row addresses. mat holds #9k.'],[2,[fr('main',[['y',7.84],['mat','#9k']])],[hp('#9k',['#1k','#2k','#3k']),hp('#1k',[0,0,0,0]),hp('#2k',[0,0,0,0]),hp('#3k',[0,0,0,0])],'mat[1]: go to #9k, read slot 1 → the address #2k of row 1.'],[3,[fr('main',[['y',7.84],['mat','#9k']])],[hp('#9k',['#1k','#2k','#3k']),hp('#1k',[0,0,0,0]),hp('#2k',[0,0,0,0]),hp('#3k',[0,0,0,0])],'mat[1][3]: #9k → #2k → index 3 → 0.']]}];
-const mmw=()=>{const p=MM[st.mm??0],v=st.mmj??0,s=v?p.s[v-1]:null;const box=f=>`<div class="card2" style="padding:8px 12px;margin:6px 0"><b>${f[0]}</b><br>${f[1].map(x=>`<span class="ex" style="margin-right:12px">${x[0]} = <b>${x[1]}</b></span>`).join('')||'<span class="ex">no locals</span>'}</div>`;
-return pick('mm',MM.map(x=>x.n))+code(p.c,s?s[0]:-1)+`<div class="g" style="grid-template-columns:1fr 1.4fr"><div class="cd"><small>STACK</small>${s?s[1].map(box).join(''):'<p>·</p>'}</div><div class="cd"><small>HEAP</small>${s&&s[2].length?s[2].map(h=>`<div class="card2" style="padding:8px 12px;margin:6px 0"><b>${h[0]}</b>${cells(h[1])}</div>`).join(''):'<p>nothing on the heap yet</p>'}</div></div><p class="ex">${s?s[3]:'Press the button to run the first line.'}</p>`+btn('mmj',p.s.length,'Run first step','Next step')};
+const mmw=()=>{const p=MM[st.mm??0],v=st.mmj??0,s=v?p.s[v-1]:null,q=v>1?p.s[v-2]:null,E={f:[],h:[]};
+return pick('mm',MM.map(x=>x.n))+code(p.c,s?s[0]:-1)+memR(s?{f:s[1],h:s[2]}:E,q?{f:q[1],h:q[2]}:E,FX)+`<p class="ex">${s?s[3]:'Press the button to run the first line.'}</p>`+btn('mmj',p.s.length,'Run first step','Next step')};
 // ---------- sorting ----------
 const fac=n=>{const r=[];for(let d=1;d<=n;d++)if(n%d==0)r.push(d);return r};
 // ---------- noble ----------
@@ -134,11 +273,12 @@ const TABS=[
 think('Where does a variable live?','In <code>x = 10</code> and <code>ar = new array[3]</code>, what does each variable actually store, and where is the array’s data?','x stores the value 10 directly on the <b>stack</b>. ar stores only an <b>address</b>; the array itself lives on the <b>heap</b>.','Take guesses before revealing.'),
 info('Today’s plan','<p>Memory first, then sorting as a tool for three problems. Each problem starts with brute force.</p>'+cards([['Part 1','Call stack','Frames pushed and popped'],['Part 2','Stack vs heap','Values vs references'],['Part 3','Sorting basics','Order on a parameter, library sort'],['Part 4','Noble integer','Distinct, then duplicates'],['Part 5','Min cost to remove','Largest first']]),'Say: stack for calls, heap for containers.')]},
 {t:'Call stack',s:[
-think('Pile of plates','A stack lets you add and remove only at the top. When main() calls add(x, y), which frame is on top while add runs, and what happens when add returns?','add’s frame is on top. When it returns, the frame is <b>popped</b> and control goes back to main. Each frame holds locals, parameters and where to return.','Use the idli maker or plates picture.'),
-ST('PREDICT',think('Predict the output','Example 1: x = 10, y = 20; main calls add, product and subtract one after another and prints temp1 + temp2 + temp3. What is printed, and how many frames are on the stack at the deepest point?','30 + 200 + (−10) = <b>220</b>. At most <b>two</b> frames (main plus one callee), because the calls happen one after another, not nested.','Ask for the prediction before running the trace.')),
+ST('STACK',W('The idli stand is a stack','Push plates, pop them, and try to grab the bottom one. Then answer the check below.',k=>plw(k),'Bring a learner in: ask them to grab plate 1 before clicking. The stand only gives you the top plate, exactly like the call stack only runs the top frame.')),
+ST('RUNTIME',W('You are the runtime','A tiny idli program. For each event, decide what happens to the call stack.',()=>rtw(),'Let the class vote on each event before clicking. The “nothing changes” events (storing a returned value) catch most people.')),
+ST('PREDICT',W('Predict, then run','Example 1 from the script. Lock in your predictions, then watch the program run and grade itself.',()=>prw(),'Take a few depth guesses first. Many say 4 (main + three calls). The depth chart shows why it is 2.')),
 ST('TRACE',W('Trace the call stack','One click = one step. Watch frames pushed, popped, and the output.',()=>csw(),'Example 3 is nested: three frames at the deepest point. The script lists the output as 300, Hello, 310 but extra(z) prints w = 300, so it is 300, Hello, 300.'))]},
 {t:'Stack vs heap',s:[
-think('What gets copied?','If <code>ar2 = ar</code> and ar is an array, is the array copied? And if you pass ar to a function that changes a[1], does main see the change?','No, only the <b>address</b> is copied, so ar and ar2 share one array. Yes: the function got a copy of the address, so the change is visible in main.','Settle this before the trace.'),
+ST('PREDICT',W('Copy or share?','Five tiny programs. Predict what is printed, then run each one and watch the arrows.',()=>crw(),'Poll the room before each reveal. Round 5 is the trap: reassigning a parameter only moves the local arrow, so main’s array keeps its 9.')),
 ST('TRACE',W('Values on the stack, containers on the heap','One click = one line. Simple values sit in the frame, arrays sit on the heap and variables hold their address.',()=>mmw(),'Example 4: mat[1] returns an address, then [3] indexes that row.')),
 ST('RECAP',W('Simple value vs container','Reveal one point at a time.',()=>rvl('rv1',[['SIMPLE VALUE','x = 10 is stored on the stack','A function gets a copy of the value; the original is untouched.'],['CONTAINER','ar = new array[3]: data on the heap','The variable holds only an address.'],['PASSING A CONTAINER','The function gets a copy of the address','Both variables point to the same heap data, so changes are visible to the caller.'],['MEMORY CLEANUP','Java, Python, JS use garbage collection','C++ lets you manage heap memory yourself.']]),'Link back to Example 3.'))
 ]},
@@ -185,10 +325,11 @@ function go(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;
 $('#tn').textContent='Instructor notes: '+(notes?'on':'off');
 $('#tabs').innerHTML=TABS.map((x,i)=>`<button class="${i==T?'on':''}" onclick="T=${i};S=0;go()"><i>0${i}</i>${x.t}</button>`).join('');
 $('#side').innerHTML=`<h3>${tb.t}</h3>`+tb.s.map((x,i)=>`<button class="${i==S?'on':''}" onclick="S=${i};go()"><span>${i+1}</span>${x.h}</button>`).join('');
-$('#main').innerHTML=`<small class="k">${tb.t.toUpperCase()} · STEP ${S+1} OF ${tb.s.length}</small>${tb.s.every(x=>x.st)?`<div class="stg">${[...new Set(tb.s.map(x=>x.st))].map(g=>`<span class="${g==s.st?'on':''}">${g}</span>`).join('›')}</div>`:''}<h2>${s.h}</h2>${s.r(k)}${notes&&s.n?`<div class="ins"><small>INSTRUCTOR</small><p>${s.n}</p></div>`:''}`;
+$('#main').innerHTML=`<small class="k">${tb.t.toUpperCase()} · STEP ${S+1} OF ${tb.s.length}</small>${tb.s.every(x=>x.st)?`<div class="stg">${[...new Set(tb.s.map(x=>x.st))].map(g=>`<span class="${g==s.st?'on':''}">${g}</span>`).join('›')}</div>`:''}<h2>${s.h}</h2>${s.d?`<p class="ex" style="margin:-8px 0 14px">${s.d}</p>`:''}${s.r(k)}${notes&&s.n?`<div class="ins"><small>INSTRUCTOR</small><p>${s.n}</p></div>`:''}`;
 const last=S==tb.s.length-1,nt=TABS[T+1];
 $('#nx').textContent=s.th&&!rev[k]?'Reveal the answer ›':last?(nt?'Next: '+nt.t+' ›':'Done'):'Next ›';
-$('#nx').disabled=last&&!nt&&!(s.th&&!rev[k]);$('#bk').disabled=!T&&!S}
+$('#nx').disabled=last&&!nt&&!(s.th&&!rev[k]);$('#bk').disabled=!T&&!S;
+FX=0;SHK=0;arrows();clearTimeout(AT);AT=setTimeout(arrows,560)}
 function nx(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;if(s.th&&!rev[k])rev[k]=1;else if(S<tb.s.length-1)S++;else if(T<TABS.length-1){T++;S=0}go()}
 function bk(){if(S)S--;else if(T){T--;S=TABS[T].s.length-1}go()}
 addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;if(e.key=='ArrowRight')nx();if(e.key=='ArrowLeft')bk()});
