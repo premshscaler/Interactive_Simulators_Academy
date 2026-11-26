@@ -1,170 +1,380 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Intermediate DSA · Bit Manipulation Basics</title>
+<title>Bit Manipulation Basics</title>
 <style>
-:root,:root[data-theme=dark]{--bg:#0a0e1a;--cd:#151b2e;--bd:#2a3350;--tx:#e8ecf8;--mu:#8b95b5;--ac:#8b9cf8;--ye:#f5c84c;--gr:#5ed49a;--rd:#f07878;--cc:#0d1222;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f6fc;--cd:#fff;--bd:#d5dbee;--tx:#171c30;--mu:#5b6586;--ac:#4a5ce0;--ye:#a67600;--gr:#17874f;--rd:#c23b3b;--cc:#eef1fa}}
-*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+/* VOICE: a classroom instrument, calm and precise
+   IDEA: a live circuit board: bits are bulbs, carries fly, the ALU decides the type
+   PICTURE: each step is an animated player (play, pause, step, speed)
+   COLOUR and TYPE: the original deep-navy lesson palette; system sans plus mono for bits
+   LAYOUT: tabs per part, step list at the side, one stage per step */
+:root,:root[data-theme=dark]{--bg:#0a0e1a;--cd:#151b2e;--bd:#2a3350;--tx:#e8ecf8;--mu:#8b95b5;--ac:#8b9cf8;--ye:#f5c84c;--gr:#5ed49a;--rd:#f07878;--cc:#0d1222;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f6fc;--cd:#fff;--bd:#d5dbee;--tx:#171c30;--mu:#5b6586;--ac:#4a5ce0;--ye:#b07d00;--gr:#17874f;--rd:#c23b3b;--cc:#eef1fa}}
+:root[data-theme=light]{--bg:#f4f6fc;--cd:#fff;--bd:#d5dbee;--tx:#171c30;--mu:#5b6586;--ac:#4a5ce0;--ye:#b07d00;--gr:#17874f;--rd:#c23b3b;--cc:#eef1fa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;overflow-x:clip}
 body::before{content:"a ^ b";position:fixed;right:-2%;bottom:2%;font:800 clamp(40px,9vw,120px) ui-monospace,Menlo,monospace;color:var(--tx);opacity:.035;white-space:nowrap;pointer-events:none}
 header{max-width:1180px;margin:auto;padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 header small{color:var(--mu);font:12px ui-monospace,Menlo,monospace}header h1{font-size:22px;margin:2px 0}
-.tg{background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:20px;padding:7px 14px;cursor:pointer;font:inherit}
+.tg{background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:20px;padding:9px 14px;cursor:pointer;font:inherit}
 #tabs{max-width:1180px;margin:10px auto 0;padding:0 20px;display:flex;overflow-x:auto;border-bottom:1px solid var(--bd)}
-#tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:12px 14px;font:600 15px inherit;cursor:pointer;white-space:nowrap}
+#tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:12px 14px;font:600 15px system-ui,sans-serif;cursor:pointer;white-space:nowrap}
 #tabs button.on{color:var(--tx);border-color:var(--ac)}#tabs i{font:normal 12px ui-monospace,Menlo,monospace;opacity:.7;margin-right:4px}
-.wrap{max-width:1180px;margin:22px auto;padding:0 20px;display:grid;grid-template-columns:260px 1fr;gap:28px}
+.wrap{max-width:1180px;margin:22px auto;padding:0 20px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px}
 #side h3{margin:0 0 12px;color:var(--mu)}#side button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:1px solid transparent;color:var(--mu);border-radius:10px;padding:9px;font:inherit;cursor:pointer}
 #side button.on{background:var(--cd);border-color:var(--bd);color:var(--tx);font-weight:600}
 #side span{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--ac);display:grid;place-items:center;font-size:12px}
 #side .on span{background:var(--ac);color:#0a0e1a}
 .card{background:var(--cd);border:1px solid var(--bd);border-radius:22px;padding:26px 28px;min-width:0}
 .k{color:var(--ac);font:12px ui-monospace,Menlo,monospace;letter-spacing:.06em}
-h2{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 18px;letter-spacing:-.02em}
+h2{font-size:clamp(28px,4.4vw,42px);line-height:1.1;margin:6px 0 14px;letter-spacing:-.02em}
+.lead{color:var(--mu);margin:0 0 10px}
 .think,.card2{border:2px solid var(--ac);border-radius:16px;padding:18px 20px;background:var(--cc);margin-bottom:14px}.card2{border:1px solid var(--bd)}
 .tag{background:var(--ye);color:#1a1400;border-radius:6px;padding:2px 10px;font:700 12px ui-monospace,Menlo,monospace}
-.think h3,.card2 h3{font-size:22px;margin:12px 0}
-.btn{background:var(--ac);color:#0a0e1a;border:0;border-radius:10px;padding:10px 18px;font:700 15px inherit;cursor:pointer}.btn:disabled{opacity:.35;cursor:default}
-.ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}.ghost:disabled{opacity:.35}
+.think h3,.card2 h3{font-size:21px;margin:12px 0}
+.btn{background:var(--ac);color:#0a0e1a;border:0;border-radius:10px;padding:10px 18px;font:700 15px system-ui,sans-serif;cursor:pointer;min-height:42px}.btn:disabled{opacity:.35;cursor:default}
+.ghost{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:9px 14px;font:15px system-ui,sans-serif;cursor:pointer;min-height:42px}.ghost:disabled{opacity:.35;cursor:default}
 .ans{border-top:1px dashed var(--bd);padding-top:12px;margin:6px 0 14px}.ans small{color:var(--gr);font:700 12px ui-monospace,monospace}
 .ins{border-top:1px dashed var(--bd);margin-top:18px;padding-top:12px;color:var(--mu)}.ins small{color:var(--ye);font:700 12px ui-monospace,monospace}.ins p{margin:4px 0 0}
 .nav{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--bd);margin-top:20px;padding-top:16px;color:var(--mu);font:13px ui-monospace,monospace}
-.cells{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 26px}
-.cell{position:relative;min-width:56px;padding:12px 8px 22px;text-align:center;border:2px solid var(--bd);border-radius:10px;background:var(--cc);cursor:default}
-.cell b{font-size:20px}.cell small{position:absolute;bottom:3px;left:0;right:0;color:var(--mu);font-size:11px}
-.cell u{position:absolute;top:-24px;left:0;right:0;text-decoration:none;color:var(--ye);font:700 13px ui-monospace,monospace}
-.cell em{display:block;font:11px ui-monospace,monospace;color:var(--mu);margin-bottom:6px}
-.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 20%,var(--cc))}.sw{border-color:var(--gr)}.rg{border-color:var(--ye)}.emp{border-style:dashed;opacity:.5}
 .code{background:var(--cc);border-radius:12px;padding:12px 0;margin:10px 0;font:14px/1.7 ui-monospace,Menlo,monospace;overflow-x:auto}
 .code span{display:block;padding:0 16px;white-space:pre}.code i{color:var(--mu);margin-right:14px;font-style:normal}.code .hl{background:color-mix(in srgb,var(--ac) 22%,transparent)}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
-.opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font:600 15px inherit;cursor:pointer;text-align:left}
-.qf{margin-top:12px;padding:12px 14px;border-radius:12px;border:1px solid;font-size:14px;line-height:1.5}.qf.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 14%,var(--cd))}.qf.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 14%,var(--cd))}
+.opt{display:flex;gap:10px;align-items:center;background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:12px;font:600 15px system-ui,sans-serif;cursor:pointer;text-align:left}
 .opt b{background:var(--bd);border-radius:6px;padding:1px 8px;font-size:12px}.opt.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 18%,var(--cd))}.opt.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 18%,var(--cd))}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--bd)}.row span{flex:1 1 260px}.opt.sm{padding:6px 12px}
-.ex{color:var(--mu);margin:10px 0}.ex b{color:var(--tx)}mark{background:var(--ye);color:#1a1400;padding:0 4px;border-radius:3px}
-.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0}.cd{border:1px solid var(--bd);border-radius:14px;padding:14px;background:var(--cc)}
-.cd small{color:var(--ac);font:12px ui-monospace,monospace}.cd h4{margin:4px 0;font-size:18px}.cd p{margin:0;color:var(--mu);font-size:14px}
-.bt{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}.bt label{color:var(--mu);font-size:14px}input[type=range]{accent-color:var(--ac)}
-.bars{display:flex;align-items:flex-end;gap:3px;height:110px;margin:10px 0}.bars i{flex:1;background:var(--ac);border-radius:3px 3px 0 0;min-width:4px}.bars i.big{background:var(--rd)}
-@media(max-width:820px){.wrap{grid-template-columns:1fr}#side{display:flex;gap:6px;overflow-x:auto}#side h3{display:none}#side button{white-space:nowrap;width:auto}.card{padding:18px}}
+.qf{margin-top:12px;padding:12px 14px;border-radius:12px;border:1px solid;font-size:15px;line-height:1.5}.qf.good{border-color:var(--gr);background:color-mix(in srgb,var(--gr) 14%,var(--cd))}.qf.bad{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 14%,var(--cd))}
+.ex{color:var(--mu);margin:10px 0}.ex b{color:var(--tx)}
 .stg{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0;font:700 11px ui-monospace,Menlo,monospace;color:var(--mu);align-items:center}.stg span{padding:3px 9px;border-radius:12px;border:1px solid var(--bd)}.stg .on{background:var(--ye);color:#1a1400;border-color:var(--ye)}
-.pgw{overflow-x:auto}.pg{display:grid;grid-template-columns:82px repeat(10,minmax(36px,1fr));gap:5px;align-items:center;margin:12px 0;min-width:480px}.pg .l{color:var(--mu);font:12px ui-monospace,Menlo,monospace}.pg .c{text-align:center;padding:7px 0;border:2px solid var(--bd);border-radius:8px;background:var(--cc);font:600 14px ui-monospace,Menlo,monospace}.pg .bn{display:block;height:18px;border-radius:5px;border:1px dashed var(--bd)}
- .rd2{border-color:var(--rd)}.gone b{text-decoration:line-through;opacity:.5}
+.bt{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}.bt label{color:var(--mu)}
+.inp{background:var(--cc);border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:8px 10px;font:16px ui-monospace,Menlo,monospace;width:140px}
 :focus-visible{outline:2px solid var(--ye);outline-offset:2px}
+
+/* ---------- stage + cells ---------- */
+.stage{overflow-x:auto;padding:26px 4px 26px;margin:4px 0}
+.rw{display:flex;align-items:center;gap:10px;margin:4px 0 8px}
+.rw.gap{margin-bottom:26px}.rw.sum{border-top:2px solid var(--bd);padding-top:10px}
+.lb{flex:none;width:92px;text-align:right;color:var(--mu);font:12px ui-monospace,Menlo,monospace}
+.cells{display:flex;gap:8px;flex-wrap:nowrap}
+.cell,.bulb{position:relative;flex:none;width:52px;height:54px;display:grid;place-items:center;border:2px solid var(--bd);border-radius:10px;background:var(--cc);color:var(--tx);transition:border-color .25s,background .25s,box-shadow .25s}
+.cell b,.bulb b{font:700 20px ui-monospace,Menlo,monospace}
+.cell small,.bulb small{position:absolute;bottom:-19px;left:-6px;right:-6px;text-align:center;color:var(--mu);font:10px ui-monospace,monospace}
+.cell u,.bulb u{position:absolute;top:-21px;left:-8px;right:-8px;text-align:center;text-decoration:none;color:var(--ye);font:700 11px ui-monospace,monospace}
+u.neg{color:var(--rd)!important}
+.cell.dim b{opacity:.3}.cell.emp{border-style:dashed;opacity:.45}.cell.blank{border-color:transparent;background:none}
+.cell.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 24%,var(--cc));box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 30%,transparent)}
+.cell.sw{border-color:var(--gr)}
+.cell.lit,.bulb.lit{background:color-mix(in srgb,var(--ye) 26%,var(--cc));border-color:var(--ye)}
+.bulb{cursor:pointer;font:inherit;height:58px}
+.bulb.lit{box-shadow:0 0 18px color-mix(in srgb,var(--ye) 45%,transparent)}
+.cell.cy b{color:var(--ye)}
+.msg{border-left:4px solid var(--ac);background:var(--cc);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0;min-height:46px;animation:fadeUp .35s}
+.okb{color:var(--gr);font-weight:700}
+.big{font:800 clamp(28px,5vw,42px) ui-monospace,Menlo,monospace;margin:14px 0}
+
+/* ---------- player controls ---------- */
+.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:14px 0 4px;padding-top:12px;border-top:1px dashed var(--bd)}
+.prog{flex:1 1 80px;height:6px;background:var(--bd);border-radius:3px;overflow:hidden;min-width:60px}.prog i{display:block;height:100%;background:var(--ac);transition:width .3s}
+.pk{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 8px}
+.chip{background:none;border:1px solid var(--bd);color:var(--mu);border-radius:20px;padding:7px 14px;font:600 14px ui-monospace,Menlo,monospace;cursor:pointer;min-height:38px}
+.chip.on{background:var(--ac);border-color:var(--ac);color:#0a0e1a}
+
+/* ---------- place value ---------- */
+.pvc{display:flex;gap:12px;align-items:flex-start;overflow-x:auto;padding:6px 2px 4px}
+.col{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:78px}
+.wchip{font:700 12px ui-monospace,monospace;color:var(--ye);white-space:nowrap}
+.arr{color:var(--mu);height:20px}
+.prod{min-width:70px;padding:6px 8px;border-radius:8px;border:1px dashed var(--bd);text-align:center;font:700 16px ui-monospace,monospace;color:var(--mu)}
+.prod.on{border-style:solid;border-color:var(--gr);color:var(--tx)}
+.bar{display:flex;height:22px;border-radius:6px;overflow:hidden;background:var(--bd);margin:12px 0 4px}.bar i{display:block;height:100%;animation:grow-x .6s ease-out both;transform-origin:left}
+/* ---------- ladder ---------- */
+.ladw{position:relative;max-width:440px;margin:8px 0;padding-right:44px}
+.lad{display:grid;grid-template-columns:40px 60px 1fr 40px;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd);font:17px ui-monospace,Menlo,monospace}
+.lad .dv{color:var(--mu)}
+.rem{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--ac);color:#0a0e1a;font-weight:800}
+.upar{position:absolute;right:10px;top:8px;bottom:8px;width:4px;background:var(--ye);border-radius:2px;transform-origin:bottom;animation:grow-y .9s ease-out both}
+.upar::before{content:"";position:absolute;top:-8px;left:-6px;border:8px solid transparent;border-bottom-color:var(--ye);border-top:0}
+/* ---------- gates ---------- */
+.gate{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0}
+.tw{display:flex;flex-direction:column;align-items:center;gap:4px}.tw small{color:var(--mu);font:11px ui-monospace,monospace}
+.tgl{width:62px;height:62px;border-radius:14px;border:2px solid var(--bd);background:var(--cc);color:var(--tx);font:800 26px ui-monospace,monospace;cursor:pointer;transition:all .2s}
+.tgl.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 28%,var(--cc))}
+.opbox{font:800 26px ui-monospace,monospace;color:var(--ac)}
+.lamp{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font:800 26px ui-monospace,monospace;border:2px solid var(--bd);background:var(--cc);transition:all .3s}
+.lamp.on{background:var(--ye);color:#1a1400;border-color:var(--ye);box-shadow:0 0 28px var(--ye)}
+.tt{border-collapse:collapse;font:15px ui-monospace,monospace;margin:8px 0}.tt td,.tt th{padding:6px 16px;border-bottom:1px solid var(--bd);text-align:center}.tt th{color:var(--mu);font-weight:600}.tt tr.cur{background:color-mix(in srgb,var(--ac) 20%,transparent)}
+/* ---------- boxes (ALU, adder) ---------- */
+.flow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin:12px 0}
+.box{border:2px solid var(--bd);border-radius:14px;padding:10px 14px;background:var(--cc);min-width:128px;text-align:center;transition:opacity .3s,border-color .3s;opacity:.28;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.box.on{opacity:1}.box.hot{border-color:var(--ac)}.box.bad{border-color:var(--rd)}.box.ok{border-color:var(--gr)}
+.box small{display:block;color:var(--mu);font:11px ui-monospace,monospace}
+.box b{font:700 17px ui-monospace,monospace}
+.box.bad b{color:var(--rd)}.box.ok b{color:var(--gr)}
+.ty{display:inline-block;padding:1px 8px;border-radius:6px;font:700 11px ui-monospace,monospace;margin-left:4px;vertical-align:middle}.ty.int{background:var(--ac);color:#0a0e1a}.ty.long{background:var(--gr);color:#0a0e1a}
+.fa{align-self:center;color:var(--mu);font-size:22px}
+/* ---------- number line ---------- */
+.nl{display:flex;gap:6px;padding:6px 0 4px;overflow-x:auto}
+.slot{flex:none;width:58px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.slot .pt{height:36px;width:56px;border:2px dashed var(--bd);border-radius:8px;display:grid;place-items:center;font:700 13px ui-monospace,monospace}
+.slot .pt.f{border-style:solid;border-color:var(--ac);background:color-mix(in srgb,var(--ac) 18%,var(--cc))}
+.slot .pt.f.ng{border-color:var(--rd);background:color-mix(in srgb,var(--rd) 15%,var(--cc))}
+.slot span{font:700 14px ui-monospace,monospace;border-top:2px solid var(--bd);width:100%;text-align:center;padding-top:4px}
+.slot.min .pt{box-shadow:0 0 0 3px var(--rd)}.slot.max .pt{box-shadow:0 0 0 3px var(--gr)}
+.dg{display:inline-flex;flex-direction:column;align-items:center;margin:0 1px}.dg b{font:800 clamp(20px,3.4vw,30px) ui-monospace,monospace}.dg small{color:var(--ye);font:700 10px ui-monospace,monospace;min-height:14px}
+/* ---------- tank ---------- */
+.tankw{display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap;margin:10px 0}
+.tank{position:relative;width:96px;height:180px;border:3px solid var(--bd);border-top:none;border-radius:0 0 14px 14px;background:var(--cc)}
+.tank i{position:absolute;left:0;right:0;bottom:0;background:var(--ac);border-radius:0 0 10px 10px;animation:fill .8s cubic-bezier(.3,1.3,.6,1) both}
+.tank.over{border-color:var(--rd)}.tank.over i{background:var(--rd)}
+.tank .lim{position:absolute;left:-10px;right:-10px;top:0;border-top:2px dashed var(--rd)}
+.tank .lim::after{content:"int limit";position:absolute;right:-4px;top:-18px;font:10px ui-monospace,monospace;color:var(--rd)}
+.tcap{text-align:center;color:var(--mu);font:12px ui-monospace,monospace;margin-top:6px}
+.hist{flex:1 1 260px}.hist .r{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:14px;animation:fadeUp .35s}
+
+/* ---------- motion ---------- */
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.12);opacity:1}100%{transform:none;opacity:1}}
+@keyframes flip{0%{transform:rotateX(90deg)}100%{transform:none}}
+@keyframes fly{0%{transform:translate(60px,16px) scale(.5);opacity:.1}100%{transform:none;opacity:1}}
+@keyframes drop{0%{transform:translateY(-36px);opacity:0}100%{transform:none;opacity:1}}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ac) 70%,transparent)}100%{box-shadow:0 0 0 16px transparent}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes grow-y{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes grow-x{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes fill{from{height:var(--h0)}to{height:var(--h)}}
+.pop{animation:pop .45s ease-out both}.flip{animation:flip .5s ease-out both}.fly{animation:fly .65s ease-out both}.drop{animation:drop .45s ease-out both}.shake{animation:shake .5s}.pulse{animation:pulse 1s ease-out}
+@media(prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
+@media(max-width:820px){.wrap{grid-template-columns:minmax(0,1fr)}#side{display:flex;gap:6px;overflow-x:auto}#side h3{display:none}#side button{white-space:nowrap;width:auto}.card{padding:18px}.lb{width:64px}}
 </style></head><body>
 <header><div><small>INTERMEDIATE DSA · CLASS 8</small><h1>Bit Manipulation Basics</h1></div>
-<button class="tg" id="tn" onclick="notes=!notes;go()"></button></header>
+<button class="tg" id="tn"></button></header>
 <nav id="tabs"></nav>
 <div class="wrap"><aside id="side"></aside>
-<section class="card"><div id="main"></div>
-<div class="nav"><button class="ghost" id="bk" onclick="bk()">‹ Back</button><span>← → keys work too</span><button class="btn" id="nx" onclick="nx()">Next ›</button></div></section></div>
+<section class="card" id="card"><div id="main"></div>
+<div class="nav"><button class="ghost" id="bk">‹ Back</button><span>← → change step · Space plays</span><button class="btn" id="nx">Next ›</button></div></section></div>
 <script>
-const $=s=>document.querySelector(s);let T=0,S=0,notes=true,rev={},st={};
-const code=(l,h)=>'<pre class="code" style="margin:10px 0">'+l.map((x,i)=>`<span class="${i==h?'hl':''}"><i>${i+1}</i>${x}</span>`).join('')+'</pre>';
-const cells=(a,m={},c={},r)=>`<div class="cells">${a.map((v,j)=>`<div class="cell ${c[j]||''}">${m[j]?`<u>${m[j]}</u>`:''}<b>${v}</b><small>[${r?r(j):j}]</small></div>`).join('')}</div>`;
-const cards=a=>`<div class="g">${a.map(x=>`<div class="cd"><small>${x[0]}</small><h4>${x[1]}</h4><p>${x[2]}</p></div>`).join('')}</div>`;
-const W=(h,n,r)=>({h,n,r}),info=(h,b,n)=>W(h,n,()=>b);
-const think=(h,q,a,n)=>({h,n,th:1,r:k=>`<div class="think"><span class="tag">THINK FIRST</span><h3>${q}</h3><button class="btn" onclick="rev['${k}']=!rev['${k}'];go()">${rev[k]?'Hide':'Reveal'} the answer</button></div>`+(rev[k]?`<div class="ans"><small>ANSWER</small><p>${a}</p></div>`:'')});
-const pickQ=(k,i,ok)=>{if(st[k]===ok)return;const t=st[k+'w']||[];if(i!==ok&&!t.includes(i))t.push(i);st[k+'w']=t;st[k]=i;st[k+'a']=(st[k+'a']||0)+1;go()};
-const quiz=(h,q,c,o,ok,why,n)=>W(h,n,k=>{const R=Array.isArray(why)?why:o.map((_,i)=>i==ok?why:'This option does not match. Re-read the question and try again.'),s=st[k],t=st[k+'w']||[],done=s===ok,at=st[k+'a']||0;
-return `<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3>${c?code(c):''}<div class="opts">${o.map((x,i)=>`<button class="opt ${done&&i==ok?'good':t.includes(i)?'bad':''}" ${done?'disabled':''} onclick="pickQ('${k}',${i},${ok})"><b>${'ABCD'[i]}</b>${x}</button>`).join('')}</div>`+(s==null?'':done?`<div class="qf good"><b>✓ Correct${at>1?' (after '+at+' tries)':' on the first try'}.</b> ${R[ok]}</div>`:`<div class="qf bad"><b>✗ Option ${'ABCD'[s]} is not right.</b> ${R[s]}<div class="bt"><button class="btn" onclick="st['${k}']=null;go()">Try again</button></div></div>`)+`</div>`});
-const sorter=(h,items,L,tail,n)=>W(h,n,k=>`<div class="card2">${items.map((t,i)=>{const v=st[k+i];return `<div class="row"><span>${t[0]}</span>${L.map((l,x)=>`<button class="opt sm ${v!=null&&x==t[1]?'good':v==x?'bad':''}" onclick="st['${k}${i}']=${x};go()">${l}</button>`).join('')}</div>`}).join('')}${items.every((_,i)=>st[k+i]!=null)?`<p class="ex"><b>${tail}</b></p>`:''}</div>`);
-const set=(f,v)=>`${f};go()`;
-const X=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').split('\n');
-const ST=(t,s)=>(s.st=t,s);
-const walk=(h,q,c,S_,ans)=>W(h,0,k=>{const v=st[k]??0;return `<div class="card2"><small class="k">WORK IT OUT</small><h3>${q}</h3>${c?code(X(c)):''}${S_.slice(0,v).map((s,i)=>`<div class="row"><span style="flex:0 0 26px"><b>${i+1}</b></span><span><b>${s[0]}</b><br>${s[1]}</span></div>`).join('')}${v>=S_.length?`<p class="ex"><b>Answer: ${ans}</b></p>`:''}<div class="bt"><button class="btn" ${v>=S_.length?'disabled':''} onclick="${set(`st['${k}']=(st['${k}']??0)+1`)}">${v?'Next step':'Show step 1'}</button><button class="ghost" onclick="${set(`st['${k}']=0`)}">Reset</button><span class="ex">${v} / ${S_.length}</span></div></div>`});
-const sl=(k,min,max,d,l)=>`<label>${l} = <b>${st[k]??d}</b> <input type="range" min="${min}" max="${max}" value="${st[k]??d}" onchange="st.${k}=+this.value;go()"></label>`;
-const btn=(k,max,first,nxt)=>{const v=st[k]??0;return `<div class="bt"><button class="btn" ${v>=max?'disabled':''} onclick="${set(`st.${k}=(st.${k}??0)+1`)}">${v?nxt:first}</button><button class="ghost" onclick="${set(`st.${k}=0`)}">Reset</button><span class="ex">${v} / ${max}</span></div>`};
-const pick=(k,labels)=>`<div class="bt">${labels.map((l,i)=>`<button class="${i==(st[k]??0)?'btn':'ghost'}" onclick="${set(`st.${k}=${i};st.${k}j=0`)}">${l}</button>`).join('')}</div>`;
-const rvl=(k,items)=>{const v=st[k]??0;return items.slice(0,v).map(x=>`<div class="card2" style="padding:10px 14px;margin:8px 0"><small class="k">${x[0]}</small><br><b>${x[1]}</b>${x[2]?`<br><span class="ex">${x[2]}</span>`:''}</div>`).join('')+btn(k,items.length,'Reveal first','Reveal next')};
-const sl2=(k,min,max,d,l,rs)=>`<label>${l} = <b>${st[k]??d}</b> <input type="range" min="${min}" max="${max}" value="${st[k]??d}" onchange="st.${k}=+this.value;${rs};go()"></label>`;
+const $=s=>document.querySelector(s);
+let T=0,S=0,notes=true,rev={},st={sa:92,sb:154,sd:251,ca:1,cb:1},timer=null,playK=null,pm=0,pms=0;
+const SPD=[1800,1100,560];
+const fmt=x=>x.toLocaleString('en-US');
 const bits=(n,w)=>(n>>>0).toString(2).padStart(w,'0').slice(-w);
-const wrap=x=>Number(BigInt.asIntN(32,BigInt(x))),fmt=x=>Number(x).toLocaleString('en-US');
-const PV=[{b:10,s:'342'},{b:2,s:'110'},{b:2,s:'1011'},{b:2,s:'1101'},{b:2,s:'10101'}];
-const pvw=()=>{const p=PV[st.pv??0],d=p.s.split(''),n=d.length,v=st.pvj??0,cl={},m={};let tot=0,h='';
-for(let t=0;t<v;t++){const i=n-1-t,val=+d[i]*p.b**t;tot+=val;cl[i]=t==v-1?'sw sel':'sw';m[i]=p.b+'^'+t;h+=`<div class="row"><span>${d[i]} × ${p.b}^${t}</span><b>${val}</b></div>`}
-return pick('pv',PV.map(x=>`${x.s} (base ${x.b})`))+cells(d,m,cl)+`<p class="ex">${v?`Position ${v-1} from the right has weight ${p.b}^${v-1} = ${p.b**(v-1)}. Multiply the digit by it, then add.`:'Every digit has a position, counted from the right starting at 0. Press the button to start with the rightmost digit.'}</p>`+h+`<p class="ex">Running total: <b>${tot}</b>${v>=n?` · <b>${p.s} in base ${p.b} = ${tot}</b>`:''}</p>`+btn('pvj',n,'Rightmost digit','Next digit')};
+const wrap=x=>Number(BigInt.asIntN(32,BigInt(x)));
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const X=s=>esc(s).split('\n');
+const code=(l,h)=>'<pre class="code">'+l.map((x,i)=>`<span class="${i==h?'hl':''}"><i>${i+1}</i>${x}</span>`).join('')+'</pre>';
+const C=(v,cls='',top='',sub='',sty='')=>`<div class="cell ${cls}"${sty?` style="${sty}"`:''}>${top!==''?`<u class="${String(top).startsWith('−')?'neg':''}">${top}</u>`:''}<b>${v}</b>${sub!==''?`<small>${sub}</small>`:''}</div>`;
+const R=(lab,a,cls='')=>`<div class="rw ${cls}"><span class="lb">${lab}</span><div class="cells">${a.join('')}</div></div>`;
+const msg=t=>`<div class="msg">${t}</div>`;
+const dl=i=>`animation-delay:${i*70}ms`;
+
+/* ---------- player engine ---------- */
+function stopPlay(){clearInterval(timer);timer=null;playK=null}
+function adv(k){st[k+'_p']=st[k]??0;st[k]=(st[k]??0)+1;if(st[k]>=pm){st[k]=pm;stopPlay()}go()}
+function play(k,max,ms){if(playK===k){stopPlay();go();return}stopPlay();if((st[k]??0)>=max){st[k]=0}playK=k;pm=max;pms=ms||0;adv(k);if(playK)timer=setInterval(()=>adv(k),pms||SPD[st.spd??1])}
+function stepTo(k,v){stopPlay();st[k+'_p']=st[k]??0;st[k]=v;go()}
+function cycleSpd(){st.spd=((st.spd??1)+1)%3;if(playK&&!pms){clearInterval(timer);const k=playK;timer=setInterval(()=>adv(k),SPD[st.spd])}go()}
+function tog(k,j){stopPlay();const v=st[k]??0;st[k+'_p']=v;st[k]=v^(1<<(7-j));go()}
+const ctl=(k,max,o={})=>{const v=st[k]??0,on=playK===k;return `<div class="ctl"><button class="ghost" title="Reset" aria-label="Reset" onclick="stepTo('${k}',0)">⟲</button><button class="ghost" aria-label="Step back" ${v<=0?'disabled':''} onclick="stepTo('${k}',${Math.max(0,v-1)})">‹</button><button class="btn play" onclick="play('${k}',${max}${o.ms?','+o.ms:''})">${on?'❚❚ Pause':v>=max?'↻ Replay':v?'▶ Resume':'▶ '+(o.lab||'Play')}</button><button class="ghost" ${v>=max?'disabled':''} onclick="stepTo('${k}',${v+1})">${o.step||'Step'} ›</button><span class="prog"><i style="width:${v/max*100}%"></i></span><span class="ex">${v} / ${max}</span>${o.ms?'':`<button class="ghost" title="Speed" onclick="cycleSpd()">${['0.5×','1×','2×'][st.spd??1]}</button>`}</div>`};
+const pick=(k,labels,rk)=>`<div class="pk">${labels.map((l,i)=>`<button class="chip ${i==(st[k]??0)?'on':''}" onclick="stopPlay();st['${k}']=${i};${rk?`st['${rk}']=0;st['${rk}_p']=0;`:''}go()">${l}</button>`).join('')}</div>`;
+const bulbs=(k,top,sub)=>{const v=st[k]??0,p=st[k+'_p']??v,b=bits(v,8),pb=bits(p,8);return `<div class="stage"><div class="cells">${[...b].map((d,j)=>{const t=top?top(j):'';return `<button class="bulb ${d=='1'?'lit':''} ${d!=pb[j]?'flip':''}" onclick="tog('${k}',${j})" aria-label="bit ${7-j}, now ${d}">${top?`<u class="${t<0?'neg':''}">${t<0?'−'+(-t):t}</u>`:''}<b>${d}</b><small>${sub?sub(j):'bit '+(7-j)}</small></button>`}).join('')}</div></div>`};
+const tgl=(k,l,v)=>`<div class="tw"><button class="tgl ${v?'on':''}" onclick="st['${k}']=${v?0:1};go()" aria-label="${l} = ${v}, click to flip">${v}</button><small>${l}</small></div>`;
+
+/* ---------- lesson building blocks ---------- */
+const W=(h,lead,r,n)=>({h,lead,r,n});
+const ST=(t,s)=>(s.st=t,s);
+const think=(h,q,a,n)=>({h,n,th:1,r:k=>`<div class="think"><span class="tag">THINK FIRST</span><h3>${q}</h3><button class="btn" onclick="rev['${k}']=!rev['${k}'];go()">${rev[k]?'Hide':'Reveal'} the answer</button></div>`+(rev[k]?`<div class="ans msg"><small>ANSWER</small><p>${a}</p></div>`:'')});
+const pickQ=(k,i,ok)=>{if(st[k]===ok)return;const t=st[k+'w']||[];if(i!==ok&&!t.includes(i))t.push(i);st[k+'w']=t;st[k]=i;st[k+'a']=(st[k+'a']||0)+1;go()};
+const quiz=(h,q,o,ok,why,n)=>W(h,'',k=>{const s=st[k],t=st[k+'w']||[],done=s===ok,at=st[k+'a']||0;
+return `<div class="card2"><small class="k">QUIZ</small><h3>${q}</h3><div class="opts">${o.map((x,i)=>`<button class="opt ${done&&i==ok?'good pop':t.includes(i)?'bad':''}" ${done?'disabled':''} onclick="pickQ('${k}',${i},${ok})"><b>${'ABCD'[i]}</b>${x}</button>`).join('')}</div>`+(s==null?'':done?`<div class="qf good pop"><b>✓ Correct${at>1?' (after '+at+' tries)':' on the first try'}.</b> ${why[ok]}</div>`:`<div class="qf bad shake"><b>✗ Option ${'ABCD'[s]} is not right.</b> ${why[s]}<div class="bt"><button class="btn" onclick="st['${k}']=null;go()">Try again</button></div></div>`)+`</div>`},n);
+const rvl=(k,items)=>{const v=st[k]??0;return items.slice(0,v).map((x,i)=>`<div class="card2 ${i==v-1?'drop':''}" style="padding:10px 14px;margin:8px 0"><small class="k">${x[0]}</small><br><b>${x[1]}</b>${x[2]?`<br><span class="ex">${x[2]}</span>`:''}</div>`).join('')+ctl(k,items.length,{lab:'Reveal',step:'Next'})};
+
+/* ================= WIDGETS ================= */
+
+/* 0 · 8-bit counter */
+function counter(){const v=st.bv??0;return bulbs('bv')+msg(`Pattern <b>${bits(v,8)}</b> is number <b>${v}</b>: pattern ${v+1} of 2<sup>8</sup> = <b>256</b> (0 to 255). Click any bulb to flip it, or press Play to count up and watch the bits change.`)+ctl('bv',255,{ms:170,lab:'Count up',step:'+1'})}
+
+/* 1 · place value */
+const PV=[{b:10,s:'342'},{b:10,s:'2563'},{b:2,s:'110'},{b:2,s:'1011'},{b:2,s:'1101'},{b:2,s:'10101'}];
+const COLS=['var(--ac)','var(--gr)','var(--ye)','var(--rd)','#c08cf0'];
+function pvw(){const p=PV[st.pv??0],d=[...p.s],n=d.length,v=st.pvj??0,max=n+1,total=parseInt(p.s,p.b);
+const info=d.map((x,i)=>{const t=n-1-i,w=p.b**t;return{x,t,w,val:+x*w,dn:t<Math.min(v,n),cur:t==v-1&&v<=n}});
+const cols=info.map(o=>`<div class="col"><span class="wchip">${p.b}^${o.t} = ${fmt(o.w)}</span>${C(o.x,o.cur?'sel pulse':o.dn?'sw':'')}<span class="arr">${o.dn?'↓ ×'+fmt(o.w):''}</span><div class="prod ${o.dn?'on':''} ${o.cur?'pop':''}">${o.dn?fmt(o.val):'?'}</div></div>`).join('');
+const done=info.filter(o=>o.dn),sum=done.reduce((a,o)=>a+o.val,0);
+const bar=`<div class="bar">${done.filter(o=>o.val).map((o,i)=>`<i style="width:${o.val/total*100}%;background:${COLS[o.t%5]}" title="${o.val}"></i>`).join('')}</div>`;
+const cur=info.find(o=>o.cur);
+const m=v==0?`Every position has a weight, a power of the base (${p.b}), counted from the right starting at 0. Press Play to handle one digit at a time, starting from the rightmost.`:cur?`Digit <b>${cur.x}</b> is at position ${cur.t}, so its weight is ${p.b}^${cur.t} = ${fmt(cur.w)}. It contributes ${cur.x} × ${fmt(cur.w)} = <b>${fmt(cur.val)}</b>.${cur.val==0?' A 0 adds nothing, but it still holds its place.':''}`:`<b>${p.s}</b> in base ${p.b} = ${info.map(o=>fmt(o.val)).join(' + ')} = <b>${fmt(total)}</b>`;
+return pick('pv',PV.map(x=>`${x.s} (base ${x.b})`),'pvj')+`<div class="pvc">${cols}</div>${bar}<p class="ex">Running total: <b class="${v?'pop':''}" style="display:inline-block">${fmt(sum)}</b></p>`+msg(m)+ctl('pvj',max)}
+
+/* 1 · build a number */
+const TG=[6,11,13,21];
+function pgw(){const v=st.pgv??0,t=TG[st.tg??0],b=bits(v,8),parts=[...b].map((d,j)=>d=='1'?2**(7-j):0).filter(x=>x);
+return pick('tg',TG.map(x=>'Make '+x))+bulbs('pgv',j=>2**(7-j),j=>'2^'+(7-j))+msg(`${parts.length?parts.join(' + '):'0'} = <b>${v}</b>`+(v==t?` <span class="okb pop" style="display:inline-block">✓ ${t} = ${t.toString(2)} in binary</span>`:` · target: <b>${t}</b>`))+`<div class="bt"><button class="ghost" onclick="stopPlay();st.pgv_p=st.pgv??0;st.pgv=0;go()">Clear all bits</button></div>`}
+
+/* 2 · division ladder */
 const DN=[20,45,13];
-const d2bw=()=>{const n0=DN[st.db??0],v=st.dbj??0,S=[];let n=n0;while(n>0){S.push({n,q:n>>1,r:n&1});n>>=1}
-const K=S.length,sh=Math.min(v,K),rem=S.slice(0,sh).map(s=>s.r);let h='';S.slice(0,sh).forEach(s=>h+=`<div class="row"><span>${s.n} ÷ 2 = ${s.q}</span><b>remainder ${s.r}</b></div>`);
-const last=sh?S[sh-1]:null;
-return pick('db',DN.map(String))+`<p class="ex">${!v?'Divide by 2 again and again, writing down each remainder, until the quotient is 0.':v>K?'Now read the remainders from the last one to the first.':last.q==0?`${last.n} ÷ 2 = 0 with remainder ${last.r}. The quotient is 0, so we stop dividing.`:`${last.n} ÷ 2 = ${last.q} with remainder ${last.r}. Keep going with ${last.q}.`}</p>`+h+(sh?`<p class="ex">Remainders in the order found:</p>`+cells(rem):'')+(v>K?`<p class="ex">Read bottom to top:</p>`+cells([...rem].reverse(),{},Object.fromEntries(rem.map((_,i)=>[i,'sw'])))+`<p class="ex"><b>${n0} = ${n0.toString(2)} in binary</b></p>`:'')+btn('dbj',K+1,'First division','Next')};
+function d2bw(){const n0=DN[st.db??0],v=st.dbj??0,Sx=[];let n=n0;while(n>0){Sx.push({n,q:n>>1,r:n&1});n>>=1}
+const K=Sx.length,max=K+2,sh=Math.min(v,K),bin=n0.toString(2),L=bin.length;
+const lad=Sx.slice(0,sh).map((s,i)=>`<div class="lad ${i==v-1?'drop':''}"><span class="dv">2 )</span><b>${s.n}</b><span class="ex" style="margin:0">quotient ${s.q}</span><span class="rem ${i==v-1?'pop':''}">${s.r}</span></div>`).join('');
+const last=sh?Sx[sh-1]:null;
+const m=v==0?`Divide by 2 again and again. Each remainder (0 or 1) is one bit. Stop when the quotient becomes 0.`:v<=K?`${last.n} ÷ 2 = ${last.q}, remainder <b>${last.r}</b>. ${last.q==0?'The quotient is 0, so we stop.':`Keep going with ${last.q}.`}`:v==K+1?`The first remainder is the lowest bit (2^0). So read the remainders from the <b>bottom up</b>, as the arrow shows.`:`<b>${n0} = ${bin}</b> in binary. Check: ${[...bin].map((d,i)=>d=='1'?2**(L-1-i):0).filter(x=>x).join(' + ')} = ${n0} ✓`;
+const res=v>=K+2?`<div class="stage">`+R('binary',[...bin].map((d,i)=>C(d,'sw pop',2**(L-1-i),'',dl(i*2))),'gap')+`</div>`:'';
+return pick('db',DN.map(String),'dbj')+`<div class="ladw">${lad}${v>=K+1?'<div class="upar"></div>':''}</div>`+res+msg(m)+ctl('dbj',max)}
+
+/* 2 · your turn */
+const PR=[6,11,21,90];
+function prw(){const i=st.pri??0,t=PR[i],a=st['pra'+i],clean=a==null?'':a.replace(/^0+(?=.)/,''),ok=clean===t.toString(2),isb=/^[01]+$/.test(a||'');
+return pick('pri',PR.map(String))+`<div class="bt"><label for="pin"><b style="color:var(--tx)">${t}</b> in binary =</label><input id="pin" class="inp" inputmode="numeric" autocomplete="off" value="${esc(a??'')}" placeholder="e.g. 101" onkeydown="if(event.key=='Enter')chk()"><button class="btn" onclick="chk()">Check</button></div>`+(a==null?'':ok?`<div class="qf good pop">✓ Correct: ${t} = ${t.toString(2)}.</div>`:`<div class="qf bad shake">✗ ${isb?`${esc(a)} is ${parseInt(a,2)}, not ${t}.`:'Use only the digits 0 and 1.'} Divide ${t} by 2 repeatedly and read the remainders from the bottom up.</div>`)}
+function chk(){st['pra'+(st.pri??0)]=$('#pin').value.trim();go()}
+
+/* 3 · one column */
+function ocw(){const a=st.ca??0,b=st.cb??0,c=st.cc??0,s=a+b+c,d=s%2,cy=s>>1;
+return `<div class="gate">${tgl('ca','bit a',a)}<span class="opbox">+</span>${tgl('cb','bit b',b)}<span class="opbox">+</span>${tgl('cc','carry in',c)}<span class="opbox">=</span><div class="lamp pop">${s}</div></div><div class="flow"><div class="box on ok pop"><small>digit = ${s} % 2</small><b>${d}</b></div><div class="box on hot pop"><small>carry = ${s} / 2</small><b>${cy}</b></div></div>`+msg(s<2?`${s} fits in one bit: digit ${d}, carry 0.`:`${s} does not fit in one bit. Write <b>${d}</b> and carry <b>${cy}</b> to the next column. Same rule as decimal, with base 2 instead of 10.`)}
+
+/* 3 · column adder */
 const AD=[{b:10,x:'368',y:'253'},{b:2,x:'10101',y:'1101'},{b:2,x:'110101',y:'100110'},{b:2,x:'10110',y:'00111'}];
-const addw=()=>{const p=AD[st.ad??0],B=p.b,L=Math.max(p.x.length,p.y.length),x=p.x.padStart(L,'0'),y=p.y.padStart(L,'0'),v=st.adj??0,cols=[];let c=0;
+function addw(){const p=AD[st.ad??0],B=p.b,L=Math.max(p.x.length,p.y.length),x=p.x.padStart(L,'0'),y=p.y.padStart(L,'0'),v=st.adj??0,cols=[];let c=0;
 for(let i=L-1;i>=0;i--){const t=+x[i]+ +y[i]+c,c2=Math.floor(t/B);cols.push({i,a:+x[i],b:+y[i],c,t,d:t%B,c2});c=c2}
-const ex=c>0?1:0,K=L+ex,sh=Math.min(v,K),R=Array(L+1).fill('·'),C=Array(L+1).fill('·'),cl={};
-cols.slice(0,Math.min(sh,L)).forEach(o=>{R[o.i+1]=o.d;C[o.i]=o.c2});const cur=sh>0&&sh<=L?cols[sh-1]:null;if(cur)cl[cur.i+1]='sel';if(sh>L){R[0]=c;cl[0]='sw sel'}
-const res=(ex?c:'')+cols.map(o=>o.d).reverse().join('');
-const msg=cur?`Column ${sh} from the right: ${cur.a} + ${cur.b} + carry ${cur.c} = ${cur.t}. Digit = ${cur.t} % ${B} = <b>${cur.d}</b>, carry = ${cur.t} / ${B} = <b>${cur.c2}</b>.`:sh>L?`A carry of ${c} is left over, so write it at the front.`:'Add from the rightmost column, carrying to the left. Press the button for the first column.';
-const dn=sh>=K,A_=parseInt(p.x,B),B_=parseInt(p.y,B);
-return pick('ad',AD.map(q=>`${q.x} + ${q.y}${q.b==10?'':' (binary)'}`))+`<p class="ex">carry</p>`+cells(C,{},{})+`<p class="ex">first number</p>`+cells([' ',...x.split('')],{},cl)+`<p class="ex">second number</p>`+cells([' ',...y.split('')],{},cl)+`<p class="ex">sum</p>`+cells(R,{},cl)+`<p class="ex">${msg}</p>`+(dn?`<p class="ex"><b>${p.x} + ${p.y} = ${res}</b> · check in decimal: ${A_} + ${B_} = ${A_+B_} = ${parseInt(res,B)} ✓</p>`:'')+btn('adj',K,'First column','Next column')};
+const ex=c>0,K=L+(ex?1:0),max=K+1,sh=Math.min(v,L),car=Array(L+1).fill(null),sm=Array(L+1).fill(null);car[L]={v:0};
+cols.slice(0,sh).forEach((o,s)=>{car[o.i]={v:o.c2,nw:s==v-1};sm[o.i+1]={v:o.d,nw:s==v-1}});
+if(ex&&v>L)sm[0]={v:c,nw:v==L+1};
+const cur=v>=1&&v<=L?cols[v-1]:null,cp=cur?cur.i+1:(ex&&v==L+1?0:-1);
+const res=(ex?String(c):'')+cols.map(o=>o.d).reverse().join('');
+const rowCar=car.map((o,j)=>o?C(o.v,(o.v?'cy ':'dim ')+(o.nw?'fly ':'')+(j==cp?'sel':'')):C('','blank'));
+const rowX=[C('','blank'),...[...x].map((d,i)=>C(d,i+1==cp?'sel':''))];
+const rowY=[C('','blank'),...[...y].map((d,i)=>C(d,i+1==cp?'sel':''))];
+const rowS=sm.map((o,j)=>o?C(o.v,'sw '+(o.nw?'pop ':'')+(j==cp?'sel':'')):C('·','emp'));
+const m=v==0?'Add from the rightmost column. In each column: digit = sum % base, carry = sum / base. The carry moves one column to the left.':cur?`Column ${v} from the right: ${cur.a} + ${cur.b} + carry ${cur.c} = ${cur.t}. Digit = ${cur.t} % ${B} = <b>${cur.d}</b>, carry = ${cur.t} / ${B} = <b>${cur.c2}</b>${cur.c2?' (watch it fly left)':''}.`:ex&&v==L+1?`A carry of ${c} is left over, so write it at the front.`:`<b>${p.x} + ${p.y} = ${res}</b>`+(B==2?` · check in decimal: ${parseInt(p.x,2)} + ${parseInt(p.y,2)} = ${parseInt(res,2)} ✓`:' ✓');
+return pick('ad',AD.map(q=>`${q.x} + ${q.y}${q.b==10?' (decimal)':''}`),'adj')+`<div class="stage">`+R('carry',rowCar)+R('A',rowX)+R('+ B',rowY)+R('= sum',rowS,'sum')+`</div>`+msg(m)+ctl('adj',max)}
+
+/* 4 · gate lab */
 const OPS={AND:['&',(a,b)=>a&b,'1 only if both bits are 1'],OR:['|',(a,b)=>a|b,'1 if either bit, or both, is 1'],XOR:['^',(a,b)=>a^b,'1 if the two bits are different'],NOT:['~',a=>a^1,'the opposite of the input bit']};
-const ttw=()=>{const nm=Object.keys(OPS)[st.tt??0],[sy,f,rule]=OPS[nm],rows=nm=='NOT'?[[0],[1]]:[[0,0],[0,1],[1,0],[1,1]],v=st.ttj??0;
-return pick('tt',Object.keys(OPS))+rows.slice(0,v).map(r=>`<div class="row"><span>${nm=='NOT'?sy+r[0]:r[0]+' '+sy+' '+r[1]}</span><b>= ${f(...r)}</b></div>`).join('')+`<p class="ex">${v>=rows.length?`Rule: the result bit is <b>${rule}</b>.`:'Press the button to try the first input. Bits: 0 = unset/false, 1 = set/true.'}</p>`+btn('ttj',rows.length,'First input','Next input')};
+const OPN=Object.keys(OPS);
+function gatew(){const nm=OPN[st.gop??0],[sy,f,rule]=OPS[nm],un=nm=='NOT',a=st.ga??0,b=st.gb??0,o=un?f(a):f(a,b),rows=un?[[0],[1]]:[[0,0],[0,1],[1,0],[1,1]],ri=un?a:a*2+b,vk='gv'+nm;st[vk]=(st[vk]||0)|(1<<ri);const left=rows.filter((_,i)=>!(st[vk]>>i&1)).length;
+return pick('gop',OPN.map(x=>`${x} ${OPS[x][0]}`))+`<div class="gate">${un?`<span class="opbox">${sy}</span>`+tgl('ga','A',a):tgl('ga','A',a)+`<span class="opbox">${sy}</span>`+tgl('gb','B',b)}<span class="opbox">=</span><div class="lamp pop ${o?'on':''}">${o}</div></div>`+
+`<table class="tt"><tr>${un?'<th>A</th>':'<th>A</th><th>B</th>'}<th>${un?'~A':'A '+sy+' B'}</th></tr>${rows.map((r,i)=>`<tr class="${i==ri?'cur':''}">${r.map(z=>`<td>${z}</td>`).join('')}<td>${st[vk]>>i&1?`<b>${f(...r)}</b>`:'?'}</td></tr>`).join('')}</table>`+msg(left?`Flip the switches to try every input. ${left} left to try. (0 = unset/false, 1 = set/true)`:`<b>${nm} (${sy})</b>: the result bit is <b>${rule}</b>.`)}
+
+/* 4 · bitwise on numbers */
 const BX=[{o:'&',a:5,b:6,w:3},{o:'&',a:20,b:45,w:6},{o:'|',a:92,b:154,w:8},{o:'~',a:92,w:8},{o:'^',a:92,b:154,w:8}];
-const bxw=()=>{const e=BX[st.bx??0],v=st.bxj??0,w=e.w,bin=e.b!=null,A=bits(e.a,w).split(''),Bb=bin?bits(e.b,w).split(''):null,f={'&':(x,y)=>x&y,'|':(x,y)=>x|y,'^':(x,y)=>x^y,'~':x=>x^1}[e.o],R=A.map((x,i)=>f(+x,bin?+Bb[i]:0)),sh=v>=2?Math.min(v-1,w):0,col=v>=2&&v<=w+1?v-2:-1,cl=col>=0?{[col]:'sel'}:{},rl=j=>w-1-j,rule={'&':'both 1 → 1, otherwise 0','|':'any 1 → 1, otherwise 0','^':'different → 1, same → 0','~':'flip the bit'}[e.o],val=parseInt(R.join(''),2),parts=R.map((b,i)=>b==1?2**(w-1-i):0).filter(z=>z);
-const msg=v==0?'Start from the decimal numbers. Bitwise operators work on the bits, so convert first.':v==1?`Both numbers in binary with ${w} bits, so the columns line up.`:col>=0?`Column ${col+1} from the left: ${bin?A[col]+' '+e.o+' '+Bb[col]:e.o+A[col]} = <b>${R[col]}</b> (${rule}).`:`Add the weights of the 1s: ${parts.join(' + ')||0} = <b>${val}</b>.`;
-return pick('bx',BX.map(q=>q.o=='~'?`~${q.a}`:`${q.a} ${q.o} ${q.b}`))+(v==0?`<p class="ex"><b>${bin?e.a+' '+e.o+' '+e.b:'~'+e.a}</b></p>`:`<p class="ex">${e.a}</p>`+cells(A,{},cl,rl)+(bin?`<p class="ex">${e.b}</p>`+cells(Bb,{},cl,rl):'')+`<p class="ex">result</p>`+cells(R.map((b,i)=>i<sh?b:'·'),{},cl,rl))+`<p class="ex">${msg}</p>`+(v>w+1?`<p class="ex"><b>${bin?e.a+' '+e.o+' '+e.b:'~'+e.a} = ${val}</b>${e.o=='~'?' (read as an unsigned 8-bit number)':''}</p>`:'')+btn('bxj',w+2,'Convert to binary','Next')};
+const FN={'&':(x,y)=>x&y,'|':(x,y)=>x|y,'^':(x,y)=>x^y,'~':x=>x^1},RULE={'&':'both 1 → 1, otherwise 0','|':'any 1 → 1, otherwise 0','^':'different → 1, same → 0','~':'flip the bit'};
+function bxw(){const e=BX[st.bx??0],v=st.bxj??0,w=e.w,bin=e.b!=null,A=bits(e.a,w),Bb=bin?bits(e.b,w):'',Rb=[...A].map((x,i)=>FN[e.o](+x,bin?+Bb[i]:0)),max=w+2,col=v>=2&&v<=w+1?v-2:-1,sh=v>=2?Math.min(v-1,w):0,val=parseInt(Rb.join(''),2),parts=Rb.map((b,i)=>b?2**(w-1-i):0).filter(z=>z),expr=bin?`${e.a} ${e.o} ${e.b}`:`~${e.a}`;
+let h;if(v==0)h=`<div class="big pop">${expr} = ?</div>`;else{const an=v==1?' pop':'';h=`<div class="stage">`+R(String(e.a),[...A].map((d,j)=>C(d,(j==col?'sel':'')+an,2**(w-1-j),'',v==1?dl(j):'')))+(bin?R(e.o+' '+e.b,[...Bb].map((d,j)=>C(d,(j==col?'sel':'')+an,'','',v==1?dl(j+w):''))):'')+R('= result',Rb.map((b,j)=>j<sh?C(b,(b?'lit ':'')+(j==col?'sel flip':'')):C('·','emp')),'sum')+`</div>`}
+const m=v==0?'Bitwise operators work on bits, so first write both numbers in binary.':v==1?`In binary with ${w} bits, so the columns line up.`+(bin?'':' (~ is shown on an 8-bit pattern.)'):col>=0?`Column ${col+1} from the left: ${bin?A[col]+' '+e.o+' '+Bb[col]:'~'+A[col]} = <b>${Rb[col]}</b> (${RULE[e.o]}).`:`Result <b>${Rb.join('')}</b>. Add the weights of the 1s: ${parts.join(' + ')||0} = <b>${val}</b>. So <b>${expr} = ${val}</b>${e.o=='~'?' (read as an unsigned 8-bit number, as in the script)':''}.`;
+return pick('bx',BX.map(q=>q.o=='~'?`~${q.a}`:`${q.a} ${q.o} ${q.b}`),'bxj')+h+msg(m)+ctl('bxj',max)}
+
+/* 4 · sandbox */
+function sbw(){const a=st.sa??0,b=st.sb??0,rows=[['A & B',a&b],['A | B',a|b],['A ^ B',a^b],['~A',(~a)&255]];
+const mini=n=>`<div class="cells">${[...bits(n,8)].map(d=>C(d,d=='1'?'lit':'')).join('')}</div>`;
+return `<p class="ex">Click the bulbs to change A and B (0 to 255). Every result updates column by column.</p><p class="ex"><b>A = ${a}</b></p>`+bulbs('sa',j=>2**(7-j))+`<p class="ex"><b>B = ${b}</b></p>`+bulbs('sb',j=>2**(7-j))+`<div class="stage" style="padding-top:4px">`+rows.map(([l,n])=>`<div class="rw"><span class="lb">${l}</span>${mini(n)}<b style="font:700 18px ui-monospace,monospace;margin-left:6px">= ${n}</b></div>`).join('')+`</div>`}
+
+/* 5 · two's complement */
 const NG=[-5,-3,-12];
-const ngw=()=>{const n=NG[st.ng??0],v=st.ngj??0,ab=bits(-n,8).split(''),inv=ab.map(b=>b^1),fin=bits(n,8).split(''),sh=v>=2?Math.min(v-1,8):0,cl=v>=2&&v<=9?{[v-2]:'sel'}:{},rl=j=>7-j;
-const pos=parseInt(fin.slice(1).join(''),2);
-const msg=[`Convert ${n} to 8-bit two’s complement in three steps: binary of |${n}|, invert, add 1.`,`Step 1: |${n}| = ${-n} in 8-bit binary is <b>${ab.join('')}</b>.`,'','','','','','','','',`Step 3: add 1: ${inv.join('')} + 1 = <b>${fin.join('')}</b>. The trailing 1s turn to 0 and the first 0 from the right turns to 1.`,`Check: the leftmost bit has weight −128. −128 + ${pos} = <b>${n}</b> ✓. A leading 1 means negative.`][v]||`Step 2: invert bit ${v-1} from the left: ${ab[v-2]} → <b>${inv[v-2]}</b>.`;
-return pick('ng',NG.map(String))+(v>=1?`<p class="ex">|${n}| in binary</p>`+cells(ab,{},cl,rl):'')+(v>=2?`<p class="ex">inverted</p>`+cells(inv.map((b,i)=>i<sh?b:'·'),{},cl,rl):'')+(v>=10?`<p class="ex">plus 1</p>`+cells(fin,{},Object.fromEntries(fin.map((_,i)=>[i,'sw'])),rl):'')+`<p class="ex">${msg}</p>`+btn('ngj',11,'Start','Next')};
-const rgw=()=>{const n=st.rn??3,N=2**n,v=Math.min(st.rgj??0,N);let h='';for(let k=0;k<v;k++){const s=k>=N/2?k-N:k,c=v==N&&s==-N/2?'rd':v==N&&s==N/2-1?'gr':'tx';h+=`<div class="row"><span>${bits(k,n)}</span><b style="color:var(--${c})">${s}</b></div>`}
-return sl2('rn',2,4,3,'bits n','st.rgj=0')+`<p class="ex">With ${n} bits there are 2^${n} = ${N} patterns. The leftmost bit is the sign (1 = negative). Counting up through the patterns:</p>`+h+(v>=N?`<p class="ex">Smallest = <b>−2^(${n}−1) = ${-N/2}</b>, largest = <b>2^(${n}−1) − 1 = ${N/2-1}</b>.</p>`:'')+btn('rgj',N,'First pattern','Next pattern')};
-const TR=[['int c = a * b','int × int, computed as int',wrap(1e11),0,'The multiplication happens in 32 bits, so 10^11 overflows before the result reaches c.'],['long c = a * b','int × int, computed as int',wrap(1e11),0,'Making c a long is too late: a * b was already computed, and overflowed, as int.'],['long c = (long)(a * b)','int × int, then cast',wrap(1e11),0,'The cast is applied to a result that has already overflowed.'],['long c = (long) a * b','long × int, computed as long',1e11,1,'a becomes a long first, so the multiplication runs in 64 bits.']];
-const trw=()=>{const v=st.tr??0;return `<p class="ex">a = 10^5 and b = 10^6. We want c = a × b = 10^11. The ALU multiplies in the type of its operands.</p>`+TR.slice(0,v).map((t,i)=>`<div class="card2" style="padding:10px 14px;margin:8px 0"><small class="k">TRY ${i+1}</small>${code([t[0]])}<span class="ex">${t[1]} · c ends up as <b>${fmt(t[2])}</b> · ${t[3]?'<b style="color:var(--gr)">works ✓</b>':'<b style="color:var(--rd)">fails ✗</b>'}</span><br><span class="ex">${t[4]}</span></div>`).join('')+btn('tr',4,'Try the first line','Next try')};
-const CK=[1,1000,2147,2148,100000];
-const smw=()=>{const v=st.sm??0,mx=2147483647;return `<p class="ex">Worst case: every A[i] = 10^6. After i elements the sum is i × 10^6. An int holds at most ${fmt(mx)}.</p>`+CK.slice(0,v).map(i=>{const s=i*1e6,ok=s<=mx;return `<div class="row"><span>after ${fmt(i)} elements: sum = ${fmt(s)}</span><b style="color:var(--${ok?'gr':'rd'})">${ok?'fits in int':'overflows, stored as '+fmt(wrap(s))}</b></div>`}).join('')+(v>=5?`<p class="ex">The real maximum is N × max(A[i]) = 10^5 × 10^6 = <b>10^11</b>, far beyond an int. The sum must be a <b>long</b>.</p>`:'')+btn('sm',5,'Check after 1 element','Check a later point')};
+function ngw(){const n=NG[st.ng??0],v=st.ngj??0,ab=bits(-n,8),inv=[...ab].map(b=>b^1).join(''),fin=bits(n,8),max=4,pos=parseInt(fin.slice(1),2);
+const wt=j=>j==0?'−128':String(2**(7-j));
+let h='<div class="stage">';
+if(v>=1)h+=R('|'+n+'| = '+(-n),[...ab].map((d,j)=>C(d,v==1?'pop':'','','',v==1?dl(j):'')));
+if(v>=2)h+=R('invert',[...inv].map((d,j)=>C(d,'sw '+(v==2?'flip':''),'','',v==2?dl(j*1.4):'')));
+if(v>=3)h+=R('+ 1',[...'00000001'].map((d,j)=>C(d,j==7?'cy':'dim')));
+if(v>=3)h+=R('= '+n,[...fin].map((d,j)=>C(d,(d=='1'?'lit ':'')+(v==3&&d!=inv[j]?'flip':'')+(v>=4&&j==0?' sel':''),v>=4?wt(j):'','',v==3?dl((7-j)*1.5):'')),'sum'+(v>=4?' gap':''));
+h+='</div>';
+const m=[`Convert <b>${n}</b> to 8-bit two’s complement in three steps: binary of |${n}|, invert every bit, add 1.`,`Step 1: |${n}| = ${-n} in 8-bit binary is <b>${ab}</b>.`,`Step 2: invert every bit (0 → 1, 1 → 0): <b>${inv}</b>.`,`Step 3: add 1: ${inv} + 1 = <b>${fin}</b>. The trailing 1s turn to 0 and the first 0 from the right turns to 1.`,`Check: the leftmost bit (MSB) has a <b>negative</b> weight, −128. −128 + ${pos} = <b>${n}</b> ✓. MSB = 1 means negative.`][v];
+return pick('ng',NG.map(String),'ngj')+h+msg(m)+ctl('ngj',max)}
+
+/* 5 · signed decoder */
+function sdw(){const v=st.sd??0,s=v>=128?v-256:v,b=bits(v,8),parts=[...b].map((d,j)=>d=='1'?(j==0?-128:2**(7-j)):0).filter(x=>x);
+return bulbs('sd',j=>j==0?-128:2**(7-j))+msg(`${parts.length?parts.map(x=>x<0?'−128':x).join(' + '):'0'} = <b>${s}</b> · MSB is <b>${b[0]}</b>, so the number is <b>${b[0]=='1'?'negative':'zero or positive'}</b>.`)+`<div class="pk">${[[251,'−5'],[253,'−3'],[5,'+5'],[3,'+3'],[127,'largest'],[128,'smallest']].map(([x,l])=>`<button class="chip" onclick="stopPlay();st.sd_p=st.sd;st.sd=${x};go()">${l}</button>`).join('')}</div>`}
+
+/* 6 · number line */
+function rgw(){const n=[2,3,4][st.rn??1],N=2**n,H=N/2,v=st.rgj??0,max=N+1,sh=Math.min(v,N);
+const slots=[];for(let val=-H;val<H;val++){const k=val<0?val+N:val,pl=k<sh;slots.push(`<div class="slot ${v>N&&val==-H?'min':''} ${v>N&&val==H-1?'max':''}"><div class="pt ${pl?'f':''} ${pl&&val<0?'ng':''} ${k==v-1&&v<=N?'drop':''}">${pl?bits(k,n):''}</div><span>${val}</span></div>`)}
+const k=v-1,m=v==0?`With ${n} bits there are 2^${n} = <b>${N}</b> patterns. Press Play to count through them in order and drop each one onto the number line at its value.`:v<=N?`Pattern <b>${bits(k,n)}</b>: sign bit ${k>=H?1:0} → ${k>=H?`negative: −2^${n-1} + ${k-H} = <b>${k-N}</b>`:`<b>${k}</b>`}.`:`Smallest = <b>−2^(${n}−1) = ${-H}</b> (pattern ${bits(H,n)}), largest = <b>2^(${n}−1) − 1 = ${H-1}</b>. In general: <b>−2^(n−1) to 2^(n−1) − 1</b>.`;
+return pick('rn',['n = 2','n = 3','n = 4'],'rgj')+`<div class="nl">${slots.join('')}</div>`+msg(m)+ctl('rgj',max)}
+
+/* 6 · int and long */
+const DT=[{nm:'int',bt:32,p:'4294967296',ap:'4 × 10^9',hf:'2 × 10^9',sf:'10^9',mn:-(2n**31n),mx:2n**31n-1n},{nm:'long',bt:64,p:'18446744073709551616',ap:'18 × 10^18',hf:'9 × 10^18',sf:'10^18',mn:-(2n**63n),mx:2n**63n-1n}];
+function dtw(){const d=DT[st.dt??0],v=st.dtj??0,L=d.p.length;
+const num=v>=1?`<div class="stage" style="padding:8px 0">${[...d.p].map((c,i)=>`<span class="dg ${v==1?'pop':''}" style="${v==1?dl(i):''}"><b>${c}</b><small>${v>=2?L-i:''}</small></span>`).join('')}</div>`:'';
+const m=[`An <b>${d.nm}</b> has ${d.bt} bits, so it has 2^${d.bt} patterns. How big is that?`,`2^${d.bt} = <b>${d.p}</b>. Nobody remembers this number, so we count its digits.`,`It has <b>${L} digits</b>, so 2^${d.bt} ≈ <b>${d.ap}</b>.`,`Half the patterns are negative. Range: <b>${fmt(d.mn)}</b> to <b>${fmt(d.mx)}</b>, i.e. −2^${d.bt-1} to 2^${d.bt-1} − 1, so the largest is about <b>${d.hf}</b>.`,`Rule of thumb: an <b>${d.nm}</b> can be as big as <b>~${d.sf}</b>.`][v];
+return pick('dt',['int (32 bits)','long (64 bits)'],'dtj')+`<div class="big" style="font-size:clamp(22px,4vw,32px)">2^${d.bt}</div>`+num+msg(m)+ctl('dtj',4)+`<p class="ex">Remember: <b>int ~ 10^9</b>, <b>long ~ 10^18</b>.</p>`}
+
+/* 7 · ALU */
+const TR=[{c:'int c = a * b',aT:'int',cT:'int',cast:0,why:'The calculation happens in the ALU. Two ints in → the result is computed as int, so a * b overflows before it is stored in c.'},
+{c:'long c = a * b',aT:'int',cT:'long',cast:0,why:'c is long now, but a * b was already computed as int and overflowed. Changing the type of c is too late.'},
+{c:'long c = (long)(a * b)',aT:'int',cT:'long',cast:1,why:'The cast happens after a * b has already overflowed. Casting a wrong value to long keeps it wrong.'},
+{c:'long c = (long) a * b',aT:'long',cT:'long',cast:0,why:'a is converted to long before the multiplication. One long and one int in → the ALU computes in long, so 10^11 fits.'}];
+function aluw(){const t=TR[st.tri??0],v=st.trj??0,max=4,ok=t.aT=='long',Wv=wrap(1e11),res=ok?1e11:Wv;const ty=x=>`<span class="ty ${x}">${x}</span>`,an=i=>v==i?' pop':'';
+const flow=`<div class="flow">
+<div class="box ${v>=1?'on':''}${an(1)}"><small>operands</small><b>a = 100,000 ${ty(t.aT)}</b><b>b = 1,000,000 ${ty('int')}</b>${ok?'<small>(long) cast applied to a first</small>':''}</div><span class="fa">→</span>
+<div class="box ${v>=2?'on hot':''}${an(2)}"><small>ALU</small><b>${t.aT} × int</b><small>computes in ${ok?'long (64 bits)':'int (32 bits)'}</small></div><span class="fa">→</span>
+<div class="box ${v>=3?'on '+(ok?'ok':'bad'):''}${v==3&&!ok?' shake':an(3)}"><small>result of a × b</small><b>${fmt(res)}</b><small>${ok?'10^11 fits ✓':'10^11 overflowed: wrong value'}</small></div><span class="fa">→</span>
+<div class="box ${v>=4?'on '+(ok?'ok':'bad'):''}${an(4)}"><small>${t.cast?'(long) cast, then ':''}stored in c ${ty(t.cT)}</small><b>c = ${fmt(res)}</b><small>${ok?'WORKS ✓':'FAILS ✗'}</small></div></div>`;
+const m=[`a = 10^5 and b = 10^6 are ints. The true answer is 10^11. Press Play to follow the value through the machine.`,ok?'(long) a turns a into a long <b>before</b> the multiplication.':'Both operands reach the ALU as <b>int</b>.',`The ALU picks the result type from its operands: ${ok?'<b>long × int → long</b>':'<b>int × int → int</b>'}.`,ok?'10^11 is far below the long limit (~10^18), so the value is correct.':`10^11 is above the int limit (~2 × 10^9), so it overflows <b>inside the ALU</b> and becomes ${fmt(Wv)}.`,t.why][v];
+return pick('tri',['Try 1','Try 2','Try 3','Try 4'],'trj')+code([t.c])+flow+msg(m)+ctl('trj',max)}
+
+/* 7 · sum tank */
+const CK=[1,1000,2147,2148,100000],MX=2147483647;
+const SUMC=X('int sum = 0;\nfor (int i = 0; i < N; i++) {\n    sum = sum + A[i];\n}\nprint(sum)'),SUML=X('long sum = 0;\nfor (int i = 0; i < N; i++) {\n    sum = sum + A[i];\n}\nprint(sum)');
+function smw(){const v=st.smj??0,max=6,pv=st.smj_p??0,f=i=>Math.min(i*1e6/MX,1)*100,i=v>=1?CK[Math.min(v,5)-1]:0,i0=pv>=1&&pv<=5?CK[pv-1]:0,s=i*1e6,ov=s>MX;
+const hist=CK.slice(0,Math.min(v,5)).map(n=>{const s=n*1e6,o=s<=MX;return `<div class="r"><span>after ${fmt(n)} elements: ${fmt(s)}</span><b style="color:var(--${o?'gr':'rd'})">${o?'fits':'overflow → '+fmt(wrap(s))}</b></div>`}).join('');
+const m=v==0?`Worst case: every A[i] = 10^6. After i elements the sum is i × 10^6. The int tank holds at most ${fmt(MX)}. Press Play to fill it.`:v<=5?(ov?`<b>Overflow!</b> ${fmt(s)} does not fit in an int, so sum holds a wrong value: ${fmt(wrap(s))}.`:`${fmt(s)} still fits in an int${i==2147?', but only just':''}.`):`Read the constraints first: max sum = N × max(A[i]) = 10^5 × 10^6 = <b>10^11</b>. That is beyond int (~10^9) but well inside long (~10^18). Fix: make <b>sum</b> a long.`;
+return `<p class="ex">Constraints: 1 ≤ N ≤ 10^5, 1 ≤ A[i] ≤ 10^6.</p>`+code(v>=6?SUML:SUMC,0)+`<div class="tankw"><div><div class="tank ${ov?'over':''} ${ov&&v==4?'shake':''}"><div class="lim"></div><i style="--h0:${f(i0)}%;--h:${f(i)}%;height:${f(i)}%"></i></div><div class="tcap">int sum</div></div><div class="hist">${hist}</div></div>`+msg(m)+ctl('smj',max,{lab:'Add elements'})}
+
+/* ================= LESSON ================= */
 const TABS=[
 {t:'Recap & plan',s:[
-think('How many values?','A byte has 8 bits. How many different numbers can 8 bits represent, and how would a computer show a negative number using only 0s and 1s?','2<sup>8</sup> = <b>256</b> patterns. Negative numbers use <b>two’s complement</b>: the leftmost bit has a negative weight (−2<sup>7</sup> = −128 for 8 bits), so it effectively acts as the sign bit. We build up to that today.','Take guesses before revealing.'),
-W('Today’s plan','Reveal one part at a time.',()=>rvl('pl',[['PART 1','Number systems','Place values in base 10 and base 2'],['PART 2','Conversions','Binary to decimal and decimal to binary'],['PART 3','Binary addition','Column by column with a carry'],['PART 4','Bitwise operators','AND, OR, XOR, NOT'],['PART 5','Negative numbers','Two’s complement'],['PART 6','Ranges and constraints','Why int can overflow']]),'This session is the foundation for the advanced bit problems.')]},
+think('How many values?','A byte has 8 bits. How many different numbers can 8 bits represent, and how could a computer show a negative number using only 0s and 1s?','2<sup>8</sup> = <b>256</b> patterns. Negative numbers use <b>two’s complement</b>: the leftmost bit gets a negative weight (−2<sup>7</sup> = −128 for 8 bits), so it acts as the sign. We build up to that today.','Take guesses before revealing.'),
+W('8 bits, 256 patterns','Each bulb is one bit. Count up and watch how the bits change.',()=>counter(),'Ask learners to predict the next pattern before pressing +1. Point out that bit 0 flips every step and bit 1 every two steps.'),
+W('Today’s plan','Reveal one part at a time.',()=>rvl('pl',[['PART 1','Number systems','Place values in base 10 and base 2'],['PART 2','Conversions','Binary to decimal and decimal to binary'],['PART 3','Binary addition','Column by column with a carry'],['PART 4','Bitwise operators','AND, OR, XOR, NOT'],['PART 5','Negative numbers','Two’s complement'],['PART 6','Ranges and constraints','Why int can overflow']]),'This session is the foundation for the advanced binary problems.')]},
 {t:'Number systems',s:[
-ST('ASK',think('Place value','In the decimal number 342, what does each digit contribute? What do you think changes if only the digits 0 and 1 are allowed?','3 hundreds + 4 tens + 2 ones = 3·10² + 4·10¹ + 2·10⁰. In binary the same idea works, but the weights are powers of <b>2</b> instead of 10.','')),
-ST('TRY',W('Build a number from its digits','Pick a number. Each click adds one digit’s contribution, starting from the rightmost digit.',()=>pvw(),'Start with 342, then 110, then 1101.')),
-ST('QUIZ',quiz('Quiz 1','What is the decimal value of the binary number 1011010?',null,['45','90','94','130'],1,['45 is 101101, which is this number without its trailing 0. A trailing 0 matters: it doubles the value, so 45 is half of the answer.','Correct. The 1s are at positions 6, 4, 3 and 1 from the right: 64 + 16 + 8 + 2 = 90.','94 = 64 + 16 + 8 + 4 + 2 would need a 1 at position 2. The third bit from the right is 0 in 1011010.','130 = 128 + 2 uses the weight 2^7, but this number has only 7 digits, so the leftmost weight is 2^6 = 64.'],''))]},
-{t:'Decimal to binary',s:[
-ST('ASK',think('Reverse the idea','Binary to decimal multiplies digits by powers of 2. To go the other way, what operation keeps splitting a number into 2s and tells you the lowest bit each time?','Dividing by 2: the <b>remainder</b> is the lowest bit, and the quotient continues. Repeat until the quotient is 0, then read the remainders backwards.','')),
-ST('TRY',W('Long division by 2','One division per click. Collect the remainders.',()=>d2bw(),'The last remainder is the leftmost bit.')),
-ST('QUIZ',quiz('Quiz 2','What is the binary representation of 45?',null,['101100','101110','101111','101101'],3,['101100 is 44. 45 is odd, so the last remainder is 1, not 0.','101110 is 46. Again 45 is odd, so the lowest bit must be 1.','101111 is 47. Dividing 22 by 2 leaves remainder 0, so the bit for 2^1 must be 0, not 1.','Correct. 45 ÷ 2 gives remainders 1, 0, 1, 1, 0, 1. Read bottom to top: 101101 = 32 + 8 + 4 + 1 = 45.'],''))]},
+ST('ASK',think('Place value','In the decimal number 342, what does each digit contribute? What changes if only the digits 0 and 1 are allowed?','3·10² + 4·10¹ + 2·10⁰ = 300 + 40 + 2. In binary the idea is the same, but the weights are powers of <b>2</b> instead of 10.','')),
+ST('TRY',W('Each digit × its weight','Pick a number and play. Each step lights up one digit, from the right.',()=>pvw(),'Go 342 → 2563 (decimal) → 110 → 1011 → 1101 → 10101. Script examples: 110 = 6, 1011 = 11, 1101 = 13, 10101 = 21.')),
+ST('TRY',W('Build a number','Turn bulbs on until the value matches the target.',()=>pgw(),'Targets are the script’s answers (6, 11, 13, 21). Ask: which bulb do you turn on first, and why the biggest that fits?')),
+ST('QUIZ',quiz('Quiz 1','What is the decimal value of the binary number 1011010?',['45','90','94','130'],1,['45 is 101101, which is this number without its trailing 0. A trailing 0 doubles the value, so 45 is half the answer.','The 1s are at positions 6, 4, 3 and 1 from the right: 64 + 16 + 8 + 2 = 90.','94 = 64 + 16 + 8 + 4 + 2 would need a 1 at position 2. The third bit from the right is 0 in 1011010.','130 = 128 + 2 uses the weight 2^7, but this number has only 7 digits, so the leftmost weight is 2^6 = 64.'],''))]},
+{t:'Decimal → binary',s:[
+ST('ASK',think('Reverse the idea','Binary to decimal multiplies digits by powers of 2. To go the other way, what operation keeps splitting a number by 2 and tells you the lowest bit each time?','Divide by 2: the <b>remainder</b> is the lowest bit, and the quotient carries on. Repeat until the quotient is 0, then read the remainders backwards (bottom to top).','')),
+ST('TRY',W('Long division by 2','Play the ladder. Remainders stack up, then we read them from the bottom.',()=>d2bw(),'20 is the script example; 45 is Quiz 2’s number, so you can use it right after the quiz as the explanation.')),
+ST('TRY',W('Your turn','Convert, type the bits, press Check.',()=>prw(),'All four numbers appear in the script (6, 11, 21, 90). Let learners work on paper first.')),
+ST('QUIZ',quiz('Quiz 2','What is the binary representation of 45?',['101100','101110','101111','101101'],3,['101100 is 44. 45 is odd, so the last remainder is 1, not 0.','101110 is 46. 45 is odd, so the lowest bit must be 1.','101111 is 47. Dividing 22 by 2 leaves remainder 0, so the bit for 2^1 must be 0.','45 ÷ 2 gives remainders 1, 0, 1, 1, 0, 1. Read bottom to top: 101101 = 32 + 8 + 4 + 1 = 45.'],''))]},
 {t:'Binary addition',s:[
-ST('ASK',think('Carry rule','In decimal, 8 + 3 = 11 gives digit 1 and carry 1 because the base is 10. What would be the digit and carry in binary for 1 + 1?','2 does not fit in one bit: digit = 2 % 2 = <b>0</b>, carry = 2 / 2 = <b>1</b>. Same rule, base 2.','')),
-ST('TRY',W('Add column by column','Pick a pair. Each click handles one column: digit = sum % base, carry = sum / base. The first pair is a decimal warm-up.',()=>addw(),'The script gives 368 + 253 = 821. The correct sum is 621; the simulator computes it live, so mention the correction to learners.')),
-ST('QUIZ',quiz('Quiz 3','What is the sum 10110 + 00111?',null,['11111','10101','11011','11101'],3,['11111 is 31, but 22 + 7 = 29. Somewhere a carry was added too many times.','10101 is 21, which is smaller than 22 alone. A sum cannot be smaller than one of its parts.','11011 is 27. In the second column 0 + 1 + 1 = 2, so the digit is 0 and the carry is 1; writing 1 there gives a wrong sum.','Correct. 22 + 7 = 29, and 11101 = 16 + 8 + 4 + 1 = 29. The carries, from right to left, are 0, 1, 1, 0, 0.'],''))]},
+ST('ASK',think('Carry rule','In decimal, 8 + 3 = 11 gives digit 1 and carry 1 because the base is 10. What are the digit and carry in binary for 1 + 1?','2 does not fit in one bit: digit = 2 % 2 = <b>0</b>, carry = 2 / 2 = <b>1</b>. Same rule, base 2.','')),
+ST('TRY',W('One column','Flip the input bits and the carry-in. These four cases are all binary addition ever needs.',()=>ocw(),'Show 1 + 1 (digit 0, carry 1) and 1 + 1 + 1 (digit 1, carry 1).')),
+ST('TRY',W('Add column by column','Pick a pair and play. The carry flies to the next column on the left.',()=>addw(),'Script correction: the script says 368 + 253 = 821. The right answer is 621 (its last line should be 1 + 3 + 2 = 6). The player shows 621. The 10110 + 00111 pair is the Quiz 3 explanation.')),
+ST('QUIZ',quiz('Quiz 3','What is the sum 10110 + 00111?',['11111','10101','11011','11101'],3,['11111 is 31, but 22 + 7 = 29. A carry was counted too many times.','10101 is 21, smaller than 22 alone. A sum cannot be smaller than one of its parts.','11011 is 27. In the second column 0 + 1 + 1 = 2, so the digit is 0 and the carry is 1; writing 1 there gives a wrong sum.','22 + 7 = 29, and 11101 = 16 + 8 + 4 + 1 = 29. Carries from right to left: 0, 1, 1, 0, 0.'],''))]},
 {t:'Bitwise operators',s:[
-ST('ASK',think('Operate on bits','AND, OR, XOR and NOT work on individual bits. If 1 means true and 0 means false, when would an AND of two bits be true? An OR? XOR?','AND: both true. OR: at least one true. XOR: exactly one true (the bits differ). NOT: the opposite.','Let learners say the rule before the table.')),
-ST('TRY',W('Truth tables, one input at a time','Pick an operator and try each input.',()=>ttw(),'Compare the four rules once all are filled.')),
-ST('TRY',W('Operators on whole numbers','Convert to binary, then handle one column per click, then read the result back in decimal.',()=>bxw(),'~ is shown as an 8-bit pattern. The small labels under each box are bit indices: bit 0 is the rightmost (weight 1).')),
-ST('QUIZ',quiz('Quiz 5','What is A ^ B where A = 20 and B = 45?',null,['4','20','57','61'],2,['4 is 20 & 45 (AND): only the columns where both bits are 1.','20 is just A. XOR with 45 flips every bit of A where 45 has a 1, so the value must change.','Correct. 00010100 ^ 00101101 = 00111001 = 32 + 16 + 8 + 1 = 57.','61 is 20 | 45 (OR). XOR gives 0 where both bits are 1, so the 2^2 column is 0, which makes 57 instead of 61.'],''))]},
+ST('ASK',think('Operate on bits','AND, OR, XOR and NOT work on single bits. If 1 means true and 0 means false, when is an AND of two bits true? An OR? XOR?','AND: both true. OR: at least one true. XOR: exactly one true (the bits differ). NOT: the opposite.','Let learners say the rule before using the switches.')),
+ST('TRY',W('Switches and a lamp','Pick an operator and try every input. The truth table fills in as you go.',()=>gatew(),'Compare the four rules once all tables are filled.')),
+ST('TRY',W('Operators on whole numbers','Convert to binary, then one column per step, then back to decimal.',()=>bxw(),'These are the script’s five examples. ~92 = 163 is read as an unsigned 8-bit pattern, as the script does.')),
+ST('TRY',W('Bitwise sandbox','Change A and B bit by bit and watch all four results.',()=>sbw(),'Ask: which bulbs in A ^ B light up? Exactly the columns where A and B differ.')),
+ST('QUIZ',quiz('Quiz 5','What is A ^ B where A = 20 and B = 45?',['4','20','57','61'],2,['4 is 20 & 45 (AND): only the columns where both bits are 1.','20 is just A. XOR with 45 flips every bit of A where 45 has a 1, so the value must change.','00010100 ^ 00101101 = 00111001 = 32 + 16 + 8 + 1 = 57.','61 is 20 | 45 (OR). XOR gives 0 where both bits are 1, so the 2^2 column is 0, which gives 57 instead of 61.'],''))]},
 {t:'Negative numbers',s:[
-ST('ASK',think('Sign bit','With 8 bits we can write 256 patterns. If half must stand for negative numbers, what could the leftmost bit mean?','The leftmost bit (MSB) can be the <b>sign</b>: 0 for positive, 1 for negative. Two’s complement also gives it a negative weight.','')),
-ST('TRY',W('Two’s complement, bit by bit','Binary of |n|, invert each bit, add 1, then check the value.',()=>ngw(),'Try −5, then −3. Bit 7 (leftmost) is the sign bit; bit 0 (rightmost) is the LSB.')),
-ST('QUIZ',quiz('Quiz 6','What is −3 in 8-bit signed (two’s complement) format?',null,['11111101','01111101','00000011','10101010'],0,['Correct. 3 = 00000011, invert to 11111100, add 1 to get 11111101. Check: −128 + 125 = −3.','The leftmost bit is 0, which means the number is positive (125). A negative number must start with 1.','That is +3. You converted |−3| but skipped the invert and add-1 steps.','10101010 is −86 in two’s complement, not −3. Redo the three steps starting from 00000011.'],''))]},
+ST('ASK',think('Sign bit','With 8 bits we can write 256 patterns. If half of them must stand for negative numbers, what could the leftmost bit mean?','The leftmost bit (MSB) acts as the <b>sign</b>: 0 for positive, 1 for negative. In two’s complement it has a <b>negative weight</b>, −128 for 8 bits.','')),
+ST('TRY',W('Two’s complement in three steps','Binary of |n| → invert every bit → add 1 → check.',()=>ngw(),'−5 is the script example; −3 is Quiz 6, so you can replay it as the explanation.')),
+ST('TRY',W('Read any 8-bit pattern','The MSB weighs −128. Flip bits and see the signed value.',()=>sdw(),'Show that MSB = 0 is always zero or positive and MSB = 1 is always negative.')),
+ST('QUIZ',quiz('Quiz 6','What is −3 in 8-bit signed (two’s complement) format?',['11111101','01111101','00000011','10101010'],0,['3 = 00000011, invert to 11111100, add 1 to get 11111101. Check: −128 + 125 = −3.','The leftmost bit is 0, so this number is positive (125). A negative number must start with 1.','That is +3. You converted |−3| but skipped the invert and add-1 steps.','10101010 is −86 in two’s complement, not −3. Redo the three steps starting from 00000011.'],''))]},
 {t:'Ranges',s:[
-ST('ASK',think('Smallest and largest','With n bits where one bit is used for the sign, what are the smallest and largest numbers you can store?','Smallest <b>−2^(n−1)</b>, largest <b>2^(n−1) − 1</b>. We confirm it by listing every pattern for small n.','')),
-ST('TRY',W('List every pattern','Choose n, then step through all 2^n bit patterns.',()=>rgw(),'The extra negative value comes from the pattern 100…0.')),
-ST('TRY',W('int and long','Reveal each data type.',()=>rvl('rt',[['INT (32 bits)',`−${fmt(2n**31n)} to ${fmt(2n**31n-1n)}`,'2^32 = 4294967296 has 10 digits, about 4 × 10^9 patterns. Half of them are negative, so the largest int is 2^31 − 1, about 2 × 10^9. In contest problems we treat an int as safe up to about 10^9.'],['LONG (64 bits)',`−${(2n**63n).toLocaleString('en-US')} to ${(2n**63n-1n).toLocaleString('en-US')}`,'2^64 has 20 digits, about 18 × 10^18 patterns. Half are negative, so the largest long is 2^63 − 1, about 9 × 10^18. In contest problems we treat a long as safe up to about 10^18.']]),'Remember: int ~ 10^9, long ~ 10^18.'))]},
+ST('ASK',think('Smallest and largest','With n bits, one acting as the sign, what are the smallest and largest numbers you can store?','Smallest <b>−2^(n−1)</b>, largest <b>2^(n−1) − 1</b>. We confirm it by placing every pattern for small n.','')),
+ST('TRY',W('Every pattern on a number line','Choose n and play. Each pattern drops onto its value.',()=>rgw(),'There is one extra negative value because 0 uses up one of the non-negative patterns. The smallest comes from 100…0.')),
+ST('TRY',W('int and long','How big is 2^32, and 2^64? Count the digits.',()=>dtw(),'int ≈ 10^9 and long ≈ 10^18 are the numbers learners should remember.'))]},
 {t:'Constraints',s:[
-ST('ASK',think('Multiply two ints','a = 10^5 and b = 10^6. Can an int hold a × b? If not, which of these would store c correctly: int c = a*b, long c = a*b, long c = (long)(a*b), long c = (long) a * b?','No, 10^11 is above int range. Only the last one works, because the multiplication itself runs in long.','Ask for a vote before revealing.')),
-ST('TRY',W('Four attempts, one at a time','Reveal each line and see where the multiplication happens.',()=>trw(),'Emphasise: the ALU decides the result type from the operands.')),
-ST('QUIZ',quiz('Quiz: which line works?','a and b are ints with a = 10^5 and b = 10^6. Which line stores a × b correctly?',null,['long c = a * b','long c = (long)(a * b)','long c = (long) a * b','int c = (long) a * b'],2,['a * b is evaluated as int × int first, so it overflows before it is assigned to a long.','The cast is applied after a * b has already overflowed, so the value is already wrong.','Correct. (long) a converts a first, so the multiplication is long × int and runs in 64 bits.','The multiplication is fine now, but storing 10^11 into an int overflows again.'],'')),
-ST('TRY',W('Is int enough for the sum?','N ≤ 10^5, A[i] ≤ 10^6. Check the running sum at a few points.',()=>smw(),'This is the script’s array-sum example.')),
-ST('QUIZ',quiz('Quiz: array sum','With N ≤ 10^5 and A[i] ≤ 10^6, is a loop that adds the elements into an int sum correct?',null,['Yes, int is enough','No, the sum can reach 10^11, so use long','No, A[i] must be long','Yes, but only if N ≤ 10^6'],1,['The maximum sum is 10^5 × 10^6 = 10^11, which is much larger than the int limit of about 2 × 10^9.','Correct. Read the constraints first: the sum can be as large as 10^11, so sum must be a long.','A[i] ≤ 10^6 fits in an int. The problem is the total, not the individual elements.','A smaller N would not rescue it either: even 2148 elements of 10^6 already overflow an int.'],'')),
-W('Wrap-up','Reveal one idea at a time.',()=>rvl('wr',[['NUMBER SYSTEMS','Place values','Weights are powers of the base'],['CONVERSION','Divide by 2','Remainders, read bottom to top'],['OPERATORS','AND, OR, XOR, NOT','Work column by column on bits'],['NEGATIVES','Two’s complement','Invert, add 1; the leftmost bit means negative'],['RANGES','n bits','−2^(n−1) to 2^(n−1) − 1'],['CONSTRAINTS','Check them first','They tell you when to use long']]),'Contest on the whole Intermediate module is coming: keep solving problems.')]}
+ST('ASK',think('Multiply two ints','a = 10^5 and b = 10^6. Can an int hold a × b? Which of these stores c correctly: int c = a*b, long c = a*b, long c = (long)(a*b), long c = (long) a * b?','No, 10^11 is above int range. Only the last one works, because the multiplication itself runs in long.','Ask for a vote before revealing.')),
+ST('TRY',W('Inside the ALU: four tries','Pick a try and play it through: operands → ALU → result → c.',()=>aluw(),'Emphasise: the ALU decides the result type from the operands, not from the variable you store into.')),
+ST('QUIZ',quiz('Quiz: which line works?','a and b are ints with a = 10^5 and b = 10^6. Which line stores a × b correctly?',['long c = a * b','long c = (long)(a * b)','long c = (long) a * b','int c = (long) a * b'],2,['a * b runs as int × int first, so it overflows before it is assigned to a long.','The cast is applied after a * b has already overflowed, so the value is already wrong.','(long) a converts a first, so the multiplication is long × int and runs in 64 bits.','The multiplication is fine, but storing 10^11 into an int overflows again.'],'')),
+ST('TRY',W('Is int enough for the sum?','Fill the int tank with the worst case: every A[i] = 10^6.',()=>smw(),'This is the script’s array-sum question. 2147 elements still fit; 2148 overflow.')),
+ST('QUIZ',quiz('Quiz: array sum','With N ≤ 10^5 and A[i] ≤ 10^6, is a loop that adds the elements into an int sum correct?',['Yes, int is enough','No, the sum can reach 10^11, so use long','No, A[i] must be long','Yes, but only if N ≤ 10^6'],1,['The maximum sum is 10^5 × 10^6 = 10^11, much larger than the int limit of about 2 × 10^9.','Read the constraints first: the sum can be as large as 10^11, so sum must be a long.','A[i] ≤ 10^6 fits in an int. The problem is the total, not the elements.','A smaller N would not help: 2148 elements of 10^6 already overflow an int.'],'')),
+W('Wrap-up','Reveal one idea at a time.',()=>rvl('wr',[['NUMBER SYSTEMS','Place values','Weights are powers of the base'],['CONVERSION','Divide by 2','Remainders, read bottom to top'],['ADDITION','digit = sum % 2, carry = sum / 2','Column by column, carry to the left'],['OPERATORS','AND, OR, XOR, NOT','Work column by column on bits'],['NEGATIVES','Two’s complement','Invert, add 1; MSB = 1 means negative'],['RANGES','n bits','−2^(n−1) to 2^(n−1) − 1 · int ~10^9, long ~10^18'],['CONSTRAINTS','Check them first','They tell you when to use long']]),'Reminder: the contest on the whole Intermediate module is coming. Keep solving problems and share the contest video.')]}
 ];
+
+/* ================= RENDER ================= */
 function go(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;
 $('#tn').textContent='Instructor notes: '+(notes?'on':'off');
-$('#tabs').innerHTML=TABS.map((x,i)=>`<button class="${i==T?'on':''}" onclick="T=${i};S=0;go()"><i>0${i}</i>${x.t}</button>`).join('');
-$('#side').innerHTML=`<h3>${tb.t}</h3>`+tb.s.map((x,i)=>`<button class="${i==S?'on':''}" onclick="S=${i};go()"><span>${i+1}</span>${x.h}</button>`).join('');
-$('#main').innerHTML=`<small class="k">${tb.t.toUpperCase()} · STEP ${S+1} OF ${tb.s.length}</small>${tb.s.every(x=>x.st)?`<div class="stg">${[...new Set(tb.s.map(x=>x.st))].map(g=>`<span class="${g==s.st?'on':''}">${g}</span>`).join('›')}</div>`:''}<h2>${s.h}</h2>${s.r(k)}${notes&&s.n?`<div class="ins"><small>INSTRUCTOR</small><p>${s.n}</p></div>`:''}`;
+$('#tabs').innerHTML=TABS.map((x,i)=>`<button class="${i==T?'on':''}" onclick="nav(${i},0)"><i>0${i}</i>${x.t}</button>`).join('');
+$('#side').innerHTML=`<h3>${tb.t}</h3>`+tb.s.map((x,i)=>`<button class="${i==S?'on':''}" onclick="nav(T,${i})"><span>${i+1}</span>${x.h}</button>`).join('');
+$('#main').innerHTML=`<small class="k">${tb.t.toUpperCase()} · STEP ${S+1} OF ${tb.s.length}</small>${tb.s.every(x=>x.st)?`<div class="stg">${[...new Set(tb.s.map(x=>x.st))].map(g=>`<span class="${g==s.st?'on':''}">${g}</span>`).join('›')}</div>`:''}<h2>${s.h}</h2>${s.lead?`<p class="lead">${s.lead}</p>`:''}${s.r(k)}${notes&&s.n?`<div class="ins"><small>INSTRUCTOR</small><p>${s.n}</p></div>`:''}`;
 const last=S==tb.s.length-1,nt=TABS[T+1];
 $('#nx').textContent=s.th&&!rev[k]?'Reveal the answer ›':last?(nt?'Next: '+nt.t+' ›':'Done'):'Next ›';
 $('#nx').disabled=last&&!nt&&!(s.th&&!rev[k]);$('#bk').disabled=!T&&!S}
-function nx(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;if(s.th&&!rev[k])rev[k]=1;else if(S<tb.s.length-1)S++;else if(T<TABS.length-1){T++;S=0}go()}
-function bk(){if(S)S--;else if(T){T--;S=TABS[T].s.length-1}go()}
-addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;if(e.key=='ArrowRight')nx();if(e.key=='ArrowLeft')bk()});
+function nav(t,s){stopPlay();T=t;S=s;go();const c=$('#card');if(c.getBoundingClientRect().top<0)c.scrollIntoView({behavior:'smooth'})}
+function nx(){const tb=TABS[T],s=tb.s[S],k=T+'_'+S;if(s.th&&!rev[k]){rev[k]=1;go()}else if(S<tb.s.length-1)nav(T,S+1);else if(T<TABS.length-1)nav(T+1,0)}
+function bk(){if(S)nav(T,S-1);else if(T)nav(T-1,TABS[T-1].s.length-1)}
+$('#nx').onclick=nx;$('#bk').onclick=bk;$('#tn').onclick=()=>{notes=!notes;go()};
+addEventListener('keydown',e=>{const tg=e.target.tagName;if(tg=='INPUT')return;if(e.key=='ArrowRight')nx();else if(e.key=='ArrowLeft')bk();else if(e.key==' '&&tg!='BUTTON'){const p=$('#main .play');if(p){e.preventDefault();p.click()}}});
 go();
 </script></body></html>
